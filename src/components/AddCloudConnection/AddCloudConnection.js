@@ -169,28 +169,20 @@ class AddCloudConnection extends Reflux.Component {
         return;
       }
 
-      // If Azure, explicitly setting the fields right
-      if (this.state.currentCloud.name == "azure") {
-        credentials = {}
-        credentials["subscription_id"] = this.state.currentCloudData["subscription_id"]
-        if (this.state.currentCloudData["login_type"] == "user_credentials") {
-          credentials["user_credentials"] = {
-            username: this.state.currentCloudData["username"],
-            password: this.state.currentCloudData["password"]
-          }
-        } else {
-          credentials["service_principal_credentials"] = {
-            tenant_id: this.state.currentCloudData["tenant_id"],
-            client_id: this.state.currentCloudData["client_id"],
-            client_secret: this.state.currentCloudData["client_secret"]
-          }
-        }
-      }
+      // If there's a switch radio, create a hierarchical structure with the selected radio as the root.
+      this.state.currentCloud.endpoint.fields.forEach(field => {
+        if (field.type === 'switch-radio') {
+          credentials[credentials[field.name]] = {}
 
-      // Remove the login_type since it is not needed
-      if (this.state.currentCloud.name == "azure") {
-        delete credentials.login_type
-      }
+          field.options.forEach(fieldOptions => {
+            if (fieldOptions.value === credentials[field.name]) {
+              fieldOptions.fields.forEach(fieldOptionField => {
+                credentials[credentials[field.name]][fieldOptionField.name] = credentials[fieldOptionField.name]
+              })
+            }
+          })
+        }
+      })
 
       // If endpoint is new
       if (this.state.type == "new") {
