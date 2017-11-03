@@ -24,6 +24,7 @@ class WizardStore {
 
   handleClearData() {
     this.data = {}
+    this.currentPage = wizardConfig.pages[0]
   }
 
   handleSetCurrentPage(page) {

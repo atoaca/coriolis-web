@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${props => props.useDefaultCursor ? 'default' : 'pointer'};
+  cursor: ${props => props.useDefaultCursor || props.disabled ? 'default' : 'pointer'};
   opacity: ${props => props.opacity};
   transition: all ${StyleProps.animations.swift};
   ${props => getOrientation(props)}
@@ -31,6 +31,7 @@ class Arrow extends React.Component {
     useDefaultCursor: PropTypes.bool,
     orientation: PropTypes.string,
     opacity: PropTypes.number,
+    disabled: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -39,11 +40,13 @@ class Arrow extends React.Component {
   }
 
   render() {
+    let color = this.props.primary ? Palette.primary : Palette.grayscale[4]
+    color = this.props.disabled ? Palette.grayscale[0] : color
     return (
       <Wrapper
         {...this.props}
         dangerouslySetInnerHTML={
-          { __html: arrowImage(this.props.primary ? Palette.primary : Palette.grayscale[4]) }
+          { __html: arrowImage(color) }
         }
       />
     )

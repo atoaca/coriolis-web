@@ -149,6 +149,18 @@ class WizardPage extends React.Component {
     this.setState({ showNewEndpointModal: false })
   }
 
+  handleInstancesSearchInputChange(searchText) {
+    InstanceActions.searchInstances(this.props.wizardStore.data.source.id, searchText)
+  }
+
+  handleInstancesNextPageClick(searchText) {
+    InstanceActions.loadNextPage(this.props.wizardStore.data.source.id, searchText)
+  }
+
+  handleInstancesPreviousPageClick() {
+    InstanceActions.loadPreviousPage()
+  }
+
   render() {
     return (
       <Wrapper>
@@ -159,10 +171,8 @@ class WizardPage extends React.Component {
           />}
           pageContentComponent={<WizardPageContent
             page={this.props.wizardStore.currentPage}
-            providers={this.props.providerStore.providers}
-            providersLoading={this.props.providerStore.providersLoading}
-            instances={this.props.instanceStore.instances}
-            instancesLoading={this.props.instanceStore.instancesLoading}
+            providerStore={this.props.providerStore}
+            instanceStore={this.props.instanceStore}
             endpoints={this.props.endpointStore.endpoints}
             wizardData={this.props.wizardStore.data}
             type={this.state.type}
@@ -172,6 +182,9 @@ class WizardPage extends React.Component {
             onSourceEndpointChange={endpoint => { this.handleSourceEndpointChange(endpoint) }}
             onTargetEndpointChange={endpoint => { this.handleTargetEndpointChange(endpoint) }}
             onAddEndpoint={(type, fromSource) => { this.handleAddEndpoint(type, fromSource) }}
+            onInstancesSearchInputChange={searchText => { this.handleInstancesSearchInputChange(searchText) }}
+            onInstancesNextPageClick={searchText => { this.handleInstancesNextPageClick(searchText) }}
+            onInstancesPreviousPageClick={() => { this.handleInstancesPreviousPageClick() }}
           />}
         />
         <Modal

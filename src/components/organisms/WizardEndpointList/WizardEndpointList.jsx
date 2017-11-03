@@ -31,6 +31,7 @@ class WizardEndpointList extends React.Component {
     endpoints: PropTypes.array,
     loading: PropTypes.bool,
     selectedEndpoint: PropTypes.object,
+    otherEndpoint: PropTypes.object,
     onChange: PropTypes.func,
     onAddEndpoint: PropTypes.func,
   }
@@ -50,7 +51,8 @@ class WizardEndpointList extends React.Component {
     }
 
     return this.props.providers.map(provider => {
-      let items = this.props.endpoints.filter(e => e.type === provider)
+      let otherEndpoint = this.props.otherEndpoint
+      let items = this.props.endpoints.filter(e => e.type === provider && (!otherEndpoint || otherEndpoint.id !== e.id))
       let selectedItem = this.props.selectedEndpoint && this.props.selectedEndpoint.type === provider
         ? this.props.selectedEndpoint : null
 

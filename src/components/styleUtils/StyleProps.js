@@ -38,6 +38,11 @@ const StyleProps = {
     min-width: ${width};
     max-width: ${width};
   `,
+
+  exactHeight: height => css`
+    min-height: ${height};
+    max-height: ${height};
+  `,
 }
 
 export default StyleProps

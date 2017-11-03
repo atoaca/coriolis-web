@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+const image = (bigColor, smallColor) => `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
     <title>Icon-Progress</title>
@@ -16,12 +16,14 @@
                         </mask>
                         <g id="Mask"></g>
                         <g id="Group-2" stroke-width="1" fill-rule="evenodd" mask="url(#mask-2)">
-                            <circle id="Oval-2-Copy" fill="#A4AAB5" cx="8" cy="8" r="8"></circle>
-                            <path d="M16,8 C16,3.581722 12.418278,0 8,0 L8,8 L16,8 Z" id="Combined-Shape" fill="#0044CA"></path>
+                            <circle id="Oval-2-Copy" fill="${bigColor}" cx="8" cy="8" r="8"></circle>
+                            <path d="M16,8 C16,3.581722 12.418278,0 8,0 L8,8 L16,8 Z" id="Combined-Shape" fill="${smallColor}"></path>
                         </g>
                     </g>
                 </g>
             </g>
         </g>
     </g>
-</svg>
+</svg>`
+
+export default image

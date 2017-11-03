@@ -2,14 +2,25 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
+import Palette from '../../styleUtils/Palette'
 import StyleProps from '../../styleUtils/StyleProps'
 
 import errorImage from './images/error.svg'
 import progressWithBackgroundImage from './images/progress-background.svg'
-import progressImage from './images/progress.svg'
+import progressImage from './images/progress.js'
 import successImage from './images/success.svg'
 import warningImage from './images/warning.svg'
 import pendingImage from './images/pending.svg'
+
+const getRunningImageUrl = props => {
+  const smallCircleColor = props.secondary ? Palette.grayscale[0] : Palette.primary
+
+  if (props.useBackground) {
+    return `url('${progressWithBackgroundImage}')`
+  }
+
+  return `url('data:image/svg+xml;utf8,${progressImage(Palette.grayscale[3], smallCircleColor)}')`
+}
 
 const statuses = props => {
   return {
@@ -17,7 +28,7 @@ const statuses = props => {
       background-image: url('${successImage}');
     `,
     RUNNING: css`
-      background-image: url('${props.useBackground ? progressWithBackgroundImage : progressImage}');
+      background-image: ${getRunningImageUrl(props)};
       ${StyleProps.animations.rotation}
     `,
     ERROR: css`

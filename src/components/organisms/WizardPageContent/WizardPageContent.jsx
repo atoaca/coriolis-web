@@ -17,8 +17,9 @@ import { providerTypes } from '../../../config'
 
 import migrationArrowImage from './images/migration.js'
 
+const bodyWidth = 800
 const Wrapper = styled.div`
-  ${StyleProps.exactWidth('800px')}
+  ${StyleProps.exactWidth(`${bodyWidth + 64}px`)}
   margin: 64px auto 32px auto;
   position: absolute;
   top: 0;
@@ -40,11 +41,12 @@ const Body = styled.div`
   overflow: auto;
   display: flex;
   justify-content: center;
+  padding: 0 32px;
 `
 const Navigation = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-top: 16px;
+  padding: 16px 32px 0 32px;
   margin-bottom: 80px;
 `
 const IconRepresentation = styled.div`
@@ -64,10 +66,8 @@ class WizardPageContent extends React.Component {
   static propTypes = {
     page: PropTypes.object,
     type: PropTypes.string,
-    providers: PropTypes.object,
-    providersLoading: PropTypes.bool,
-    instances: PropTypes.array,
-    instancesLoading: PropTypes.bool,
+    providerStore: PropTypes.object,
+    instanceStore: PropTypes.object,
     wizardData: PropTypes.object,
     endpoints: PropTypes.array,
     onTypeChange: PropTypes.func,
@@ -76,6 +76,9 @@ class WizardPageContent extends React.Component {
     onSourceEndpointChange: PropTypes.func,
     onTargetEndpointChange: PropTypes.func,
     onAddEndpoint: PropTypes.func,
+    onInstancesSearchInputChange: PropTypes.func,
+    onInstancesNextPageClick: PropTypes.func,
+    onInstancesPreviousPageClick: PropTypes.func,
   }
 
   getProvidersType(type) {
@@ -96,8 +99,8 @@ class WizardPageContent extends React.Component {
     let providers = []
     let providerType = this.getProvidersType(type)
 
-    Object.keys(this.props.providers || {}).forEach(provider => {
-      if (this.props.providers[provider].types.findIndex(t => t === providerType) > -1) {
+    Object.keys(this.props.providerStore.providers || {}).forEach(provider => {
+      if (this.props.providerStore.providers[provider].types.findIndex(t => t === providerType) > -1) {
         providers.push(provider)
       }
     })
@@ -144,7 +147,8 @@ class WizardPageContent extends React.Component {
         body = (
           <WizardEndpointList
             providers={this.getProviders('source')}
-            loading={this.props.providersLoading}
+            loading={this.props.providerStore.providersLoading}
+            otherEndpoint={this.props.wizardData.target}
             selectedEndpoint={this.props.wizardData.source}
             endpoints={this.props.endpoints}
             onChange={this.props.onSourceEndpointChange}
@@ -156,7 +160,8 @@ class WizardPageContent extends React.Component {
         body = (
           <WizardEndpointList
             providers={this.getProviders('target')}
-            loading={this.props.providersLoading}
+            loading={this.props.providerStore.providersLoading}
+            otherEndpoint={this.props.wizardData.source}
             selectedEndpoint={this.props.wizardData.target}
             endpoints={this.props.endpoints}
             onChange={this.props.onTargetEndpointChange}
@@ -167,11 +172,18 @@ class WizardPageContent extends React.Component {
       case 'vms':
         body = (
           <WizardInstances
-            instances={this.props.instances}
-            loading={this.props.instancesLoading}
+            instances={this.props.instanceStore.instances}
+            loading={this.props.instanceStore.instancesLoading}
+            searching={this.props.instanceStore.searching}
+            onSearchInputChange={this.props.onInstancesSearchInputChange}
+            onNextPageClick={this.props.onInstancesNextPageClick}
+            onPreviousPageClick={this.props.onInstancesPreviousPageClick}
+            hasNextPage={this.props.instanceStore.hasNextPage}
+            currentPage={this.props.instanceStore.currentPage}
+            loadingPage={this.props.instanceStore.loadingPage}
           />
-        )  
-        break  
+        )
+        break
       default:
     }
 

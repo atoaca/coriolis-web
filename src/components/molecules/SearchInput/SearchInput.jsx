@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-import { SearchButton, TextInput } from 'components'
+import { SearchButton, TextInput, StatusIcon } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 
@@ -11,6 +11,7 @@ const Input = styled(TextInput) `
   top: -8px;
   left: -8px;
   padding-left: 32px;
+  ${props => props.loading ? 'padding-right: 32px;' : ''}
   width: 50px;
   opacity: 0;
   transition: all ${StyleProps.animations.swift};
@@ -28,11 +29,22 @@ const Wrapper = styled.div`
 const SearchButtonStyled = styled(SearchButton)`
   position: relative;
 `
+const StatusIconStyled = styled(StatusIcon)`
+  position: absolute;
+  left: 144px;
+  top: 0;
+`
 
 class SearchInput extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,
     alwaysOpen: PropTypes.bool,
+    loading: PropTypes.bool,
+    placeholder: PropTypes.string,
+  }
+
+  static defaultProps = {
+    placeholder: 'Search',
   }
 
   constructor() {
@@ -91,15 +103,17 @@ class SearchInput extends React.Component {
       >
         <Input
           _ref={input => { this.input = input }}
-          placeholder="Search"
+          placeholder={this.props.placeholder}
           onChange={e => { this.props.onChange(e.target.value) }}
           onFocus={() => { this.handleFocus() }}
           onBlur={() => { this.handleBlur() }}
+          loading={this.props.loading}
         />
         <SearchButtonStyled
           primary={this.state.open || (this.props.alwaysOpen && (this.state.hover || this.state.focus))}
           onClick={() => { this.handleSearchButtonClick() }}
         />
+        {this.props.loading ? <StatusIconStyled status="RUNNING" /> : null}
       </Wrapper>
     )
   }
