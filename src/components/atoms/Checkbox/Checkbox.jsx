@@ -38,10 +38,15 @@ const InputStyled = styled.input`
 `
 
 class Checkbox extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+  }
+
   render() {
+    let { className, ...props } = this.props
     return (
-      <Wrapper>
-        <InputStyled {...this.props} type="checkbox" />
+      <Wrapper className={className}>
+        <InputStyled {...props} type="checkbox" />
       </Wrapper>
     )
   }

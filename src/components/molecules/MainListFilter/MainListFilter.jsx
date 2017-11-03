@@ -2,12 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Checkbox, SearchInput, Dropdown } from 'components'
+import { Checkbox, SearchInput, Dropdown, ReloadButton } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 import StyleProps from '../../styleUtils/StyleProps'
-
-import reloadImage from './images/reload.svg'
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,13 +35,6 @@ const FilterItem = styled.div`
   &:last-child {
     margin-right: 16px;
   }
-`
-const ReloadButton = styled.div`
-  width: 16px;
-  height: 16px;
-  margin-right: 16px;
-  background: url('${reloadImage}') no-repeat center;
-  cursor: pointer;
 `
 const Selection = styled.div`
   display: flex;
@@ -98,7 +89,7 @@ class MainListFilter extends React.Component {
             checked={!!this.props.selectAllSelected}
           />
           {this.renderFilterGroup()}
-          <ReloadButton onClick={this.props.onReloadButtonClick} />
+          <ReloadButton style={{ marginRight: '16px' }} onClick={this.props.onReloadButtonClick} />
           <SearchInput onChange={this.props.onSearchChange} />
         </Main>
         <Selection show={this.props.selectionInfo.selected}>

@@ -8,6 +8,7 @@ import {
   WizardBreadcrumbs,
   EndpointLogos,
   WizardEndpointList,
+  WizardInstances,
 } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
@@ -32,11 +33,11 @@ const Header = styled.div`
   font-size: 32px;
   font-weight: ${StyleProps.fontWeights.light};
   color: ${Palette.primary};
-  margin-bottom: 64px;
+  margin-bottom: 32px;
 `
 const Body = styled.div`
   flex-grow: 1;
-  overflow-y: auto; 
+  overflow: auto;
   display: flex;
   justify-content: center;
 `
@@ -65,6 +66,8 @@ class WizardPageContent extends React.Component {
     type: PropTypes.string,
     providers: PropTypes.object,
     providersLoading: PropTypes.bool,
+    instances: PropTypes.array,
+    instancesLoading: PropTypes.bool,
     wizardData: PropTypes.object,
     endpoints: PropTypes.array,
     onTypeChange: PropTypes.func,
@@ -161,6 +164,14 @@ class WizardPageContent extends React.Component {
           />
         )
         break
+      case 'vms':
+        body = (
+          <WizardInstances
+            instances={this.props.instances}
+            loading={this.props.instancesLoading}
+          />
+        )  
+        break  
       default:
     }
 

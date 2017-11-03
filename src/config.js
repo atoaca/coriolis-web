@@ -47,6 +47,7 @@ export const wizardConfig = {
     { id: 'schedule', title: 'Schedule', breadcrumb: 'Schedule' },
     { id: 'summary', title: 'Summary', breadcrumb: 'Summary' },
   ],
+  instancesItemsPerPage: 6,
 }
 
 export const basename = process.env.PUBLIC_PATH

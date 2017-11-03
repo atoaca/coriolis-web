@@ -19,6 +19,8 @@ import EndpointActions from '../../../actions/EndpointActions'
 import EndpointStore from '../../../stores/EndpointStore'
 import WizardStore from '../../../stores/WizardStore'
 import WizardActions from '../../../actions/WizardActions'
+import InstanceStore from '../../../stores/InstanceStore'
+import InstanceActions from '../../../actions/InstanceActions'
 import { wizardConfig } from '../../../config'
 
 const Wrapper = styled.div``
@@ -29,11 +31,12 @@ class WizardPage extends React.Component {
     wizardStore: PropTypes.object,
     providerStore: PropTypes.object,
     endpointStore: PropTypes.object,
+    instanceStore: PropTypes.object,
     match: PropTypes.object,
   }
 
   static getStores() {
-    return [UserStore, WizardStore, ProviderStore, EndpointStore]
+    return [UserStore, WizardStore, ProviderStore, EndpointStore, InstanceStore]
   }
 
   static getPropsFromStores() {
@@ -42,6 +45,7 @@ class WizardPage extends React.Component {
       wizardStore: WizardStore.getState(),
       providerStore: ProviderStore.getState(),
       endpointStore: EndpointStore.getState(),
+      instanceStore: InstanceStore.getState(),
     }
   }
 
@@ -74,6 +78,9 @@ class WizardPage extends React.Component {
       case 'source':
         ProviderActions.loadProviders()
         EndpointActions.getEndpoints()
+        break
+      case 'vms':
+        InstanceActions.loadInstances(this.props.wizardStore.data.source.id)
         break
       default:
     }
@@ -154,6 +161,8 @@ class WizardPage extends React.Component {
             page={this.props.wizardStore.currentPage}
             providers={this.props.providerStore.providers}
             providersLoading={this.props.providerStore.providersLoading}
+            instances={this.props.instanceStore.instances}
+            instancesLoading={this.props.instanceStore.instancesLoading}
             endpoints={this.props.endpointStore.endpoints}
             wizardData={this.props.wizardStore.data}
             type={this.state.type}
