@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon-CentOS</title>
+    <title>Icon/instance</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Elements/Item/VM" transform="translate(-32.000000, -8.000000)">
-            <g id="Icon/VM" transform="translate(32.000000, 8.000000)">
-                <rect id="Rectangle-Copy-2" fill="#D8DBE2" fill-rule="evenodd" x="0" y="0" width="48" height="48" rx="8"></rect>
-                <path d="M24,10.8682777 L12.75,17.4307777 L12.75,30.5208291 L24.0013467,37.1309367 L35.25,30.5692223 L35.25,17.4307777 L24,10.8682777 Z" id="Page-1" stroke="#0044CA" stroke-width="1.5"></path>
-                <path d="M11.9984395,17.7999358 L12.75,17.0499374 L12.75,18 L12.3572124,17.340531 L24.0013734,23.6477849 L35.644915,17.3893206 L35.25,18.0499374 L35.25,17.0998748 L35.9984395,17.8498732 L11.9984395,17.7999358 Z" id="Page-1-Copy" stroke="#0044CA" stroke-width="1.5"></path>
-                <path d="M24,24 L24,37" id="Line" stroke="#0044CA" stroke-width="1.5"></path>
-            </g>
+        <g id="Icon/instance">
+            <rect id="Rectangle-Copy-2" fill="#D8DBE2" x="0" y="0" width="48" height="48" rx="8"></rect>
+            <polygon id="Page-1" stroke="#0044CA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="24 10 12 17 12 30.9500626 24 38 36 31 36 17"></polygon>
+            <polyline id="Page-1-Copy" stroke="#0044CA" stroke-width="1.5" stroke-linejoin="round" points="12 17 24 23.5 36 17.0499374"></polyline>
+            <path d="M24,23.5 L24,37.5" id="Line" stroke="#0044CA" stroke-width="1.5" stroke-linecap="round"></path>
         </g>
     </g>
 </svg>
