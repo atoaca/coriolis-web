@@ -5,19 +5,14 @@
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g id="Icon/Execution/96" stroke="#0044CA" stroke-width="1.3">
-            <path d="M51.3813646,87.1884591 C30.4203167,89.2163117 11.7882742,73.8286823 9.76580341,52.8195684 C8.03589649,34.8514099 19.0169018,18.5898765 35.3462369,12.9922783" id="Stroke-1" stroke-dasharray="3.136587160442947,6.274348547699255,10.97981696172592,6.274348547699255" transform="translate(30.484101, 50.180114) rotate(-2.000000) translate(-30.484101, -50.180114) "></path>
-            <path d="M43.9612259,9.90835559 C64.9230956,7.88132657 83.5551381,23.268956 85.5776089,44.2772462 C87.2943669,62.1045587 76.4982685,78.252427 60.3801381,83.9711034" id="Stroke-3" stroke-dasharray="3.136587160442947,6.274348547699255,10.97981696172592,6.274348547699255" transform="translate(64.858941, 46.850053) rotate(-2.000000) translate(-64.858941, -46.850053) "></path>
-            <path d="M50.6060636,17.7965931 L48.2384333,15.5348208" id="Stroke-5" stroke-linejoin="round" transform="translate(49.422248, 16.665707) rotate(-2.000000) translate(-49.422248, -16.665707) "></path>
-            <path d="M46.9511849,14.5027676 L45.7612062,13.3661158" id="Stroke-7" stroke-linejoin="round" stroke-dasharray="0.8571428954601288,1.715142846107483" transform="translate(46.356196, 13.934442) rotate(-2.000000) translate(-46.356196, -13.934442) "></path>
-            <polyline id="Stroke-9" stroke-linejoin="round" transform="translate(43.863375, 10.565037) rotate(-2.000000) translate(-43.863375, -10.565037) " points="45.0471899 12.8824061 42.6795596 10.6206337 44.9362457 8.24766723"></polyline>
-            <path d="M45.9262391,6.96048576 L47.0611567,5.76782505" id="Stroke-11" stroke-linejoin="round" stroke-dasharray="0.8571428954601288,1.715142846107483" transform="translate(46.493698, 6.364155) rotate(-2.000000) translate(-46.493698, -6.364155) "></path>
-            <path d="M47.543226,5.09415639 L49.7999122,2.72118987" id="Stroke-13" stroke-linejoin="round" transform="translate(48.671569, 3.907673) rotate(-2.000000) translate(-48.671569, -3.907673) "></path>
-            <path d="M44.9818453,79.2224816 L47.3494756,81.4842539" id="Stroke-15" stroke-linejoin="round" transform="translate(46.165660, 80.353368) rotate(-2.000000) translate(-46.165660, -80.353368) "></path>
-            <path d="M48.6367269,82.5163894 L49.8267056,83.6530412" id="Stroke-17" stroke-linejoin="round" stroke-dasharray="0.8571428954601288,1.715142846107483" transform="translate(49.231716, 83.084715) rotate(-2.000000) translate(-49.231716, -83.084715) "></path>
-            <polyline id="Stroke-19" stroke-linejoin="round" transform="translate(51.724534, 86.454038) rotate(-2.000000) translate(-51.724534, -86.454038) " points="50.540719 84.1366686 52.9083494 86.3984409 50.6516632 88.7714074"></polyline>
-            <path d="M49.6616554,90.0585891 L48.5267378,91.2504262" id="Stroke-21" stroke-linejoin="round" stroke-dasharray="0.8571428954601288,1.715142846107483" transform="translate(49.094197, 90.654508) rotate(-2.000000) translate(-49.094197, -90.654508) "></path>
-            <path d="M48.0446832,91.9249326 L45.7871752,94.2978991" id="Stroke-23" stroke-linejoin="round" transform="translate(46.915929, 93.111416) rotate(-2.000000) translate(-46.915929, -93.111416) "></path>
+        <g id="Icon/Execution/96" stroke="#0044CA" stroke-width="1.5">
+            <g id="Group" transform="translate(6.000000, 0.000000)">
+                <path d="M46.0613983,6.19384586 C44.7249018,6.06560529 43.3701124,6 42,6 C18.8040405,6 0,24.8040405 0,48 C0,60.8664574 5.78554753,72.3816277 14.8970235,80.085892 M36.1894906,89.6013306 C38.0887008,89.8641606 40.0284869,90 42,90 L42,90 C65.1959595,90 84,71.1959595 84,48 C84,35.2367569 78.3069031,23.8032079 69.321609,16.1002526" id="Oval-6"></path>
+                <polyline id="Stroke-9-Copy" stroke-linejoin="round" points="41 94.9284632 35.5192308 89.689779 40.7431781 84.1935484"></polyline>
+                <polyline id="Stroke-9-Copy-2" stroke-linejoin="round" transform="translate(43.740385, 6.206167) scale(-1, 1) translate(-43.740385, -6.206167) " points="46.4807692 11.5736245 41 6.33494027 46.2239473 0.838709677"></polyline>
+                <path d="M42,31 L42,65" id="Line"></path>
+                <path d="M25,48 L59,48" id="Line-Copy"></path>
+            </g>
         </g>
     </g>
 </svg>
