@@ -5,6 +5,10 @@ class WizardActions {
     return data
   }
 
+  toggleInstanceSelection(instance) {
+    return instance
+  }
+
   clearData() {
     return true
   }

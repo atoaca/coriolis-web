@@ -47,7 +47,6 @@ class InstanceActions {
     InstanceSource.loadInstances(
       endpointId,
       searchText,
-      instanceStore.currentPage,
       instanceStore.instances[instanceStore.instances.length - 1].id
     ).then(
       instances => { this.loadNextPageSuccess(instances) },
@@ -70,6 +69,23 @@ class InstanceActions {
 
   loadPreviousPage() {
     return true
+  }
+
+  reloadInstances(endpointId, searchText) {
+    InstanceSource.loadInstances(endpointId, searchText).then(
+      instances => { this.reloadInstancesSuccess(instances) },
+      response => { this.reloadInstancesFailed(response) },
+    )
+
+    return true
+  }
+
+  reloadInstancesSuccess(instances) {
+    return instances
+  }
+
+  reloadInstancesFailed(response) {
+    return response || true
   }
 }
 

@@ -123,7 +123,7 @@ class WizardPage extends React.Component {
   }
 
   handleSourceEndpointChange(source) {
-    WizardActions.updateData({ source })
+    WizardActions.updateData({ source, selectedInstances: null })
   }
 
   handleTargetEndpointChange(target) {
@@ -161,6 +161,14 @@ class WizardPage extends React.Component {
     InstanceActions.loadPreviousPage()
   }
 
+  handleInstancesReloadClick(searchText) {
+    InstanceActions.reloadInstances(this.props.wizardStore.data.source.id, searchText)
+  }
+
+  handleInstanceClick(instance) {
+    WizardActions.toggleInstanceSelection(instance)
+  }
+
   render() {
     return (
       <Wrapper>
@@ -185,6 +193,8 @@ class WizardPage extends React.Component {
             onInstancesSearchInputChange={searchText => { this.handleInstancesSearchInputChange(searchText) }}
             onInstancesNextPageClick={searchText => { this.handleInstancesNextPageClick(searchText) }}
             onInstancesPreviousPageClick={() => { this.handleInstancesPreviousPageClick() }}
+            onInstancesReloadClick={searchText => { this.handleInstancesReloadClick(searchText) }}
+            onInstanceClick={instance => { this.handleInstanceClick(instance) }}
           />}
         />
         <Modal

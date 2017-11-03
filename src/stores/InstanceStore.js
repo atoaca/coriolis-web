@@ -37,6 +37,7 @@ class InstanceStore {
     this.hasNextPage = false
     this.cachedHasNextPage = false
     this.cachedInstances = []
+    this.reloading = false
 
     this.bindListeners({
       handleLoadInstances: InstanceActions.LOAD_INSTANCES,
@@ -48,6 +49,9 @@ class InstanceStore {
       handleLoadNextPageSuccess: InstanceActions.LOAD_NEXT_PAGE_SUCCESS,
       handleLoadNextPageFailed: InstanceActions.LOAD_NEXT_PAGE_FAILED,
       handleLoadPreviousPage: InstanceActions.LOAD_PREVIOUS_PAGE,
+      handleReloadInstances: InstanceActions.RELOAD_INSTANCES,
+      handleReloadInstancesSuccess: InstanceActions.RELOAD_INSTANCES_SUCCESS,
+      handleReloadInstancesFailed: InstanceActions.RELOAD_INSTANCES_FAILED,
     })
   }
 
@@ -111,6 +115,23 @@ class InstanceStore {
     this.hasNextPage = true
     this.currentPage = this.currentPage - 1
     this.instances = InstanceStoreUtils.loadFromCache(this.cachedInstances, this.currentPage)
+  }
+
+  handleReloadInstances() {
+    this.reloading = true
+  }
+
+  handleReloadInstancesSuccess(instances) {
+    this.reloading = false
+    this.currentPage = 1
+    this.hasNextPage = InstanceStoreUtils.hasNextPage(instances)
+    this.instances = instances
+    this.cachedInstances = instances
+    this.searching = false
+  }
+
+  handleReloadInstancesFailed() {
+    this.reloading = false
   }
 }
 

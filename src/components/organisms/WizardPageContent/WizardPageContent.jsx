@@ -79,6 +79,8 @@ class WizardPageContent extends React.Component {
     onInstancesSearchInputChange: PropTypes.func,
     onInstancesNextPageClick: PropTypes.func,
     onInstancesPreviousPageClick: PropTypes.func,
+    onInstancesReloadClick: PropTypes.func,
+    onInstanceClick: PropTypes.func,
   }
 
   getProvidersType(type) {
@@ -175,12 +177,16 @@ class WizardPageContent extends React.Component {
             instances={this.props.instanceStore.instances}
             loading={this.props.instanceStore.instancesLoading}
             searching={this.props.instanceStore.searching}
+            reloading={this.props.instanceStore.reloading}
             onSearchInputChange={this.props.onInstancesSearchInputChange}
             onNextPageClick={this.props.onInstancesNextPageClick}
             onPreviousPageClick={this.props.onInstancesPreviousPageClick}
             hasNextPage={this.props.instanceStore.hasNextPage}
             currentPage={this.props.instanceStore.currentPage}
             loadingPage={this.props.instanceStore.loadingPage}
+            onReloadClick={this.props.onInstancesReloadClick}
+            onInstanceClick={this.props.onInstanceClick}
+            selectedInstances={this.props.wizardData.selectedInstances}
           />
         )
         break

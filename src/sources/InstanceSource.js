@@ -5,7 +5,7 @@ import Api from '../utils/ApiCaller'
 import { servicesUrl, wizardConfig } from '../config'
 
 class InstanceSource {
-  static loadInstances(endpointId, searchText, currentPage, lastInstanceId) {
+  static loadInstances(endpointId, searchText, lastInstanceId) {
     return new Promise((resolve, reject) => {
       let projectId = cookie.get('projectId')
       let url = `${servicesUrl.coriolis}/${projectId}/endpoints/${endpointId}/instances?limit=${wizardConfig.instancesItemsPerPage + 1}`

@@ -12,6 +12,7 @@ class WizardStore {
       handleUpdateData: WizardActions.UPDATE_DATA,
       handleClearData: WizardActions.CLEAR_DATA,
       handleSetCurrentPage: WizardActions.SET_CURRENT_PAGE,
+      handleToggleInstanceSelection: WizardActions.TOGGLE_INSTANCE_SELECTION,
     })
   }
 
@@ -29,6 +30,19 @@ class WizardStore {
 
   handleSetCurrentPage(page) {
     this.currentPage = page
+  }
+
+  handleToggleInstanceSelection(instance) {
+    if (!this.data.selectedInstances) {
+      this.data.selectedInstances = [instance]
+      return
+    }
+
+    if (this.data.selectedInstances.find(i => i.id === instance.id)) {
+      this.data.selectedInstances = this.data.selectedInstances.filter(i => i.id !== instance.id)
+    } else {
+      this.data.selectedInstances = [...this.data.selectedInstances, instance]
+    }
   }
 }
 

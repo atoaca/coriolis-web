@@ -28,9 +28,14 @@ const InstanceContent = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 8px 16px 8px 0;
+  padding: 8px 16px;
   margin-left: 16px;
   border-top: 1px solid ${Palette.grayscale[1]};
+  transition: background ${StyleProps.animations.swift};
+
+  &:hover {
+    background: ${Palette.grayscale[1]};
+  }
 `
 const CheckboxStyled = styled(Checkbox) `
   opacity: 0;
@@ -41,6 +46,10 @@ const Instance = styled.div`
   align-items: center;
   position: relative;
   cursor: pointer;
+
+  ${CheckboxStyled} {
+    ${props => props.selected ? 'opacity: 1;' : ''}
+  }
 
   &:hover ${CheckboxStyled} {
     opacity: 1;
@@ -117,18 +126,26 @@ const Page = styled.div`
     border-bottom-right-radius: ${StyleProps.borderRadius};
   ` : ''}
 `
+const Reloading = styled.div`
+  margin: 32px auto 0 auto;
+  flex-grow: 1;
+`
 
 class WizardInstances extends React.Component {
   static propTypes = {
     instances: PropTypes.array,
+    selectedInstances: PropTypes.array,
     currentPage: PropTypes.number,
     loading: PropTypes.bool,
     searching: PropTypes.bool,
     loadingPage: PropTypes.bool,
     hasNextPage: PropTypes.bool,
+    reloading: PropTypes.bool,
     onSearchInputChange: PropTypes.func,
     onNextPageClick: PropTypes.func,
     onPreviousPageClick: PropTypes.func,
+    onReloadClick: PropTypes.func,
+    onInstanceClick: PropTypes.func,
   }
 
   constructor() {
@@ -161,6 +178,14 @@ class WizardInstances extends React.Component {
   }
 
   renderInstances() {
+    if (this.props.reloading) {
+      return (
+        <Reloading>
+          <LoadingAnimation />
+        </Reloading>
+      )
+    }
+
     if (this.props.loading) {
       return null
     }
@@ -168,9 +193,14 @@ class WizardInstances extends React.Component {
     return (
       <InstancesWrapper>
         {this.props.instances.map(instance => {
+          let selected = Boolean(this.props.selectedInstances && this.props.selectedInstances.find(i => i.id === instance.id))
           return (
-            <Instance key={instance.id}>
-              <CheckboxStyled />
+            <Instance
+              key={instance.id}
+              onClick={() => { this.props.onInstanceClick(instance) }}
+              selected={selected}
+            >
+              <CheckboxStyled checked={selected} />
               <InstanceContent>
                 <Image />
                 <Label>{instance.name}</Label>
@@ -188,6 +218,9 @@ class WizardInstances extends React.Component {
       return null
     }
 
+    let count = this.props.selectedInstances ? this.props.selectedInstances.length : 0
+    let plural = count === 1 ? '' : 's'
+
     return (
       <FiltersWrapper>
         <SearchInput
@@ -197,9 +230,9 @@ class WizardInstances extends React.Component {
           placeholder="Search VMs"
         />
         <FilterInfo>
-          <SelectionInfo>0 instances selected</SelectionInfo>
+          <SelectionInfo>{count} instance{plural} selected</SelectionInfo>
           <FilterSeparator>|</FilterSeparator>
-          <ReloadButton />
+          <ReloadButton onClick={() => { this.props.onReloadClick(this.state.searchText) }} />
         </FilterInfo>
       </FiltersWrapper>
     )
@@ -210,24 +243,28 @@ class WizardInstances extends React.Component {
       return null
     }
 
+    let areAllDisabled = this.props.searching || this.props.loadingPage
+    let isPreviousDisabled = this.props.currentPage === 1 || areAllDisabled
+    let isNextDisabled = !this.props.hasNextPage || areAllDisabled
+
     return (
       <Pagination>
         <Page
           previous
-          disabled={this.props.currentPage === 1}
-          onClick={() => { if (this.props.currentPage > 1) { this.props.onPreviousPageClick() } }}
+          disabled={isPreviousDisabled}
+          onClick={() => { if (!isPreviousDisabled) { this.props.onPreviousPageClick() } }}
         >
-          <Arrow orientation="left" disabled={this.props.currentPage === 1} />
+          <Arrow orientation="left" disabled={isPreviousDisabled} />
         </Page>
         <Page number>
           {this.props.loadingPage ? <StatusIcon status="RUNNING" secondary /> : this.props.currentPage}
         </Page>
         <Page
           next
-          onClick={() => { if (this.props.hasNextPage) { this.props.onNextPageClick(this.state.searchText) } }}
-          disabled={!this.props.hasNextPage}
+          onClick={() => { if (!isNextDisabled) { this.props.onNextPageClick(this.state.searchText) } }}
+          disabled={isNextDisabled}
         >
-          <Arrow disabled={!this.props.hasNextPage} />
+          <Arrow disabled={isNextDisabled} />
         </Page>
       </Pagination>
     )
