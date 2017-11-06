@@ -13,8 +13,8 @@ const largeProps = css`
 `
 
 const smallProps = css`
-  width: 225px;
-  height: 42px;
+  width: 245px;
+  height: 48px;
   background: url('${coriolisSmallImage}') center no-repeat;
 `
 
