@@ -13,25 +13,20 @@ const Wrapper = styled.div`
 `
 const InputWrapper = styled.div`
   position: relative;
-  width: ${props => props.big ? 48 : 32}px;
-  height: ${props => props.big ? 24 : 16}px;
-`
-const Input = styled.input`
-  position: absolute;
-  width: ${props => props.big ? 48 : 32}px;
-  height: ${props => props.big ? 24 : 16}px;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+  width: ${props => props.height * 2}px;
+  height: ${props => props.height}px;
+  ${props => !props.disabled ? 'cursor: pointer;' : ''};
 `
 const inputBackground = props => {
   if (props.big) {
     if (props.checked) {
       return Palette.alert
-    } else {
-      return Palette.primary
     }
+    return Palette.primary
+  }
+
+  if (props.secondary && props.checked) {
+    return Palette.grayscale[5]
   }
 
   if (props.checked) {
@@ -39,6 +34,21 @@ const inputBackground = props => {
   }
 
   return 'white'
+}
+const getInputBorderColor = props => {
+  if (props.big && props.checked) {
+    return Palette.alert
+  }
+
+  if (props.secondary) {
+    return Palette.grayscale[5]
+  }
+
+  if (props.triState && props.checked === null) {
+    return Palette.grayscale[2]
+  }
+
+  return Palette.primary
 }
 const InputBackground = styled.div`
   position: absolute;
@@ -49,32 +59,39 @@ const InputBackground = styled.div`
   transition: all ${StyleProps.animations.swift};
   background: ${props => inputBackground(props)};
   border-radius: 50px;
-  border: 1px solid ${props => props.big && props.checked ? Palette.alert : Palette.primary};
+  border: 1px solid ${props => getInputBorderColor(props)};
 `
 const getThumbLeft = props => {
-  if (props.big && props.checked) {
-    return 23
+  if (props.checked) {
+    return props.height - 1
   }
 
-  if (props.checked) {
-    return 15
+  if (props.triState && props.checked === null) {
+    return (props.height / 2) - 1
   }
 
   return -1
 }
 const InputThumb = styled.div`
   position: absolute;
-  width: ${props => props.big ? 22 : 14}px;
-  height: ${props => props.big ? 22 : 14}px;
+  width: ${props => props.height - 2}px;
+  height: ${props => props.height - 2}px;
   transition: all ${StyleProps.animations.swift};
   top: -1px;
   left: ${props => getThumbLeft(props)}px;
   background: white;
-  border: 1px solid ${props => props.big && props.checked ? Palette.alert : Palette.primary};
+  border: 1px solid ${props => getInputBorderColor(props)};
   border-radius: 50%;
 `
 const Label = styled.div`
   margin-left: 16px;
+  ${props => props.secondary ? `color: ${Palette.grayscale[4]};` : ''}
+  white-space: nowrap;
+`
+const LeftLabel = styled.div`
+  margin-right: 16px;
+  color: ${Palette.grayscale[4]};
+  white-space: nowrap;
 `
 
 class Switch extends React.Component {
@@ -82,48 +99,111 @@ class Switch extends React.Component {
     onChange: PropTypes.func,
     checked: PropTypes.bool,
     disabled: PropTypes.bool,
+    triState: PropTypes.bool,
+    leftLabel: PropTypes.bool,
+    secondary: PropTypes.bool,
+    height: PropTypes.number,
     big: PropTypes.bool,
     checkedLabel: PropTypes.string,
     uncheckedLabel: PropTypes.string,
+    style: PropTypes.object,
   }
 
   static defaultProps = {
     checkedLabel: 'Yes',
     uncheckedLabel: 'No',
+    height: 24,
+  }
+
+  constructor() {
+    super()
+
+    this.state = {
+      lastChecked: null,
+    }
+  }
+
+  getLabel() {
+    let label = this.props.checked ? this.props.checkedLabel : this.props.uncheckedLabel
+    if (this.props.triState && this.props.checked === null) {
+      label = 'Not Set'
+    }
+
+    return label
+  }
+
+  handleInputChange() {
+    if (this.props.disabled) {
+      return
+    }
+
+    if (this.props.triState) {
+      if (this.props.checked === true || this.props.checked === false) {
+        this.setState({ lastChecked: this.props.checked })
+        this.props.onChange(null)
+      } else {
+        this.props.onChange(!this.state.lastChecked)
+      }
+    } else {
+      this.props.onChange(!this.props.checked)
+    }
   }
 
   renderInput() {
     return (
-      <InputWrapper big={this.props.big}>
-        <InputBackground big={this.props.big} checked={this.props.checked}>
-          <InputThumb big={this.props.big} checked={this.props.checked} />
-        </InputBackground>
-        <Input
-          type="checkbox"
+      <InputWrapper
+        triState={this.props.triState}
+        big={this.props.big}
+        height={this.props.height}
+        secondary={this.props.secondary}
+        disabled={this.props.disabled}
+        onClick={() => { this.handleInputChange() }}
+      >
+        <InputBackground
+          triState={this.props.triState}
           big={this.props.big}
-          disabled={this.props.disabled}
           checked={this.props.checked}
-          onChange={(e) => this.props.onChange(e.target.checked)}
-        />
+          height={this.props.height}
+          secondary={this.props.secondary}
+        >
+          <InputThumb
+            triState={this.props.triState}
+            big={this.props.big}
+            checked={this.props.checked}
+            height={this.props.height}
+            secondary={this.props.secondary}
+          />
+        </InputBackground>
       </InputWrapper>
     )
   }
 
-  renderLabel() {
-    if (this.props.big) {
+  renderLeftLabel() {
+    if (!this.props.leftLabel) {
       return null
     }
 
     return (
-      <Label>{this.props.checked ? this.props.checkedLabel : this.props.uncheckedLabel}</Label>
+      <LeftLabel>{this.getLabel()}</LeftLabel>
+    )
+  }
+
+  renderRightLabel() {
+    if (this.props.big || this.props.leftLabel) {
+      return null
+    }
+
+    return (
+      <Label secondary={this.props.secondary}>{this.getLabel()}</Label>
     )
   }
 
   render() {
     return (
-      <Wrapper disabled={this.props.disabled}>
+      <Wrapper disabled={this.props.disabled} style={this.props.style}>
+        {this.renderLeftLabel()}
         {this.renderInput()}
-        {this.renderLabel()}
+        {this.renderRightLabel()}
       </Wrapper>
     )
   }

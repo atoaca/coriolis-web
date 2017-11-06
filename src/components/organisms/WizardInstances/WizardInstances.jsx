@@ -194,17 +194,18 @@ class WizardInstances extends React.Component {
       <InstancesWrapper>
         {this.props.instances.map(instance => {
           let selected = Boolean(this.props.selectedInstances && this.props.selectedInstances.find(i => i.id === instance.id))
+          let flavorName = instance.flavor_name ? ` | ${instance.flavor_name}` : ''
           return (
             <Instance
               key={instance.id}
               onClick={() => { this.props.onInstanceClick(instance) }}
               selected={selected}
             >
-              <CheckboxStyled checked={selected} />
+              <CheckboxStyled checked={selected} onChange={() => {}} />
               <InstanceContent>
                 <Image />
                 <Label>{instance.name}</Label>
-                <Details>{`${instance.num_cpu} vCPU | ${instance.memory_mb} MB RAM | ${instance.flavor_name}`}</Details>
+                <Details>{`${instance.num_cpu} vCPU | ${instance.memory_mb} MB RAM${flavorName}`}</Details>
               </InstanceContent>
             </Instance>
           )

@@ -21,6 +21,8 @@ import WizardStore from '../../../stores/WizardStore'
 import WizardActions from '../../../actions/WizardActions'
 import InstanceStore from '../../../stores/InstanceStore'
 import InstanceActions from '../../../actions/InstanceActions'
+import NetworkActions from '../../../actions/NetworkActions'
+import NetworkStore from '../../../stores/NetworkStore'
 import { wizardConfig } from '../../../config'
 
 const Wrapper = styled.div``
@@ -32,11 +34,12 @@ class WizardPage extends React.Component {
     providerStore: PropTypes.object,
     endpointStore: PropTypes.object,
     instanceStore: PropTypes.object,
+    networkStore: PropTypes.object,
     match: PropTypes.object,
   }
 
   static getStores() {
-    return [UserStore, WizardStore, ProviderStore, EndpointStore, InstanceStore]
+    return [UserStore, WizardStore, ProviderStore, EndpointStore, InstanceStore, NetworkStore]
   }
 
   static getPropsFromStores() {
@@ -46,6 +49,7 @@ class WizardPage extends React.Component {
       providerStore: ProviderStore.getState(),
       endpointStore: EndpointStore.getState(),
       instanceStore: InstanceStore.getState(),
+      networkStore: NetworkStore.getState(),
     }
   }
 
@@ -81,6 +85,12 @@ class WizardPage extends React.Component {
         break
       case 'vms':
         InstanceActions.loadInstances(this.props.wizardStore.data.source.id)
+        break
+      case 'options':
+        ProviderActions.loadOptionsSchema(this.props.wizardStore.data.target.type, this.state.type)
+        break
+      case 'networks':
+        NetworkActions.loadNetworks(this.props.wizardStore.data.target.id)
         break
       default:
     }
@@ -169,6 +179,10 @@ class WizardPage extends React.Component {
     WizardActions.toggleInstanceSelection(instance)
   }
 
+  handleOptionsChange(field, value) {
+    WizardActions.updateOptions({ field, value })
+  }
+
   render() {
     return (
       <Wrapper>
@@ -181,6 +195,7 @@ class WizardPage extends React.Component {
             page={this.props.wizardStore.currentPage}
             providerStore={this.props.providerStore}
             instanceStore={this.props.instanceStore}
+            networkStore={this.props.networkStore}
             endpoints={this.props.endpointStore.endpoints}
             wizardData={this.props.wizardStore.data}
             type={this.state.type}
@@ -195,6 +210,7 @@ class WizardPage extends React.Component {
             onInstancesPreviousPageClick={() => { this.handleInstancesPreviousPageClick() }}
             onInstancesReloadClick={searchText => { this.handleInstancesReloadClick(searchText) }}
             onInstanceClick={instance => { this.handleInstanceClick(instance) }}
+            onOptionsChange={(field, value) => { this.handleOptionsChange(field, value) }}
           />}
         />
         <Modal
