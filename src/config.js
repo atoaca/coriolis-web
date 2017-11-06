@@ -20,6 +20,7 @@ export const providerTypes = {
   SOURCE_MIGRATION: 2,
   TARGET_REPLICA: 4,
   SOURCE_REPLICA: 8,
+  CONNECTION: 16,
 }
 
 export const loginButtons = [
@@ -42,8 +43,8 @@ export const wizardConfig = {
     { id: 'source', title: 'Select your source cloud', breadcrumb: 'Source Cloud' },
     { id: 'target', title: 'Select your target cloud', breadcrumb: 'Target Cloud' },
     { id: 'vms', title: 'Select instances', breadcrumb: 'Select VMs' },
-    { id: 'networks', title: 'Networks', breadcrumb: 'Networks' },
     { id: 'options', title: 'Options', breadcrumb: 'Options' },
+    { id: 'networks', title: 'Networks', breadcrumb: 'Networks' },
     { id: 'schedule', title: 'Schedule', breadcrumb: 'Schedule' },
     { id: 'summary', title: 'Summary', breadcrumb: 'Summary' },
   ],

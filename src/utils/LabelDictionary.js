@@ -3,6 +3,7 @@ class LabelDictionary {
     opc: 'Oracle Cloud',
     vmware_vsphere: 'VMWare',
     oracle_vm: 'Oracle VM Server',
+    separate_vm: 'Separate Migration/VM?',
   }
 
   static get(fieldName) {

@@ -16,6 +16,10 @@ class WizardActions {
   setCurrentPage(page) {
     return page
   }
+
+  updateOptions({ field, value }) {
+    return { field, value }
+  }
 }
 
 export default alt.createActions(WizardActions)

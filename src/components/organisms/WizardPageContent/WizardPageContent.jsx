@@ -9,6 +9,8 @@ import {
   EndpointLogos,
   WizardEndpointList,
   WizardInstances,
+  WizardNetworks,
+  WizardOptions,
 } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
@@ -81,6 +83,15 @@ class WizardPageContent extends React.Component {
     onInstancesPreviousPageClick: PropTypes.func,
     onInstancesReloadClick: PropTypes.func,
     onInstanceClick: PropTypes.func,
+    onOptionsChange: PropTypes.func,
+  }
+
+  constructor() {
+    super()
+
+    this.state = {
+      useAdvancedOptions: false,
+    }
   }
 
   getProvidersType(type) {
@@ -118,9 +129,17 @@ class WizardPageContent extends React.Component {
         return !this.props.wizardData.source
       case 'target':
         return !this.props.wizardData.target
+      case 'vms':
+        return !this.props.wizardData.selectedInstances || !this.props.wizardData.selectedInstances.length
+      case 'options':
+        return false
       default:
         return true
     }
+  }
+
+  handleAdvancedOptionsToggle(useAdvancedOptions) {
+    this.setState({ useAdvancedOptions })
   }
 
   renderHeader() {
@@ -188,6 +207,22 @@ class WizardPageContent extends React.Component {
             onInstanceClick={this.props.onInstanceClick}
             selectedInstances={this.props.wizardData.selectedInstances}
           />
+        )
+        break
+      case 'options':
+        body = (
+          <WizardOptions
+            fields={this.props.providerStore.optionsSchema}
+            onChange={this.props.onOptionsChange}
+            data={this.props.wizardData.options}
+            useAdvancedOptions={this.state.useAdvancedOptions}
+            onAdvancedOptionsToggle={useAdvancedOptions => { this.handleAdvancedOptionsToggle(useAdvancedOptions) }}
+          />
+        )
+        break
+      case 'networks':
+        body = (
+          <WizardNetworks />
         )
         break
       default:

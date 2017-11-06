@@ -82,6 +82,9 @@ class WizardPage extends React.Component {
       case 'vms':
         InstanceActions.loadInstances(this.props.wizardStore.data.source.id)
         break
+      case 'options':
+        ProviderActions.loadOptionsSchema(this.props.wizardStore.data.target.type, this.state.type)
+        break
       default:
     }
   }
@@ -169,6 +172,10 @@ class WizardPage extends React.Component {
     WizardActions.toggleInstanceSelection(instance)
   }
 
+  handleOptionsChange(field, value) {
+    WizardActions.updateOptions({ field, value })
+  }
+
   render() {
     return (
       <Wrapper>
@@ -195,6 +202,7 @@ class WizardPage extends React.Component {
             onInstancesPreviousPageClick={() => { this.handleInstancesPreviousPageClick() }}
             onInstancesReloadClick={searchText => { this.handleInstancesReloadClick(searchText) }}
             onInstanceClick={instance => { this.handleInstanceClick(instance) }}
+            onOptionsChange={(field, value) => { this.handleOptionsChange(field, value) }}
           />}
         />
         <Modal

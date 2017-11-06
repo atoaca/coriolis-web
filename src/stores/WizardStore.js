@@ -13,6 +13,7 @@ class WizardStore {
       handleClearData: WizardActions.CLEAR_DATA,
       handleSetCurrentPage: WizardActions.SET_CURRENT_PAGE,
       handleToggleInstanceSelection: WizardActions.TOGGLE_INSTANCE_SELECTION,
+      handleUpdateOptions: WizardActions.UPDATE_OPTIONS,
     })
   }
 
@@ -43,6 +44,13 @@ class WizardStore {
     } else {
       this.data.selectedInstances = [...this.data.selectedInstances, instance]
     }
+  }
+
+  handleUpdateOptions({ field, value }) {
+    this.data.options = {
+      ...this.data.options,
+    }
+    this.data.options[field.name] = value
   }
 }
 

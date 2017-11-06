@@ -49,10 +49,18 @@ const getArrowColor = props => {
 
   return Palette.grayscale[4]
 }
+const getWidth = props => {
+  if (props.large) {
+    return StyleProps.inputSizes.large.width - 2
+  }
+  if (props.width) {
+    return props.width - 2
+  }
+  return StyleProps.inputSizes.regular.width - 2
+}
 const Wrapper = styled.div`
   position: relative;
-  width: ${props => props.large ? StyleProps.inputSizes.large.width - 2
-    : StyleProps.inputSizes.regular.width - 2}px;
+  width: ${props => getWidth(props)}px;
   height: ${props => props.large ? StyleProps.inputSizes.large.height - 2
     : StyleProps.inputSizes.regular.height - 2}px;
   border: 1px solid ${props => props.disabled ? Palette.grayscale[7] : Palette.grayscale[3]};

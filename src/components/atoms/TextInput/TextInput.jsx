@@ -9,9 +9,19 @@ import starImage from './images/star.svg'
 const Wrapper = styled.div`
   position: relative;
 `
+const getInputWidth = props => {
+  if (props.width) {
+    return props.width
+  }
+
+  if (props.large) {
+    return `${StyleProps.inputSizes.large.width}px`
+  }
+
+  return `${StyleProps.inputSizes.regular.width}px`
+}
 const Input = styled.input`
-  width: ${props => props.large ? StyleProps.inputSizes.large.width
-    : StyleProps.inputSizes.regular.width}px;
+  width: ${props => getInputWidth(props)};
   height: ${StyleProps.inputSizes.regular.height}px;
   border-radius: ${StyleProps.borderRadius};
   background-color: #FFF;

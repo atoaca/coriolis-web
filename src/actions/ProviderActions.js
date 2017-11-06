@@ -35,6 +35,22 @@ class ProviderActions {
   loadProvidersFailed(response) {
     return response || true
   }
+
+  loadOptionsSchema(providerName, schemaType) {
+    ProviderSource.loadOptionsSchema(providerName, schemaType).then(
+      schema => { this.loadOptionsSchemaSuccess(schema) },
+      response => { this.loadOptionsSchemaFailed(response) },
+    )
+    return true
+  }
+
+  loadOptionsSchemaSuccess(schema) {
+    return schema
+  }
+
+  loadOptionsSchemaFailed(response) {
+    return response || true
+  }
 }
 
 export default alt.createActions(ProviderActions)

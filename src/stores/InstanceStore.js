@@ -42,6 +42,7 @@ class InstanceStore {
     this.bindListeners({
       handleLoadInstances: InstanceActions.LOAD_INSTANCES,
       handleLoadInstancesSuccess: InstanceActions.LOAD_INSTANCES_SUCCESS,
+      handleLoadInstancesFailed: InstanceActions.LOAD_INSTANCES_FAILED,
       handleSearchInstances: InstanceActions.SEARCH_INSTANCES,
       handleSearchInstancesSuccess: InstanceActions.SEARCH_INSTANCES_SUCCESS,
       handleSearchInstancesFailed: InstanceActions.SEARCH_INSTANCES_FAILED,
@@ -64,6 +65,10 @@ class InstanceStore {
     this.hasNextPage = InstanceStoreUtils.hasNextPage(instances)
     this.instances = instances
     this.cachedInstances = instances
+    this.instancesLoading = false
+  }
+
+  handleLoadInstancesFailed() {
     this.instancesLoading = false
   }
 

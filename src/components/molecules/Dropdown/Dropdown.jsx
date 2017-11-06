@@ -10,14 +10,23 @@ import StyleProps from '../../styleUtils/StyleProps'
 const Wrapper = styled.div`
   position: relative;
 `
+const getWidth = props => {
+  if (props.large) {
+    return StyleProps.inputSizes.large.width - 2
+  }
 
+  if (props.width) {
+    return props.width - 2
+  }
+
+  return StyleProps.inputSizes.regular.width - 2
+}
 const List = styled.div`
   position: absolute;
   top: 45px;
   background: white;
   cursor: pointer;
-  width: ${props => props.large ? StyleProps.inputSizes.large.width - 2
-    : StyleProps.inputSizes.regular.width - 2}px;
+  width: ${props => getWidth(props)}px;
   border: 1px solid ${Palette.grayscale[3]};
   border-radius: ${StyleProps.borderRadius};
   z-index: 10;
@@ -73,6 +82,7 @@ class Dropdown extends React.Component {
     noItemsMessage: PropTypes.string,
     noSelectionMessage: PropTypes.string,
     disabled: PropTypes.bool,
+    width: PropTypes.number,
   }
 
   static defaultProps = {

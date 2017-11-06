@@ -1,9 +1,3 @@
-const SchemaTypes = {
-  CONNECTION_INFO: 16,
-  MIGRATION: 1,
-  REPLICA: 4,
-}
-
 let parseToFields = schema => {
   let fields = Object.keys(schema.properties).map(fieldName => {
     let field = {
@@ -13,6 +7,12 @@ let parseToFields = schema => {
     }
     return field
   })
+
+  return fields
+}
+
+let connectionParseToFields = schema => {
+  let fields = parseToFields(schema)
 
   let sortPriority = { username: 1, password: 2 }
   fields.sort((a, b) => {
@@ -31,19 +31,19 @@ let parseToFields = schema => {
   return fields
 }
 
-let parsersToFields = {
+let connectionParsersToFields = {
   general: schema => {
-    return parseToFields(schema.oneOf[0])
+    return connectionParseToFields(schema.oneOf[0])
   },
   azure: schema => {
-    let commonFields = parseToFields(schema).filter(f => f.type !== 'object' && f.name !== 'secret_ref')
+    let commonFields = connectionParseToFields(schema).filter(f => f.type !== 'object' && f.name !== 'secret_ref')
 
     let getOption = (option) => {
       return {
         name: option,
         type: 'radio',
         fields: [
-          ...parseToFields(schema.properties[option]),
+          ...connectionParseToFields(schema.properties[option]),
           ...commonFields,
         ],
       }
@@ -84,27 +84,33 @@ let parsersToPayload = {
 }
 
 class SchemaParser {
-  static storedSchemas = {}
+  static storedConnectionsSchemas = {}
 
-  static generateField(name, label, required = false) {
-    return {
+  static generateField(name, label, required = false, type = 'string', defaultValue = null) {
+    let field = {
       name,
       label,
-      type: 'string',
+      type,
       required,
     }
-  }
 
-  static schemaToFields(provider, schema) {
-    if (!this.storedSchemas[provider]) {
-      this.storedSchemas[provider] = schema
+    if (defaultValue) {
+      field.default = defaultValue
     }
 
-    if (!parsersToFields[provider]) {
+    return field
+  }
+
+  static connectionSchemaToFields(provider, schema) {
+    if (!this.storedConnectionsSchemas[provider]) {
+      this.storedConnectionsSchemas[provider] = schema
+    }
+
+    if (!connectionParsersToFields[provider]) {
       provider = 'general'
     }
 
-    let fields = parsersToFields[provider](schema)
+    let fields = connectionParsersToFields[provider](schema)
 
     fields = [
       this.generateField('name', 'Endpoint Name', true),
@@ -115,8 +121,24 @@ class SchemaParser {
     return fields
   }
 
+  static optionsSchemaToFields(provider, schema) {
+    let fields = parseToFields(schema.oneOf[0])
+    fields.sort((a, b) => {
+      if (a.required && !b.required) {
+        return -1
+      }
+
+      if (!a.required && b.required) {
+        return 1
+      }
+
+      return a.name.localeCompare(b.name)
+    })
+    return fields
+  }
+
   static fieldsToPayload(data) {
-    let storedSchema = this.storedSchemas[data.type] || this.storedSchemas.general
+    let storedSchema = this.storedConnectionsSchemas[data.type] || this.storedConnectionsSchemas.general
     let payload = {}
 
     payload.name = data.name
@@ -136,4 +158,4 @@ class SchemaParser {
   }
 }
 
-export { SchemaTypes, SchemaParser }
+export { SchemaParser }
