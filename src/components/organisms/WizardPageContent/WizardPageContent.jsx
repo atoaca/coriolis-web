@@ -70,6 +70,7 @@ class WizardPageContent extends React.Component {
     type: PropTypes.string,
     providerStore: PropTypes.object,
     instanceStore: PropTypes.object,
+    networkStore: PropTypes.object,
     wizardData: PropTypes.object,
     endpoints: PropTypes.array,
     onTypeChange: PropTypes.func,
@@ -222,7 +223,10 @@ class WizardPageContent extends React.Component {
         break
       case 'networks':
         body = (
-          <WizardNetworks />
+          <WizardNetworks
+            networks={this.props.networkStore.networks}
+            loading={this.props.networkStore.loading}
+          />
         )
         break
       default:
