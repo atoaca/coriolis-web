@@ -118,7 +118,7 @@ class WizardOptions extends React.Component {
       }
     })
 
-    if (fields.length < 7) {
+    if (fields.length < 8) {
       return (
         <Fields>
           <OneColumn>

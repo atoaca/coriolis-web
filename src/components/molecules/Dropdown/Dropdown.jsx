@@ -39,6 +39,7 @@ const ListItem = styled.div`
   color: ${Palette.grayscale[4]};
   padding: 8px 16px;
   transition: all ${StyleProps.animations.swift};
+  ${props => props.selected ? `font-weight: ${StyleProps.fontWeights.medium};` : ''}
 
   &:first-child {
     border-top-left-radius: ${StyleProps.borderRadius};
@@ -146,6 +147,7 @@ class Dropdown extends React.Component {
       return null
     }
 
+    let selectedLabel = this.getLabel(this.props.selectedItem)
     let list = (
       <List {...this.props}>
         {this.props.items.map((item) => {
@@ -156,6 +158,7 @@ class Dropdown extends React.Component {
               onMouseDown={() => { this.itemMouseDown = true }}
               onMouseUp={() => { this.itemMouseDown = false }}
               onClick={() => { this.handleItemClick(item) }}
+              selected={label === selectedLabel}
             >{label}
             </ListItem>
           )

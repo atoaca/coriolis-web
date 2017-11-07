@@ -8,6 +8,7 @@ import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
 
 import deleteImage from './images/delete.svg'
+import deleteHoverImage from './images/delete-hover.svg'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -41,6 +42,10 @@ const DeleteButton = styled.div`
   cursor: pointer;
   right: -32px;
   top: 24px;
+
+  &:hover {
+    background: url('${deleteHoverImage}') center no-repeat;
+  }
 `
 const RowData = styled.div`
   width: ${props => props.width};
@@ -53,6 +58,9 @@ const NoSchedules = styled.div`
 const NoSchedulesMessage = styled.div`
   font-size: 16px;
   margin-bottom: 32px;
+`
+const DropdownStyled = styled(Dropdown) `
+  font-size: 11px;
 `
 const colWidths = ['6%', '16%', '16%', '16%', '9%', '9%', '22%', '6%']
 
@@ -154,7 +162,7 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[1]}>
-                <Dropdown
+                <DropdownStyled
                   width={120}
                   items={this.generateMonthItems()}
                   selectedItem={this.getFieldValue(s.schedule, this.generateMonthItems(), 'month')}
@@ -162,7 +170,7 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[2]}>
-                <Dropdown
+                <DropdownStyled
                   width={120}
                   items={this.generateMonthDayItems()}
                   selectedItem={this.getFieldValue(s.schedule, this.generateMonthDayItems(), 'dom')}
@@ -170,7 +178,7 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[3]}>
-                <Dropdown
+                <DropdownStyled
                   width={120}
                   items={this.generateWeekDayItems()}
                   selectedItem={this.getFieldValue(s.schedule, this.generateWeekDayItems(), 'dow', true)}
@@ -178,7 +186,7 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[4]}>
-                <Dropdown
+                <DropdownStyled
                   width={64}
                   items={this.generateHourItems()}
                   selectedItem={this.getFieldValue(s.schedule, this.generateHourItems(), 'hour', true)}
@@ -186,14 +194,14 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[5]}>
-                <Dropdown
+                <DropdownStyled
                   width={64}
                   items={this.generateMinuteItems()}
                   selectedItem={this.getFieldValue(s.schedule, this.generateMinuteItems(), 'minute', true)}
                   onChange={item => { this.props.onChange(s.id, { schedule: { minute: item.value } }) }}
                 />
               </RowData>
-              <RowData width={colWidths[6]}><Dropdown width={160} /></RowData>
+              <RowData width={colWidths[6]}><DropdownStyled width={160} /></RowData>
               <RowData width={colWidths[7]}><Button secondary width="48px">...</Button></RowData>
               <DeleteButton onClick={() => { this.props.onRemove(s.id) }} />
             </Row>
