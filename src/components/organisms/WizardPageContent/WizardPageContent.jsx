@@ -143,6 +143,25 @@ class WizardPageContent extends React.Component {
     return false
   }
 
+  isOptionsPageValid() {
+    let schema = this.props.providerStore.optionsSchema
+    if (schema && schema.length > 0) {
+      let required = schema.filter(f => f.required && f.type !== 'object')
+      let validFieldsCount = 0
+      required.forEach(f => {
+        if (this.props.wizardData.options && this.props.wizardData.options[f.name] !== null && this.props.wizardData.options[f.name] !== undefined) {
+          validFieldsCount += 1
+        }
+      })
+
+      if (validFieldsCount === required.length) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   isNextButtonDisabled() {
     switch (this.props.page.id) {
       case 'type':
@@ -154,7 +173,7 @@ class WizardPageContent extends React.Component {
       case 'vms':
         return !this.props.wizardData.selectedInstances || !this.props.wizardData.selectedInstances.length
       case 'options':
-        return false
+        return !this.isOptionsPageValid()
       case 'networks':
         return !this.isNetworksPageValid()
       case 'schedule':
@@ -238,6 +257,7 @@ class WizardPageContent extends React.Component {
       case 'options':
         body = (
           <WizardOptions
+            selectedInstances={this.props.wizardData.selectedInstances}
             fields={this.props.providerStore.optionsSchema}
             onChange={this.props.onOptionsChange}
             data={this.props.wizardData.options}

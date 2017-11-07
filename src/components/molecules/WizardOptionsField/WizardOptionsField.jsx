@@ -34,6 +34,7 @@ class WizardOptionsField extends React.Component {
     className: PropTypes.string,
     properties: PropTypes.array,
     enum: PropTypes.array,
+    required: PropTypes.bool,
   }
 
   renderSwitch({ triState }) {
@@ -52,6 +53,7 @@ class WizardOptionsField extends React.Component {
     return (
       <TextInput
         width="320px"
+        required={this.props.required}
         value={this.props.value}
         onChange={e => { this.props.onChange(e.target.value) }}
         placeholder={LabelDictionary.get(this.props.name)}

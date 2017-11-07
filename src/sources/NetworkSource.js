@@ -5,12 +5,16 @@ import Api from '../utils/ApiCaller'
 import { servicesUrl } from '../config'
 
 class NetworkSource {
-  static loadNetworks(enpointId) {
+  static loadNetworks(enpointId, environment) {
     return new Promise((resolve, reject) => {
       let projectId = cookie.get('projectId')
+      let url = `${servicesUrl.coriolis}/${projectId}/endpoints/${enpointId}/networks`
+      if (environment) {
+        url = `${url}?env=${btoa(JSON.stringify(environment))}`
+      }
 
       Api.sendAjaxRequest({
-        url: `${servicesUrl.coriolis}/${projectId}/endpoints/${enpointId}/networks`,
+        url,
         method: 'GET',
       }).then(response => {
         let networks = response.data.networks

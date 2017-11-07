@@ -184,6 +184,7 @@ class WizardPage extends React.Component {
   }
 
   handleOptionsChange(field, value) {
+    WizardActions.updateData({ networks: null })
     WizardActions.updateOptions({ field, value })
   }
 

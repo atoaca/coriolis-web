@@ -22,6 +22,7 @@ const WizardOptionsFieldStyled = styled(WizardOptionsField) `
 class WizardOptions extends React.Component {
   static propTypes = {
     fields: PropTypes.array,
+    selectedInstances: PropTypes.array,
     data: PropTypes.object,
     onChange: PropTypes.func,
     useAdvancedOptions: PropTypes.bool,
@@ -40,9 +41,12 @@ class WizardOptions extends React.Component {
   getDefaultFieldsSchema() {
     let executeNowValue = this.getFieldValue('execute_now', true)
     let fieldsSchema = [
-      { name: 'separate_vm', type: 'strict-boolean', default: true },
       { name: 'description', type: 'string' },
     ]
+
+    if (this.props.selectedInstances.length > 1) {
+      fieldsSchema.unshift({ name: 'separate_vm', type: 'strict-boolean', default: true })
+    }
 
     if (this.props.wizardType === 'replica') {
       fieldsSchema.push({ name: 'execute_now', type: 'strict-boolean', default: true })
@@ -82,6 +86,7 @@ class WizardOptions extends React.Component {
         name={field.name}
         type={field.type}
         enum={field.enum}
+        required={field.required}
         value={this.getFieldValue(field.name, field.default)}
         onChange={value => { this.props.onChange(field, value) }}
       />
@@ -91,8 +96,10 @@ class WizardOptions extends React.Component {
   renderOptionsFields() {
     let fieldsSchema = this.getDefaultFieldsSchema()
 
+    fieldsSchema = fieldsSchema.concat(this.props.fields.filter(f => f.required))
+
     if (this.props.useAdvancedOptions) {
-      fieldsSchema = fieldsSchema.concat(this.props.fields)
+      fieldsSchema = fieldsSchema.concat(this.props.fields.filter(f => !f.required))
     }
 
     let executeNowColumn
@@ -111,7 +118,7 @@ class WizardOptions extends React.Component {
       }
     })
 
-    if (fields.length < 5) {
+    if (fields.length < 7) {
       return (
         <Fields>
           <OneColumn>
