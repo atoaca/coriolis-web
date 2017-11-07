@@ -16,8 +16,8 @@ const Wrapper = styled.div`
 `
 
 const Logo = styled.div`
-  width: 160px;
-  height: 32px;
+  width: 232px;
+  height: 48px;
   background: url('${logoImage}') no-repeat;
   flex-grow: 1;
 `
