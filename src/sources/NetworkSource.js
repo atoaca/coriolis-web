@@ -13,6 +13,8 @@ class NetworkSource {
         url: `${servicesUrl.coriolis}/${projectId}/endpoints/${enpointId}/networks`,
         method: 'GET',
       }).then(response => {
+        let networks = response.data.networks
+        networks.sort((a, b) => a.name.localeCompare(b.name))
         resolve(response.data.networks)
       }, reject).catch(reject)
     })

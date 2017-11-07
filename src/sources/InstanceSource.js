@@ -26,6 +26,19 @@ class InstanceSource {
       }, reject).catch(reject)
     })
   }
+
+  static loadInstanceDetails(endpointId, instanceName) {
+    return new Promise((resolve, reject) => {
+      let projectId = cookie.get('projectId')
+
+      Api.sendAjaxRequest({
+        url: `${servicesUrl.coriolis}/${projectId}/endpoints/${endpointId}/instances/${btoa(instanceName)}`,
+        method: 'GET',
+      }).then(response => {
+        resolve(response.data.instance)
+      }, reject).catch(reject)
+    })
+  }
 }
 
 export default InstanceSource

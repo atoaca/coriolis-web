@@ -20,6 +20,10 @@ class WizardActions {
   updateOptions({ field, value }) {
     return { field, value }
   }
+
+  updateNetworks({ sourceNic, targetNetwork }) {
+    return { sourceNic, targetNetwork }
+  }
 }
 
 export default alt.createActions(WizardActions)

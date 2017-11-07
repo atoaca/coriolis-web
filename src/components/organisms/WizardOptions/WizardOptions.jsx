@@ -26,6 +26,7 @@ class WizardOptions extends React.Component {
     onChange: PropTypes.func,
     useAdvancedOptions: PropTypes.bool,
     onAdvancedOptionsToggle: PropTypes.func,
+    wizardType: PropTypes.string,
   }
 
   getFieldValue(fieldName, defaultValue) {
@@ -41,20 +42,22 @@ class WizardOptions extends React.Component {
     let fieldsSchema = [
       { name: 'separate_vm', type: 'strict-boolean', default: true },
       { name: 'description', type: 'string' },
-      { name: 'execute_now', type: 'strict-boolean', default: true },
     ]
 
-    if (executeNowValue) {
-      fieldsSchema = [
-        ...fieldsSchema,
-        {
-          name: 'execute_now_options',
-          type: 'object',
-          properties: [
-            { name: 'shutdown_instances', type: 'boolean', default: true },
-          ],
-        },
-      ]
+    if (this.props.wizardType === 'replica') {
+      fieldsSchema.push({ name: 'execute_now', type: 'strict-boolean', default: true })
+      if (executeNowValue) {
+        fieldsSchema = [
+          ...fieldsSchema,
+          {
+            name: 'execute_now_options',
+            type: 'object',
+            properties: [
+              { name: 'shutdown_instances', type: 'boolean', default: true },
+            ],
+          },
+        ]
+      }
     }
 
     return fieldsSchema

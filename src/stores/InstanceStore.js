@@ -38,6 +38,8 @@ class InstanceStore {
     this.cachedHasNextPage = false
     this.cachedInstances = []
     this.reloading = false
+    this.instancesDetails = []
+    this.loadingInstancesDetails = true
 
     this.bindListeners({
       handleLoadInstances: InstanceActions.LOAD_INSTANCES,
@@ -53,6 +55,9 @@ class InstanceStore {
       handleReloadInstances: InstanceActions.RELOAD_INSTANCES,
       handleReloadInstancesSuccess: InstanceActions.RELOAD_INSTANCES_SUCCESS,
       handleReloadInstancesFailed: InstanceActions.RELOAD_INSTANCES_FAILED,
+      handleLoadInstancesDetails: InstanceActions.LOAD_INSTANCES_DETAILS,
+      handleLoadInstanceDetailsSuccess: InstanceActions.LOAD_INSTANCE_DETAILS_SUCCESS,
+      handleLoadInstanceDetailsFailed: InstanceActions.LOAD_INSTANCE_DETAILS_FAILED,
     })
   }
 
@@ -137,6 +142,32 @@ class InstanceStore {
 
   handleReloadInstancesFailed() {
     this.reloading = false
+  }
+
+  handleLoadInstancesDetails({ count }) {
+    this.loadingInstancesDetails = true
+    this.instancesDetailsCount = count
+    this.instancesDetails = []
+  }
+
+  handleLoadInstanceDetailsSuccess(instance) {
+    this.instancesDetailsCount -= 1
+    this.loadingInstancesDetails = this.instancesDetailsCount > 0
+
+    if (this.instancesDetails.find(i => i.id === instance.id)) {
+      this.instancesDetails = this.instancesDetails.filter(i => i.id !== instance.id)
+    }
+
+    this.instancesDetails = [
+      ...this.instancesDetails,
+      instance,
+    ]
+    this.instancesDetails.sort((a, b) => a.instance_name.localeCompare(b.instance_name))
+  }
+
+  handleLoadInstanceDetailsFailed() {
+    this.instancesDetailsCount -= 1
+    this.loadingInstancesDetails = this.instancesDetailsCount > 0
   }
 }
 

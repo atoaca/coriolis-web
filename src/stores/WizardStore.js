@@ -14,6 +14,7 @@ class WizardStore {
       handleSetCurrentPage: WizardActions.SET_CURRENT_PAGE,
       handleToggleInstanceSelection: WizardActions.TOGGLE_INSTANCE_SELECTION,
       handleUpdateOptions: WizardActions.UPDATE_OPTIONS,
+      handleUpdateNetworks: WizardActions.UPDATE_NETWORKS,
     })
   }
 
@@ -51,6 +52,15 @@ class WizardStore {
       ...this.data.options,
     }
     this.data.options[field.name] = value
+  }
+
+  handleUpdateNetworks({ sourceNic, targetNetwork }) {
+    if (!this.data.networks) {
+      this.data.networks = []
+    }
+
+    this.data.networks = this.data.networks.filter(n => n.sourceNic.id !== sourceNic.id)
+    this.data.networks.push({ sourceNic, targetNetwork })
   }
 }
 

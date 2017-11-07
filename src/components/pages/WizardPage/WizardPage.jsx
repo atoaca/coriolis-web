@@ -90,6 +90,7 @@ class WizardPage extends React.Component {
         ProviderActions.loadOptionsSchema(this.props.wizardStore.data.target.type, this.state.type)
         break
       case 'networks':
+        InstanceActions.loadInstancesDetails(this.props.wizardStore.data.source.id, this.props.wizardStore.data.selectedInstances)
         NetworkActions.loadNetworks(this.props.wizardStore.data.target.id)
         break
       default:
@@ -133,11 +134,11 @@ class WizardPage extends React.Component {
   }
 
   handleSourceEndpointChange(source) {
-    WizardActions.updateData({ source, selectedInstances: null })
+    WizardActions.updateData({ source, selectedInstances: null, networks: null })
   }
 
   handleTargetEndpointChange(target) {
-    WizardActions.updateData({ target })
+    WizardActions.updateData({ target, networks: null })
   }
 
   handleAddEndpoint(newEndpointType, newEndpointFromSource) {
@@ -176,11 +177,16 @@ class WizardPage extends React.Component {
   }
 
   handleInstanceClick(instance) {
+    WizardActions.updateData({ networks: null })
     WizardActions.toggleInstanceSelection(instance)
   }
 
   handleOptionsChange(field, value) {
     WizardActions.updateOptions({ field, value })
+  }
+
+  handleNetworkChange(sourceNic, targetNetwork) {
+    WizardActions.updateNetworks({ sourceNic, targetNetwork })
   }
 
   render() {
@@ -211,6 +217,7 @@ class WizardPage extends React.Component {
             onInstancesReloadClick={searchText => { this.handleInstancesReloadClick(searchText) }}
             onInstanceClick={instance => { this.handleInstanceClick(instance) }}
             onOptionsChange={(field, value) => { this.handleOptionsChange(field, value) }}
+            onNetworkChange={(sourceNic, targetNetwork) => { this.handleNetworkChange(sourceNic, targetNetwork) }}
           />}
         />
         <Modal

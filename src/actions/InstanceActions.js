@@ -87,6 +87,34 @@ class InstanceActions {
   reloadInstancesFailed(response) {
     return response || true
   }
+
+  loadInstancesDetails(endpointId, instances) {
+    instances.forEach(instance => {
+      InstanceSource.loadInstanceDetails(endpointId, instance.instance_name).then(
+        instance => { this.loadInstanceDetailsSuccess(instance) },
+        response => { this.loadInstanceDetailsFailed(response) },
+      )
+    })
+
+    return { count: instances.length }
+  }
+
+  loadInstanceDetails(endpointId, instanceName) {
+    InstanceSource.loadInstanceDetails(endpointId, instanceName).then(
+      instance => { this.loadInstanceDetailsSuccess(instance) },
+      response => { this.loadInstanceDetailsFailed(response) },
+    )
+
+    return true
+  }
+
+  loadInstanceDetailsSuccess(instance) {
+    return instance
+  }
+
+  loadInstanceDetailsFailed(response) {
+    return response || true
+  }
 }
 
 export default alt.createActions(InstanceActions)

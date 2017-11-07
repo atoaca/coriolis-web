@@ -85,6 +85,7 @@ class WizardPageContent extends React.Component {
     onInstancesReloadClick: PropTypes.func,
     onInstanceClick: PropTypes.func,
     onOptionsChange: PropTypes.func,
+    onNetworkChange: PropTypes.func,
   }
 
   constructor() {
@@ -122,6 +123,18 @@ class WizardPageContent extends React.Component {
     return providers
   }
 
+  isNetworksPageValid() {
+    let instances = this.props.instanceStore.instancesDetails
+    if (instances.find(i => i.devices)) {
+      if (instances.find(i => i.devices.nics && i.devices.nics.length > 0)) {
+        return this.props.wizardData.networks && this.props.wizardData.networks.length > 0
+      }
+      return true
+    }
+
+    return false
+  }
+
   isNextButtonDisabled() {
     switch (this.props.page.id) {
       case 'type':
@@ -134,6 +147,8 @@ class WizardPageContent extends React.Component {
         return !this.props.wizardData.selectedInstances || !this.props.wizardData.selectedInstances.length
       case 'options':
         return false
+      case 'networks':
+        return !this.isNetworksPageValid()
       default:
         return true
     }
@@ -217,6 +232,7 @@ class WizardPageContent extends React.Component {
             onChange={this.props.onOptionsChange}
             data={this.props.wizardData.options}
             useAdvancedOptions={this.state.useAdvancedOptions}
+            wizardType={this.props.type}
             onAdvancedOptionsToggle={useAdvancedOptions => { this.handleAdvancedOptionsToggle(useAdvancedOptions) }}
           />
         )
@@ -225,7 +241,11 @@ class WizardPageContent extends React.Component {
         body = (
           <WizardNetworks
             networks={this.props.networkStore.networks}
+            selectedNetworks={this.props.wizardData.networks}
             loading={this.props.networkStore.loading}
+            instancesDetails={this.props.instanceStore.instancesDetails}
+            loadingInstancesDetails={this.props.instanceStore.loadingInstancesDetails}
+            onChange={this.props.onNetworkChange}
           />
         )
         break
