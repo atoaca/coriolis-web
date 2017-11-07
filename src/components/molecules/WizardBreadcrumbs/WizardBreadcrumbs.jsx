@@ -28,12 +28,14 @@ const Name = styled.div`
 class WizardBreadcrumbs extends React.Component {
   static propTypes = {
     selected: PropTypes.object,
+    wizardType: PropTypes.string,
   }
 
   render() {
+    let pages = wizardConfig.pages.filter(p => !p.excludeFrom || p.excludeFrom !== this.props.wizardType)
     return (
       <Wrapper>
-        {wizardConfig.pages.map(page => {
+        {pages.map(page => {
           return (
             <Breadcrumb key={page.id}>
               <Name selected={this.props.selected.id === page.id}>{page.breadcrumb}</Name>

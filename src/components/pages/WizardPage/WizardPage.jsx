@@ -91,7 +91,7 @@ class WizardPage extends React.Component {
         break
       case 'networks':
         InstanceActions.loadInstancesDetails(this.props.wizardStore.data.source.id, this.props.wizardStore.data.selectedInstances)
-        NetworkActions.loadNetworks(this.props.wizardStore.data.target.id)
+        NetworkActions.loadNetworks(this.props.wizardStore.data.target.id, this.props.wizardStore.data.options)
         break
       default:
     }
@@ -114,21 +114,23 @@ class WizardPage extends React.Component {
   }
 
   handleBackClick() {
-    let currentPageIndex = wizardConfig.pages.findIndex(p => p.id === this.props.wizardStore.currentPage.id)
+    let pages = wizardConfig.pages.filter(p => !p.excludeFrom || p.excludeFrom !== this.state.type)
+    let currentPageIndex = pages.findIndex(p => p.id === this.props.wizardStore.currentPage.id)
 
     if (currentPageIndex === 0) {
       window.history.back()
       return
     }
 
-    let page = wizardConfig.pages[currentPageIndex - 1]
+    let page = pages[currentPageIndex - 1]
     this.loadDataForPage(page)
     WizardActions.setCurrentPage(page)
   }
 
   handleNextClick() {
-    let currentPageIndex = wizardConfig.pages.findIndex(p => p.id === this.props.wizardStore.currentPage.id)
-    let page = wizardConfig.pages[currentPageIndex + 1]
+    let pages = wizardConfig.pages.filter(p => !p.excludeFrom || p.excludeFrom !== this.state.type)
+    let currentPageIndex = pages.findIndex(p => p.id === this.props.wizardStore.currentPage.id)
+    let page = pages[currentPageIndex + 1]
     this.loadDataForPage(page)
     WizardActions.setCurrentPage(page)
   }
@@ -189,6 +191,18 @@ class WizardPage extends React.Component {
     WizardActions.updateNetworks({ sourceNic, targetNetwork })
   }
 
+  handleAddScheduleClick() {
+    WizardActions.addSchedule()
+  }
+
+  handleScheduleChange(scheduleId, data) {
+    WizardActions.updateSchedule(scheduleId, data)
+  }
+
+  handleScheduleRemove(scheduleId) {
+    WizardActions.removeSchedule(scheduleId)
+  }
+
   render() {
     return (
       <Wrapper>
@@ -218,6 +232,9 @@ class WizardPage extends React.Component {
             onInstanceClick={instance => { this.handleInstanceClick(instance) }}
             onOptionsChange={(field, value) => { this.handleOptionsChange(field, value) }}
             onNetworkChange={(sourceNic, targetNetwork) => { this.handleNetworkChange(sourceNic, targetNetwork) }}
+            onAddScheduleClick={() => { this.handleAddScheduleClick() }}
+            onScheduleChange={(scheduleId, data) => { this.handleScheduleChange(scheduleId, data) }}
+            onScheduleRemove={scheduleId => { this.handleScheduleRemove(scheduleId) }}
           />}
         />
         <Modal

@@ -30,6 +30,8 @@ const List = styled.div`
   border: 1px solid ${Palette.grayscale[3]};
   border-radius: ${StyleProps.borderRadius};
   z-index: 10;
+  max-height: 200px;
+  overflow: auto;
 `
 
 const ListItem = styled.div`
@@ -110,11 +112,11 @@ class Dropdown extends React.Component {
   getLabel(item) {
     let labelField = this.props.labelField || 'label'
 
-    if (item) {
-      return (item[labelField] && item[labelField].toString()) || item.toString()
+    if (item === null || item === undefined) {
+      return this.props.noSelectionMessage
     }
 
-    return this.props.noSelectionMessage
+    return (item[labelField] !== null && item[labelField] !== undefined && item[labelField].toString()) || item.toString()
   }
 
   handlePageClick() {
