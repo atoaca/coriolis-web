@@ -102,6 +102,7 @@ class Switch extends React.Component {
     triState: PropTypes.bool,
     leftLabel: PropTypes.bool,
     secondary: PropTypes.bool,
+    noLabel: PropTypes.bool,
     height: PropTypes.number,
     big: PropTypes.bool,
     checkedLabel: PropTypes.string,
@@ -179,7 +180,7 @@ class Switch extends React.Component {
   }
 
   renderLeftLabel() {
-    if (!this.props.leftLabel) {
+    if (!this.props.leftLabel || this.props.noLabel) {
       return null
     }
 
@@ -189,7 +190,7 @@ class Switch extends React.Component {
   }
 
   renderRightLabel() {
-    if (this.props.big || this.props.leftLabel) {
+    if (this.props.big || this.props.leftLabel || this.props.noLabel) {
       return null
     }
 

@@ -11,6 +11,7 @@ import {
   WizardInstances,
   WizardNetworks,
   WizardOptions,
+  Schedule,
 } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
@@ -86,6 +87,9 @@ class WizardPageContent extends React.Component {
     onInstanceClick: PropTypes.func,
     onOptionsChange: PropTypes.func,
     onNetworkChange: PropTypes.func,
+    onAddScheduleClick: PropTypes.func,
+    onScheduleChange: PropTypes.func,
+    onScheduleRemove: PropTypes.func,
   }
 
   constructor() {
@@ -124,6 +128,10 @@ class WizardPageContent extends React.Component {
   }
 
   isNetworksPageValid() {
+    if (this.props.networkStore.loading || this.props.instanceStore.loadingInstancesDetails) {
+      return false
+    }
+
     let instances = this.props.instanceStore.instancesDetails
     if (instances.find(i => i.devices)) {
       if (instances.find(i => i.devices.nics && i.devices.nics.length > 0)) {
@@ -149,6 +157,8 @@ class WizardPageContent extends React.Component {
         return false
       case 'networks':
         return !this.isNetworksPageValid()
+      case 'schedule':
+        return false
       default:
         return true
     }
@@ -249,6 +259,16 @@ class WizardPageContent extends React.Component {
           />
         )
         break
+      case 'schedule':
+        body = (
+          <Schedule
+            schedules={this.props.wizardData.schedules}
+            onAddScheduleClick={this.props.onAddScheduleClick}
+            onChange={this.props.onScheduleChange}
+            onRemove={this.props.onScheduleRemove}
+          />
+        )
+        break
       default:
     }
 
@@ -283,7 +303,7 @@ class WizardPageContent extends React.Component {
         {this.renderBody()}
         <Footer>
           {this.renderNavigationActions()}
-          <WizardBreadcrumbs selected={this.props.page} />
+          <WizardBreadcrumbs selected={this.props.page} wizardType={this.props.type} />
         </Footer>
       </Wrapper>
     )

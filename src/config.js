@@ -45,7 +45,7 @@ export const wizardConfig = {
     { id: 'vms', title: 'Select instances', breadcrumb: 'Select VMs' },
     { id: 'options', title: 'Options', breadcrumb: 'Options' },
     { id: 'networks', title: 'Networks', breadcrumb: 'Networks' },
-    { id: 'schedule', title: 'Schedule', breadcrumb: 'Schedule' },
+    { id: 'schedule', title: 'Schedule', breadcrumb: 'Schedule', excludeFrom: 'migration' },
     { id: 'summary', title: 'Summary', breadcrumb: 'Summary' },
   ],
   instancesItemsPerPage: 6,

@@ -53,7 +53,16 @@ const color = (props) => {
   }
   return 'white'
 }
+const getWidth = props => {
+  if (props.width) {
+    return props.width
+  }
 
+  if (props.large) {
+    return `${StyleProps.inputSizes.large.width}px`
+  }
+  return `${StyleProps.inputSizes.regular.width}px`
+}
 const StyledButton = styled.button`
   height: 32px;
   border-radius: 4px;
@@ -62,10 +71,7 @@ const StyledButton = styled.button`
   ${props => border(props)}
   color: ${props => color(props)};
   padding: 0;
-  min-width: ${props => props.large ? StyleProps.inputSizes.large.width
-    : StyleProps.inputSizes.regular.width}px;
-  max-width: ${props => props.large ? StyleProps.inputSizes.large.width
-    : StyleProps.inputSizes.regular.width}px;
+  ${props => StyleProps.exactWidth(getWidth(props))}
   cursor: pointer;
   font-size: inherit;
   &:disabled {

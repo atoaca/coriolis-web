@@ -24,6 +24,18 @@ class WizardActions {
   updateNetworks({ sourceNic, targetNetwork }) {
     return { sourceNic, targetNetwork }
   }
+
+  addSchedule() {
+    return true
+  }
+
+  updateSchedule(scheduleId, data) {
+    return { scheduleId, data }
+  }
+
+  removeSchedule(scheduleId) {
+    return scheduleId
+  }
 }
 
 export default alt.createActions(WizardActions)

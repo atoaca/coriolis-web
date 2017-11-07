@@ -15,6 +15,9 @@ class WizardStore {
       handleToggleInstanceSelection: WizardActions.TOGGLE_INSTANCE_SELECTION,
       handleUpdateOptions: WizardActions.UPDATE_OPTIONS,
       handleUpdateNetworks: WizardActions.UPDATE_NETWORKS,
+      handleAddSchedule: WizardActions.ADD_SCHEDULE,
+      handleUpdateSchedule: WizardActions.UPDATE_SCHEDULE,
+      handleRemoveSchedule: WizardActions.REMOVE_SCHEDULE,
     })
   }
 
@@ -61,6 +64,36 @@ class WizardStore {
 
     this.data.networks = this.data.networks.filter(n => n.sourceNic.id !== sourceNic.id)
     this.data.networks.push({ sourceNic, targetNetwork })
+  }
+
+  handleAddSchedule() {
+    if (!this.data.schedules) {
+      this.data.schedules = []
+    }
+    this.data.schedules.push({ id: this.data.schedules.length })
+  }
+
+  handleUpdateSchedule({ scheduleId, data }) {
+    let schedule = this.data.schedules.find(s => s.id === scheduleId)
+    if (data.schedule) {
+      schedule.schedule = {
+        ...schedule.schedule,
+        ...data.schedule,
+      }
+    } else {
+      schedule = {
+        ...schedule,
+        ...data,
+      }
+    }
+
+    this.data.schedules = this.data.schedules.filter(s => s.id !== scheduleId)
+    this.data.schedules.push(schedule)
+    this.data.schedules.sort((a, b) => a.id < b.id)
+  }
+
+  handleRemoveSchedule(scheduleId) {
+    this.data.schedules = this.data.schedules.filter(s => s.id !== scheduleId)
   }
 }
 
