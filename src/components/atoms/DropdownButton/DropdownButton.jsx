@@ -20,7 +20,7 @@ const getLabelColor = props => {
 }
 const Label = styled.div`
   color: ${props => getLabelColor(props)};
-  margin: 7px 32px 0 16px;
+  margin: 0 32px 0 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -59,6 +59,8 @@ const getWidth = props => {
   return StyleProps.inputSizes.regular.width - 2
 }
 const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
   position: relative;
   width: ${props => getWidth(props)}px;
   height: ${props => props.large ? StyleProps.inputSizes.large.height - 2
