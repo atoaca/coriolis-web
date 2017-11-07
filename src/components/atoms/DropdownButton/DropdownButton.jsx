@@ -84,7 +84,6 @@ const Wrapper = styled.div`
 const Arrow = styled.div`
   position: absolute;
   right: 8px;
-  top: 6px;
 `
 
 const DropdownButton = ({ value, onClick, ...props }) => {

@@ -8,6 +8,7 @@ import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
 
 import deleteImage from './images/delete.svg'
+import deleteHoverImage from './images/delete-hover.svg'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -41,6 +42,10 @@ const DeleteButton = styled.div`
   cursor: pointer;
   right: -32px;
   top: 24px;
+
+  &:hover {
+    background: url('${deleteHoverImage}') center no-repeat;
+  }
 `
 const RowData = styled.div`
   width: ${props => props.width};
