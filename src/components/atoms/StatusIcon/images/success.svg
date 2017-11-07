@@ -7,7 +7,7 @@
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Icon/Ok/Green">
             <circle id="Oval-2" fill="#4CD964" cx="8" cy="8" r="8"></circle>
-            <polyline id="Stroke-3" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" points="12 6 7.08307419 11 4 8.00397542"></polyline>
+            <polyline id="Stroke-3" stroke="#FFFFFF" stroke-width="1.5" points="12 6 7.08307419 11 4 8.00397542"></polyline>
         </g>
     </g>
 </svg>

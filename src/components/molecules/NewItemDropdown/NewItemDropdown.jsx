@@ -62,7 +62,7 @@ const Icon = styled.div`
   min-width: 48px;
   height: 48px;
   background: url('${props => getIcon(props)}') no-repeat center;
-  margin: 16px 16px 16px 8px;
+  margin: 16px 16px 16px 16px;
 `
 const Content = styled.div``
 const Title = styled.div`
@@ -178,4 +178,3 @@ class NewItemDropdown extends React.Component {
 }
 
 export default NewItemDropdown
-
