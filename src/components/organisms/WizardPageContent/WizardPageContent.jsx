@@ -97,6 +97,7 @@ class WizardPageContent extends React.Component {
 
     this.state = {
       useAdvancedOptions: false,
+      timezone: 'local',
     }
   }
 
@@ -185,6 +186,10 @@ class WizardPageContent extends React.Component {
 
   handleAdvancedOptionsToggle(useAdvancedOptions) {
     this.setState({ useAdvancedOptions })
+  }
+
+  handleTimezoneChange(timezone) {
+    this.setState({ timezone: timezone.value })
   }
 
   renderHeader() {
@@ -286,6 +291,8 @@ class WizardPageContent extends React.Component {
             onAddScheduleClick={this.props.onAddScheduleClick}
             onChange={this.props.onScheduleChange}
             onRemove={this.props.onScheduleRemove}
+            timezone={this.state.timezone}
+            onTimezoneChange={timezone => { this.handleTimezoneChange(timezone) }}
           />
         )
         break

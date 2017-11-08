@@ -32,6 +32,8 @@ const Buttons = styled.div`
 
 class ReplicaExecutionOptions extends React.Component {
   static propTypes = {
+    options: PropTypes.object,
+    onChange: PropTypes.func,
     executionLabel: PropTypes.string,
     onCancelClick: PropTypes.func,
     onExecuteClick: PropTypes.func,
@@ -54,9 +56,21 @@ class ReplicaExecutionOptions extends React.Component {
     }
   }
 
+  getFieldValue(field) {
+    if (!this.props.options || this.props.options[field.name] === null || this.props.options[field.name] === undefined) {
+      return field.value
+    }
+
+    return this.props.options[field.name]
+  }
+
   handleValueChange(field, value) {
     this.state.fields.find(f => f.name === field.name).value = value
     this.setState({ fields: this.state.fields })
+
+    if (this.props.onChange) {
+      this.props.onChange(field.name, value)
+    }
   }
 
   render() {
@@ -69,7 +83,7 @@ class ReplicaExecutionOptions extends React.Component {
               <Field
                 key={field.name}
                 type={field.type}
-                value={field.value}
+                value={this.getFieldValue(field)}
                 label={LabelDictionary.get(field.name)}
                 onChange={value => this.handleValueChange(field, value)}
               />

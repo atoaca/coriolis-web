@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { Switch, Dropdown, Button, DatetimePicker, ReplicaExecutionOptions, Modal } from 'components'
+import { Switch, Dropdown, Button, DatetimePicker, ReplicaExecutionOptions, Modal, DropdownLink } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
@@ -78,15 +78,27 @@ const Label = styled.div`
   line-height: 35px;
   margin-bottom: -8px;
 `
-
 const Footer = styled.div`
   margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `
+const Timezone = styled.div`
+  display: flex;
+  align-items: center;
+`
+const TimezoneLabel = styled.div`
+  margin-right: 4px;
+`
+
 const colWidths = ['6%', '16%', '16%', '16%', '9%', '9%', '22%', '6%']
 
 class Schedule extends React.Component {
   static propTypes = {
     schedules: PropTypes.array,
+    timezone: PropTypes.string,
+    onTimezoneChange: PropTypes.func,
     onAddScheduleClick: PropTypes.func,
     onChange: PropTypes.func,
     onRemove: PropTypes.func,
@@ -98,6 +110,7 @@ class Schedule extends React.Component {
     this.state = {
       showOptionsModal: false,
       selectedSchedule: null,
+      executionOptions: null,
     }
   }
 
@@ -122,7 +135,7 @@ class Schedule extends React.Component {
   }
 
   handleShowOptions(selectedSchedule) {
-    this.setState({ showOptionsModal: true, selectedSchedule })
+    this.setState({ showOptionsModal: true, executionOptions: selectedSchedule, selectedSchedule })
   }
 
   handleCloseOptionsModal() {
@@ -137,6 +150,19 @@ class Schedule extends React.Component {
     })
 
     this.props.onChange(this.state.selectedSchedule.id, options)
+  }
+
+  handleExecutionOptionsChange(fieldName, value) {
+    let options = this.state.executionOptions
+    if (!options) {
+      options = {}
+    }
+    options = {
+      ...options,
+    }
+    options[fieldName] = value
+
+    this.setState({ executionOptions: options })
   }
 
   renderHeader() {
@@ -156,7 +182,7 @@ class Schedule extends React.Component {
   }
 
   renderMonthValue(s) {
-    let items = [{ label: 'Every Month', value: null }]
+    let items = [{ label: 'Any', value: null }]
     let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     months.forEach((label, value) => {
       items.push({ label, value: value + 1 })
@@ -178,7 +204,7 @@ class Schedule extends React.Component {
   }
 
   renderDayOfMonthValue(s) {
-    let items = [{ label: 'Every Day', value: null }]
+    let items = [{ label: 'Any', value: null }]
     for (let i = 1; i <= 31; i += 1) {
       items.push({ label: i, value: i })
     }
@@ -199,7 +225,7 @@ class Schedule extends React.Component {
   }
 
   renderDayOfWeekValue(s) {
-    let items = [{ label: 'Every Day', value: null }]
+    let items = [{ label: 'Any', value: null }]
     let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     days.forEach((label, value) => {
       items.push({ label, value })
@@ -221,7 +247,7 @@ class Schedule extends React.Component {
   }
 
   renderHourValue(s) {
-    let items = [{ label: 'Every Hour', value: null }]
+    let items = [{ label: 'Any', value: null }]
     for (let i = 0; i <= 23; i += 1) {
       items.push({ label: this.padNumber(i), value: i })
     }
@@ -242,7 +268,7 @@ class Schedule extends React.Component {
   }
 
   renderMinuteValue(s) {
-    let items = [{ label: 'Every Minute', value: null }]
+    let items = [{ label: 'Any', value: null }]
     for (let i = 0; i <= 59; i += 1) {
       items.push({ label: this.padNumber(i), value: i })
     }
@@ -263,13 +289,20 @@ class Schedule extends React.Component {
   }
 
   renderExpirationValue(s) {
+    let momentInstance = moment
+    if (this.props.timezone === 'utc') {
+      momentInstance = moment.utc
+    }
+
+    let date = s.expiration_date && momentInstance(s.expiration_date)
+
     if (s.enabled) {
-      return this.renderLabel({ label: (s.expiration_date && moment(s.expiration_date).format('DD/MM/YYYY hh:mm A')) || '-' })
+      return this.renderLabel({ label: (date && date.format('DD/MM/YYYY hh:mm A')) || '-' })
     }
 
     return (
       <DatetimePicker
-        value={s.expiration_date}
+        value={date}
         onChange={date => { this.props.onChange(s.id, { expiration_date: date.toDate() }) }}
       />
     )
@@ -353,9 +386,22 @@ class Schedule extends React.Component {
       return null
     }
 
+    let timezoneItems = [
+      { label: 'Local Time', value: 'local' },
+      { label: 'UTC', value: 'utc' },
+    ]
+
     return (
       <Footer>
         <Button secondary onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
+        <Timezone>
+          <TimezoneLabel>Show all times in</TimezoneLabel>
+          <DropdownLink
+            items={timezoneItems}
+            selectedItem={this.props.timezone}
+            onChange={this.props.onTimezoneChange}
+          />
+        </Timezone>
       </Footer>
     )
   }
@@ -372,6 +418,8 @@ class Schedule extends React.Component {
           onRequestClose={() => { this.handleCloseOptionsModal() }}
         >
           <ReplicaExecutionOptions
+            options={this.state.executionOptions}
+            onChange={(fieldName, value) => { this.handleExecutionOptionsChange(fieldName, value) }}
             executionLabel="Save"
             onCancelClick={() => { this.handleCloseOptionsModal() }}
             onExecuteClick={fields => { this.handleOptionsSave(fields) }}
