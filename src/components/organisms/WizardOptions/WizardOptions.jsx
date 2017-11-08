@@ -6,7 +6,7 @@ import { ToggleButtonBar, WizardOptionsField } from 'components'
 
 const Wrapper = styled.div``
 const Fields = styled.div`
-  margin-top: 36px;
+  margin-top: 46px;
   display: flex;
 `
 const OneColumn = styled.div``
@@ -16,7 +16,7 @@ const Column = styled.div`
 const WizardOptionsFieldStyled = styled(WizardOptionsField) `
   width: 320px;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 39px;
 `
 
 class WizardOptions extends React.Component {
