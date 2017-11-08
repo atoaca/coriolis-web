@@ -30,7 +30,7 @@ const List = styled.div`
   border: 1px solid ${Palette.grayscale[3]};
   border-radius: ${StyleProps.borderRadius};
   z-index: 10;
-  max-height: 200px;
+  max-height: 400px;
   overflow: auto;
 `
 
