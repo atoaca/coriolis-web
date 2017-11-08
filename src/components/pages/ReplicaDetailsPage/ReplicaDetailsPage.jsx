@@ -76,8 +76,11 @@ class ReplicaDetailsPage extends React.Component {
   isActionButtonDisabled() {
     let originEndpoint = this.props.endpointStore.endpoints.find(e => e.id === this.props.replicaStore.replicaDetails.origin_endpoint_id)
     let targetEndpoint = this.props.endpointStore.endpoints.find(e => e.id === this.props.replicaStore.replicaDetails.destination_endpoint_id)
+    let lastExecution = this.props.replicaStore.replicaDetails.executions && this.props.replicaStore.replicaDetails.executions.length
+      && this.props.replicaStore.replicaDetails.executions[this.props.replicaStore.replicaDetails.executions.length - 1]
+    let status = lastExecution && lastExecution.status
 
-    return Boolean(!originEndpoint || !targetEndpoint)
+    return Boolean(!originEndpoint || !targetEndpoint || status === 'RUNNING')
   }
 
   handleUserItemClick(item) {
