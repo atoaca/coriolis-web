@@ -24,6 +24,7 @@ const Label = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-grow: 1;
   ${props => props.centered ? 'text-align: center;' : ''}
 `
 
@@ -86,9 +87,9 @@ const Arrow = styled.div`
   right: 8px;
 `
 
-const DropdownButton = ({ value, onClick, ...props }) => {
+const DropdownButton = ({ value, onClick, className, ...props }) => {
   return (
-    <Wrapper onClick={onClick} {...props}>
+    <Wrapper onClick={onClick} className={className} {...props}>
       <Label {...props}>{value}</Label>
       <Arrow {...props} dangerouslySetInnerHTML={{ __html: arrowImage }} />
     </Wrapper>
@@ -97,6 +98,7 @@ const DropdownButton = ({ value, onClick, ...props }) => {
 
 DropdownButton.propTypes = {
   value: PropTypes.string,
+  className: PropTypes.string,
   onClick: PropTypes.func,
 }
 

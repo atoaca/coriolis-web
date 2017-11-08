@@ -32,8 +32,13 @@ const Buttons = styled.div`
 
 class ReplicaExecutionOptions extends React.Component {
   static propTypes = {
+    executionLabel: PropTypes.string,
     onCancelClick: PropTypes.func,
     onExecuteClick: PropTypes.func,
+  }
+
+  static defaultProps = {
+    executionLabel: 'Execute',
   }
 
   constructor() {
@@ -73,7 +78,7 @@ class ReplicaExecutionOptions extends React.Component {
         </Form>
         <Buttons>
           <Button secondary onClick={this.props.onCancelClick}>Cancel</Button>
-          <Button onClick={() => { this.props.onExecuteClick(this.state.fields) }}>Execute</Button>
+          <Button onClick={() => { this.props.onExecuteClick(this.state.fields) }}>{this.props.executionLabel}</Button>
         </Buttons>
       </Wrapper>
     )

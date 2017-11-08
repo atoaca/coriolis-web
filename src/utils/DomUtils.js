@@ -1,4 +1,15 @@
 class DomUtils {
+  static getEventPath(event) {
+    let path = []
+    let node = event.target
+    while (node !== document.body) {
+      path.push(node)
+      node = node.parentNode
+    }
+
+    return path
+  }
+
   /**
    * Copies specified text to clipboard
    * @param {string} text The text to copy

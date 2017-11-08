@@ -70,7 +70,7 @@ class WizardStore {
     if (!this.data.schedules) {
       this.data.schedules = []
     }
-    this.data.schedules.push({ id: this.data.schedules.length })
+    this.data.schedules.push({ id: new Date().getTime() })
   }
 
   handleUpdateSchedule({ scheduleId, data }) {
@@ -89,7 +89,7 @@ class WizardStore {
 
     this.data.schedules = this.data.schedules.filter(s => s.id !== scheduleId)
     this.data.schedules.push(schedule)
-    this.data.schedules.sort((a, b) => a.id < b.id)
+    this.data.schedules.sort((a, b) => a.id > b.id)
   }
 
   handleRemoveSchedule(scheduleId) {

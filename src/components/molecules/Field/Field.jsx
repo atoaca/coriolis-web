@@ -35,7 +35,6 @@ class Field extends React.Component {
   renderSwitch() {
     return (
       <Switch
-        triState
         disabled={this.props.disabled}
         checked={this.props.value}
         onChange={checked => { this.props.onChange(checked) }}

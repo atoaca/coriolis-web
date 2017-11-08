@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
-import { Switch, Dropdown, Button } from 'components'
+import { Switch, Dropdown, Button, DatetimePicker, ReplicaExecutionOptions, Modal } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
@@ -16,6 +17,7 @@ const Wrapper = styled.div`
 const Table = styled.div``
 const Header = styled.div`
   display: flex;
+  margin-bottom: 4px;
 `
 const HeaderData = styled.div`
   width: ${props => props.width};
@@ -62,6 +64,24 @@ const NoSchedulesMessage = styled.div`
 const DropdownStyled = styled(Dropdown) `
   font-size: 11px;
 `
+const Label = styled.div`
+  background: ${Palette.grayscale[7]};
+  height: 100%;
+  font-size: 11px;
+  margin-right: 8px;
+  border-radius: ${StyleProps.borderRadius};
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  line-height: 35px;
+  margin-bottom: -8px;
+`
+
+const Footer = styled.div`
+  margin-top: 16px;
+`
 const colWidths = ['6%', '16%', '16%', '16%', '9%', '9%', '22%', '6%']
 
 class Schedule extends React.Component {
@@ -70,6 +90,15 @@ class Schedule extends React.Component {
     onAddScheduleClick: PropTypes.func,
     onChange: PropTypes.func,
     onRemove: PropTypes.func,
+  }
+
+  constructor() {
+    super()
+
+    this.state = {
+      showOptionsModal: false,
+      selectedSchedule: null,
+    }
   }
 
   getFieldValue(schedule, items, fieldName, zeroBasedIndex) {
@@ -84,33 +113,6 @@ class Schedule extends React.Component {
     return items[schedule[fieldName]]
   }
 
-  generateMonthItems() {
-    let items = [{ label: 'Every Month', value: null }]
-    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    months.forEach((label, value) => {
-      items.push({ label, value: value + 1 })
-    })
-    return items
-  }
-
-  generateMonthDayItems() {
-    let items = [{ label: 'Every Day', value: null }]
-    for (let i = 1; i <= 31; i += 1) {
-      items.push({ label: i, value: i })
-    }
-
-    return items
-  }
-
-  generateWeekDayItems() {
-    let items = [{ label: 'Every Day', value: null }]
-    let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    days.forEach((label, value) => {
-      items.push({ label, value })
-    })
-    return items
-  }
-
   padNumber(number) {
     if (number < 10) {
       return `0${number}`
@@ -119,20 +121,22 @@ class Schedule extends React.Component {
     return number
   }
 
-  generateHourItems() {
-    let items = [{ label: 'Every Hour', value: null }]
-    for (let i = 0; i <= 23; i += 1) {
-      items.push({ label: this.padNumber(i), value: i })
-    }
-    return items
+  handleShowOptions(selectedSchedule) {
+    this.setState({ showOptionsModal: true, selectedSchedule })
   }
 
-  generateMinuteItems() {
-    let items = [{ label: 'Every Minute', value: null }]
-    for (let i = 0; i <= 59; i += 1) {
-      items.push({ label: this.padNumber(i), value: i })
-    }
-    return items
+  handleCloseOptionsModal() {
+    this.setState({ showOptionsModal: false })
+  }
+
+  handleOptionsSave(fields) {
+    this.setState({ showOptionsModal: false })
+    let options = {}
+    fields.forEach(f => {
+      options[f.name] = f.value || false
+    })
+
+    this.props.onChange(this.state.selectedSchedule.id, options)
   }
 
   renderHeader() {
@@ -144,6 +148,130 @@ class Schedule extends React.Component {
           return <HeaderData key={l} width={colWidths[i]}>{l}</HeaderData>
         })}
       </Header>
+    )
+  }
+
+  renderLabel(value) {
+    return <Label>{value.label}</Label>
+  }
+
+  renderMonthValue(s) {
+    let items = [{ label: 'Every Month', value: null }]
+    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    months.forEach((label, value) => {
+      items.push({ label, value: value + 1 })
+    })
+
+    if (s.enabled) {
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'month'))
+    }
+
+    return (
+      <DropdownStyled
+        centered
+        width={120}
+        items={items}
+        selectedItem={this.getFieldValue(s.schedule, items, 'month')}
+        onChange={item => { this.props.onChange(s.id, { schedule: { month: item.value } }) }}
+      />
+    )
+  }
+
+  renderDayOfMonthValue(s) {
+    let items = [{ label: 'Every Day', value: null }]
+    for (let i = 1; i <= 31; i += 1) {
+      items.push({ label: i, value: i })
+    }
+
+    if (s.enabled) {
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'dom'))
+    }
+
+    return (
+      <DropdownStyled
+        centered
+        width={120}
+        items={items}
+        selectedItem={this.getFieldValue(s.schedule, items, 'dom')}
+        onChange={item => { this.props.onChange(s.id, { schedule: { dom: item.value } }) }}
+      />
+    )
+  }
+
+  renderDayOfWeekValue(s) {
+    let items = [{ label: 'Every Day', value: null }]
+    let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    days.forEach((label, value) => {
+      items.push({ label, value })
+    })
+
+    if (s.enabled) {
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'dow'))
+    }
+
+    return (
+      <DropdownStyled
+        centered
+        width={120}
+        items={items}
+        selectedItem={this.getFieldValue(s.schedule, items, 'dow', true)}
+        onChange={item => { this.props.onChange(s.id, { schedule: { dow: item.value } }) }}
+      />
+    )
+  }
+
+  renderHourValue(s) {
+    let items = [{ label: 'Every Hour', value: null }]
+    for (let i = 0; i <= 23; i += 1) {
+      items.push({ label: this.padNumber(i), value: i })
+    }
+
+    if (s.enabled) {
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'hour'))
+    }
+
+    return (
+      <DropdownStyled
+        centered
+        width={64}
+        items={items}
+        selectedItem={this.getFieldValue(s.schedule, items, 'hour', true)}
+        onChange={item => { this.props.onChange(s.id, { schedule: { hour: item.value } }) }}
+      />
+    )
+  }
+
+  renderMinuteValue(s) {
+    let items = [{ label: 'Every Minute', value: null }]
+    for (let i = 0; i <= 59; i += 1) {
+      items.push({ label: this.padNumber(i), value: i })
+    }
+
+    if (s.enabled) {
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'minute'))
+    }
+
+    return (
+      <DropdownStyled
+        centered
+        width={64}
+        items={items}
+        selectedItem={this.getFieldValue(s.schedule, items, 'minute', true)}
+        onChange={item => { this.props.onChange(s.id, { schedule: { minute: item.value } }) }}
+      />
+    )
+  }
+
+  renderExpirationValue(s) {
+    if (s.enabled) {
+      return this.renderLabel({ label: (s.expiration_date && moment(s.expiration_date).format('DD/MM/YYYY hh:mm A')) || '-' })
+    }
+
+    return (
+      <DatetimePicker
+        value={s.expiration_date}
+        onChange={date => { this.props.onChange(s.id, { expiration_date: date.toDate() }) }}
+      />
     )
   }
 
@@ -162,47 +290,30 @@ class Schedule extends React.Component {
                 />
               </RowData>
               <RowData width={colWidths[1]}>
-                <DropdownStyled
-                  width={120}
-                  items={this.generateMonthItems()}
-                  selectedItem={this.getFieldValue(s.schedule, this.generateMonthItems(), 'month')}
-                  onChange={item => { this.props.onChange(s.id, { schedule: { month: item.value } }) }}
-                />
+                {this.renderMonthValue(s)}
               </RowData>
               <RowData width={colWidths[2]}>
-                <DropdownStyled
-                  width={120}
-                  items={this.generateMonthDayItems()}
-                  selectedItem={this.getFieldValue(s.schedule, this.generateMonthDayItems(), 'dom')}
-                  onChange={item => { this.props.onChange(s.id, { schedule: { dom: item.value } }) }}
-                />
+                {this.renderDayOfMonthValue(s)}
               </RowData>
               <RowData width={colWidths[3]}>
-                <DropdownStyled
-                  width={120}
-                  items={this.generateWeekDayItems()}
-                  selectedItem={this.getFieldValue(s.schedule, this.generateWeekDayItems(), 'dow', true)}
-                  onChange={item => { this.props.onChange(s.id, { schedule: { dow: item.value } }) }}
-                />
+                {this.renderDayOfWeekValue(s)}
               </RowData>
               <RowData width={colWidths[4]}>
-                <DropdownStyled
-                  width={64}
-                  items={this.generateHourItems()}
-                  selectedItem={this.getFieldValue(s.schedule, this.generateHourItems(), 'hour', true)}
-                  onChange={item => { this.props.onChange(s.id, { schedule: { hour: item.value } }) }}
-                />
+                {this.renderHourValue(s)}
               </RowData>
               <RowData width={colWidths[5]}>
-                <DropdownStyled
-                  width={64}
-                  items={this.generateMinuteItems()}
-                  selectedItem={this.getFieldValue(s.schedule, this.generateMinuteItems(), 'minute', true)}
-                  onChange={item => { this.props.onChange(s.id, { schedule: { minute: item.value } }) }}
-                />
+                {this.renderMinuteValue(s)}
               </RowData>
-              <RowData width={colWidths[6]}><DropdownStyled width={160} /></RowData>
-              <RowData width={colWidths[7]}><Button secondary width="48px">...</Button></RowData>
+              <RowData width={colWidths[6]}>
+                {this.renderExpirationValue(s)}
+              </RowData>
+              <RowData width={colWidths[7]}>
+                <Button
+                  onClick={() => { this.handleShowOptions(s) }}
+                  secondary
+                  width="48px"
+                >...</Button>
+              </RowData>
               <DeleteButton onClick={() => { this.props.onRemove(s.id) }} />
             </Row>
           )
@@ -237,11 +348,35 @@ class Schedule extends React.Component {
     )
   }
 
+  renderFooter() {
+    if (!this.props.schedules || this.props.schedules.length === 0) {
+      return null
+    }
+
+    return (
+      <Footer>
+        <Button secondary onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
+      </Footer>
+    )
+  }
+
   render() {
     return (
       <Wrapper>
         {this.renderTable()}
+        {this.renderFooter()}
         {this.renderNoSchedules()}
+        <Modal
+          isOpen={this.state.showOptionsModal}
+          title="Execution options"
+          onRequestClose={() => { this.handleCloseOptionsModal() }}
+        >
+          <ReplicaExecutionOptions
+            executionLabel="Save"
+            onCancelClick={() => { this.handleCloseOptionsModal() }}
+            onExecuteClick={fields => { this.handleOptionsSave(fields) }}
+          />
+        </Modal>
       </Wrapper>
     )
   }
