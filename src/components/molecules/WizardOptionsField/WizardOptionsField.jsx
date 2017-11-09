@@ -78,7 +78,7 @@ class WizardOptionsField extends React.Component {
   renderEnumDropdown() {
     let items = this.props.enum.map(e => {
       return {
-        label: e,
+        label: LabelDictionary.get(e),
         value: e,
       }
     })
@@ -92,7 +92,7 @@ class WizardOptionsField extends React.Component {
       <Dropdown
         width={320}
         noSelectionMessage="Choose a value"
-        selectedItem={this.props.value}
+        selectedItem={items.find(i => i.value === this.props.value).label}
         items={items}
         onChange={item => this.props.onChange(item.value)}
       />

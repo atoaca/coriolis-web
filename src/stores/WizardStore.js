@@ -7,6 +7,8 @@ class WizardStore {
   constructor() {
     this.data = {}
     this.currentPage = wizardConfig.pages[0]
+    this.createdItem = null
+    this.creatingItem = false
 
     this.bindListeners({
       handleUpdateData: WizardActions.UPDATE_DATA,
@@ -18,6 +20,9 @@ class WizardStore {
       handleAddSchedule: WizardActions.ADD_SCHEDULE,
       handleUpdateSchedule: WizardActions.UPDATE_SCHEDULE,
       handleRemoveSchedule: WizardActions.REMOVE_SCHEDULE,
+      handleCreate: WizardActions.CREATE,
+      handleCreateSuccess: WizardActions.CREATE_SUCCESS,
+      handleCreateFailed: WizardActions.CREATE_FAILED,
     })
   }
 
@@ -94,6 +99,19 @@ class WizardStore {
 
   handleRemoveSchedule(scheduleId) {
     this.data.schedules = this.data.schedules.filter(s => s.id !== scheduleId)
+  }
+
+  handleCreate() {
+    this.creatingItem = true
+  }
+
+  handleCreateSuccess(item) {
+    this.createdItem = item
+    this.creatingItem = false
+  }
+
+  handleCreateFailed() {
+    this.creatingItem = false
   }
 }
 

@@ -62,6 +62,7 @@ const ArrowImage = styled.div`
 `
 const NoNicsMessage = styled.div`
   text-align: center;
+  font-size: 18px;
 `
 
 class WizardNetworks extends React.Component {

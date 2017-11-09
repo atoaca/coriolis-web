@@ -12,11 +12,12 @@ import {
   WizardNetworks,
   WizardOptions,
   Schedule,
+  WizardSummary,
 } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
-import { providerTypes } from '../../../config'
+import { providerTypes, wizardConfig } from '../../../config'
 
 import migrationArrowImage from './images/migration.js'
 
@@ -69,6 +70,7 @@ class WizardPageContent extends React.Component {
   static propTypes = {
     page: PropTypes.object,
     type: PropTypes.string,
+    nextButtonDisabled: PropTypes.bool,
     providerStore: PropTypes.object,
     instanceStore: PropTypes.object,
     networkStore: PropTypes.object,
@@ -164,9 +166,11 @@ class WizardPageContent extends React.Component {
   }
 
   isNextButtonDisabled() {
+    if (this.props.nextButtonDisabled) {
+      return true
+    }
+
     switch (this.props.page.id) {
-      case 'type':
-        return false
       case 'source':
         return !this.props.wizardData.source
       case 'target':
@@ -177,10 +181,8 @@ class WizardPageContent extends React.Component {
         return !this.isOptionsPageValid()
       case 'networks':
         return !this.isNetworksPageValid()
-      case 'schedule':
-        return false
       default:
-        return true
+        return false
     }
   }
 
@@ -296,6 +298,14 @@ class WizardPageContent extends React.Component {
           />
         )
         break
+      case 'summary':
+        body = (
+          <WizardSummary
+            data={this.props.wizardData}
+            wizardType={this.props.type}
+          />
+        )
+        break
       default:
     }
 
@@ -305,6 +315,8 @@ class WizardPageContent extends React.Component {
   renderNavigationActions() {
     let sourceEndpoint = this.props.wizardData.source && this.props.wizardData.source.type
     let targetEndpoint = this.props.wizardData.target && this.props.wizardData.target.type
+    let currentPageIndex = wizardConfig.pages.findIndex(p => p.id === this.props.page.id)
+    let isLastPage = currentPageIndex === wizardConfig.pages.length - 1
 
     return (
       <Navigation>
@@ -314,7 +326,10 @@ class WizardPageContent extends React.Component {
           <WizardTypeIcon type={this.props.type} />
           <EndpointLogos height={32} endpoint={targetEndpoint} />
         </IconRepresentation>
-        <Button onClick={this.props.onNextClick} disabled={this.isNextButtonDisabled()}>Next</Button>
+        <Button
+          onClick={this.props.onNextClick}
+          disabled={this.isNextButtonDisabled()}
+        >{isLastPage ? 'Finish' : 'Next'}</Button>
       </Navigation>
     )
   }

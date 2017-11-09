@@ -37,6 +37,13 @@ export const env = {
   isBrowser: typeof window !== 'undefined',
 }
 
+export const executionOptions = [
+  {
+    name: 'shutdown_instances',
+    type: 'boolean',
+  },
+]
+
 export const wizardConfig = {
   pages: [
     { id: 'type', title: 'New', breadcrumb: 'Type' },

@@ -1,5 +1,7 @@
 import alt from '../alt'
 
+import WizardSource from '../sources/WizardSource'
+
 class WizardActions {
   updateData(data) {
     return data
@@ -35,6 +37,23 @@ class WizardActions {
 
   removeSchedule(scheduleId) {
     return scheduleId
+  }
+
+  create(type, data) {
+    WizardSource.create(type, data).then(
+      item => { this.createSuccess(item) },
+      response => { this.createFailed(response) }
+    )
+
+    return { type, data }
+  }
+
+  createSuccess(item) {
+    return item
+  }
+
+  createFailed(reponse) {
+    return reponse || true
   }
 }
 

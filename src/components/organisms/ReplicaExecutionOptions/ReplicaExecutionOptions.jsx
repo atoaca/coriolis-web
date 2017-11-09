@@ -8,6 +8,8 @@ import LabelDictionary from '../../../utils/LabelDictionary'
 
 import executionImage from './images/execution.svg'
 
+import { executionOptions } from '../../../config'
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,12 +49,7 @@ class ReplicaExecutionOptions extends React.Component {
     super()
 
     this.state = {
-      fields: [
-        {
-          name: 'shutdown_instances',
-          type: 'boolean',
-        },
-      ],
+      fields: [...executionOptions],
     }
   }
 

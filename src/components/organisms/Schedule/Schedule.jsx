@@ -169,7 +169,7 @@ class Schedule extends React.Component {
     let month = item.value || 1
     let maxNumDays = daysInMonths[month - 1]
     let change = { schedule: { month: item.value } }
-    if (s.schedule.dom && s.schedule.dom > maxNumDays) {
+    if (s.schedule && s.schedule.dom && s.schedule.dom > maxNumDays) {
       change.schedule.dom = maxNumDays
     }
 
@@ -194,7 +194,7 @@ class Schedule extends React.Component {
 
   renderMonthValue(s) {
     let items = [{ label: 'Any', value: null }]
-    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    let months = moment.months()
     months.forEach((label, value) => {
       items.push({ label, value: value + 1 })
     })
@@ -215,7 +215,7 @@ class Schedule extends React.Component {
   }
 
   renderDayOfMonthValue(s) {
-    let month = s.schedule.month || 1
+    let month = (s.schedule && s.schedule.month) || 1
     let items = [{ label: 'Any', value: null }]
     for (let i = 1; i <= daysInMonths[month - 1]; i += 1) {
       items.push({ label: i, value: i })
@@ -238,7 +238,7 @@ class Schedule extends React.Component {
 
   renderDayOfWeekValue(s) {
     let items = [{ label: 'Any', value: null }]
-    let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    let days = moment.weekdays(true)
     days.forEach((label, value) => {
       items.push({ label, value })
     })

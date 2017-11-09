@@ -37,28 +37,37 @@ const statuses = {
       100% { background-position: 0 -1px; }
     }
   `,
-  INFO: css`
-    background: white;
-  `,
+  INFO: css``,
 }
 
 const primaryColors = css`
   color: ${Palette.primary};
   border-color: ${Palette.primary};
+  background: white;
 `
 const alertColors = css`
   color: ${Palette.alert};
   border-color: ${Palette.alert};
+  background: white;
 `
-const getStatusColor = props => {
+const secondaryColors = css`
+  color: white;
+  border-color: ${Palette.grayscale[8]};
+  background: ${Palette.grayscale[8]};
+`
+const getInfoStatusColor = props => {
   if (props.alert) {
     return alertColors
+  }
+
+  if (props.secondary) {
+    return secondaryColors
   }
 
   return primaryColors
 }
 const Wrapper = styled.div`
-  width: ${props => props.small ? 78 : 94}px;
+  ${props => StyleProps.exactWidth(`${props.small ? 78 : 94}px`)}
   height: 14px;
   line-height: 14px;
   border: 1px solid;
@@ -67,7 +76,7 @@ const Wrapper = styled.div`
   text-align: center;
   border-radius: 4px;
   ${props => statuses[props.status]}
-  ${props => props.status === 'INFO' ? getStatusColor(props) : ''}
+  ${props => props.status === 'INFO' ? getInfoStatusColor(props) : ''}
 `
 
 class StatusPill extends React.Component {
@@ -75,6 +84,7 @@ class StatusPill extends React.Component {
     status: PropTypes.string,
     label: PropTypes.string,
     primary: PropTypes.bool,
+    secondary: PropTypes.bool,
     alert: PropTypes.bool,
     small: PropTypes.bool,
   }
@@ -89,6 +99,7 @@ class StatusPill extends React.Component {
         {...this.props}
         status={this.props.status}
         primary={this.props.primary}
+        secondary={this.props.secondary}
         alert={this.props.alert}
         small={this.props.small}
       >

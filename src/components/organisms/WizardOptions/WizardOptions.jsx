@@ -39,7 +39,6 @@ class WizardOptions extends React.Component {
   }
 
   getDefaultFieldsSchema() {
-    let executeNowValue = this.getFieldValue('execute_now', true)
     let fieldsSchema = [
       { name: 'description', type: 'string' },
     ]
@@ -50,6 +49,7 @@ class WizardOptions extends React.Component {
 
     if (this.props.wizardType === 'replica') {
       fieldsSchema.push({ name: 'execute_now', type: 'strict-boolean', default: true })
+      let executeNowValue = this.getFieldValue('execute_now', true)
       if (executeNowValue) {
         fieldsSchema = [
           ...fieldsSchema,
@@ -57,7 +57,7 @@ class WizardOptions extends React.Component {
             name: 'execute_now_options',
             type: 'object',
             properties: [
-              { name: 'shutdown_instances', type: 'boolean', default: true },
+              { name: 'shutdown_instances', type: 'boolean' },
             ],
           },
         ]

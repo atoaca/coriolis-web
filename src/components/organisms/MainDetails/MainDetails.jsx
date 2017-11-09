@@ -79,7 +79,7 @@ class MainDetails extends React.Component {
 
   getLastExecutionTime() {
     let lastExecution = this.getLastExecution()
-    if (lastExecution) {
+    if (lastExecution.updated_at) {
       return DateUtils.getLocalTime(lastExecution.updated_at).format('YYYY-MM-DD HH:mm:ss')
     }
 

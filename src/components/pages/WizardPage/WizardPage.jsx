@@ -23,6 +23,8 @@ import InstanceStore from '../../../stores/InstanceStore'
 import InstanceActions from '../../../actions/InstanceActions'
 import NetworkActions from '../../../actions/NetworkActions'
 import NetworkStore from '../../../stores/NetworkStore'
+import NotificationActions from '../../../actions/NotificationActions'
+import Wait from '../../../utils/Wait'
 import { wizardConfig } from '../../../config'
 
 const Wrapper = styled.div``
@@ -59,6 +61,7 @@ class WizardPage extends React.Component {
     this.state = {
       type: 'migration',
       showNewEndpointModal: false,
+      nextButtonDisabled: false,
     }
   }
 
@@ -97,6 +100,28 @@ class WizardPage extends React.Component {
     }
   }
 
+  create() {
+    this.setState({ nextButtonDisabled: true })
+    let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
+    NotificationActions.notify(`Creating ${typeLabel} ...`)
+    WizardActions.create(this.state.type, this.props.wizardStore.data)
+    Wait.for(() => !WizardStore.getState().creatingItem, () => {
+      let item = WizardStore.getState().createdItem
+      if (!item) {
+        Notification.notify(`${typeLabel} couldn't be created`, 'error')
+        this.setState({ nextButtonDisabled: false })
+        return
+      }
+      this.handleCreationSuccess(item)
+    })
+  }
+
+  handleCreationSuccess(item) {
+    let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
+    NotificationActions.notify(`${typeLabel} was succesfully created`, 'success')
+    window.location.href = `/#/${this.state.type}/${item.id}`
+  }
+
   handleUserItemClick(item) {
     switch (item.value) {
       case 'signout':
@@ -130,6 +155,12 @@ class WizardPage extends React.Component {
   handleNextClick() {
     let pages = wizardConfig.pages.filter(p => !p.excludeFrom || p.excludeFrom !== this.state.type)
     let currentPageIndex = pages.findIndex(p => p.id === this.props.wizardStore.currentPage.id)
+
+    if (currentPageIndex === pages.length - 1) {
+      this.create()
+      return
+    }
+
     let page = pages[currentPageIndex + 1]
     this.loadDataForPage(page)
     WizardActions.setCurrentPage(page)
@@ -140,7 +171,7 @@ class WizardPage extends React.Component {
   }
 
   handleTargetEndpointChange(target) {
-    WizardActions.updateData({ target, networks: null })
+    WizardActions.updateData({ target, networks: null, options: null })
   }
 
   handleAddEndpoint(newEndpointType, newEndpointFromSource) {
@@ -219,6 +250,7 @@ class WizardPage extends React.Component {
             networkStore={this.props.networkStore}
             endpoints={this.props.endpointStore.endpoints}
             wizardData={this.props.wizardStore.data}
+            nextButtonDisabled={this.state.nextButtonDisabled}
             type={this.state.type}
             onTypeChange={isReplica => { this.handleTypeChange(isReplica) }}
             onBackClick={() => { this.handleBackClick() }}
