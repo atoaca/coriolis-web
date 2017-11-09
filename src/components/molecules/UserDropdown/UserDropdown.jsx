@@ -45,6 +45,7 @@ const ListItem = styled.div`
 const Label = styled.div`
   display: inline-block;
   cursor: pointer;
+  white-space: nowrap;
 
   &:hover {
     color: ${Palette.primary};

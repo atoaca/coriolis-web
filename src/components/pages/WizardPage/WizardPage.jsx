@@ -24,8 +24,9 @@ import InstanceActions from '../../../actions/InstanceActions'
 import NetworkActions from '../../../actions/NetworkActions'
 import NetworkStore from '../../../stores/NetworkStore'
 import NotificationActions from '../../../actions/NotificationActions'
+import ReplicaActions from '../../../actions/ReplicaActions'
 import Wait from '../../../utils/Wait'
-import { wizardConfig } from '../../../config'
+import { wizardConfig, executionOptions } from '../../../config'
 
 const Wrapper = styled.div``
 
@@ -116,9 +117,34 @@ class WizardPage extends React.Component {
     })
   }
 
+  executeCreatedReplica(replica) {
+    let options = WizardStore.getState().data.options
+    let executeNow = true
+    if (options && options.execute_now !== null && options.execute_now !== undefined) {
+      executeNow = options.execute_now
+    }
+    if (!executeNow) {
+      return
+    }
+
+    let executeNowOptions = executionOptions.map(field => {
+      if (options && options[field.name] !== null && options[field.name] !== undefined) {
+        return { name: field.name, value: options[field.name] }
+      }
+      return field
+    })
+
+    ReplicaActions.execute(replica.id, executeNowOptions)
+  }
+
   handleCreationSuccess(item) {
     let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
     NotificationActions.notify(`${typeLabel} was succesfully created`, 'success')
+
+    if (this.state.type === 'replica') {
+      this.executeCreatedReplica(item)
+    }
+
     window.location.href = `/#/${this.state.type}/${item.id}`
   }
 

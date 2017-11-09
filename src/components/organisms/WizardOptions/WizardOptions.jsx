@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 
 import { ToggleButtonBar, WizardOptionsField } from 'components'
 
+import { executionOptions } from '../../../config'
+
 const Wrapper = styled.div``
 const Fields = styled.div`
   margin-top: 46px;
@@ -56,9 +58,7 @@ class WizardOptions extends React.Component {
           {
             name: 'execute_now_options',
             type: 'object',
-            properties: [
-              { name: 'shutdown_instances', type: 'boolean' },
-            ],
+            properties: executionOptions,
           },
         ]
       }
