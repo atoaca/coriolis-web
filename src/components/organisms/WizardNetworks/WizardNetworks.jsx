@@ -42,7 +42,9 @@ const NetworkImage = styled.div`
   background: url('${networkImage}') center no-repeat;
   margin-right: 16px;
 `
-const NetworkTitle = styled.div``
+const NetworkTitle = styled.div`
+  width: 320px;
+`
 const NetworkName = styled.div`
   font-size: 16px;
 `
@@ -56,6 +58,7 @@ const ArrowImage = styled.div`
   height: 16px;
   background: url('${arrowImage}') center no-repeat;
   flex-grow: 1;
+  margin-right: 16px;
 `
 const NoNicsMessage = styled.div`
   text-align: center;
@@ -107,7 +110,7 @@ class WizardNetworks extends React.Component {
         return
       }
       instance.devices.nics.forEach(nic => {
-        if (nics.find(n => n.id === nic.id)) {
+        if (nics.find(n => n.network_name === nic.network_name)) {
           return
         }
         nics.push(nic)
@@ -125,7 +128,7 @@ class WizardNetworks extends React.Component {
             if (!i.devices || !i.devices.nics) {
               return false
             }
-            if (i.devices.nics.find(n => n.id === nic.id)) {
+            if (i.devices.nics.find(n => n.network_name === nic.network_name)) {
               return true
             }
             return false
@@ -160,7 +163,6 @@ class WizardNetworks extends React.Component {
   }
 
   render() {
-    console.log('this.props.instancesDetails', this.props.instancesDetails)
     return (
       <Wrapper>
         {this.renderLoading()}

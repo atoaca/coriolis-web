@@ -93,7 +93,7 @@ const TimezoneLabel = styled.div`
 `
 
 const colWidths = ['6%', '16%', '16%', '16%', '9%', '9%', '22%', '6%']
-
+const daysInMonths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 class Schedule extends React.Component {
   static propTypes = {
     schedules: PropTypes.array,
@@ -165,6 +165,17 @@ class Schedule extends React.Component {
     this.setState({ executionOptions: options })
   }
 
+  handleMonthChange(s, item) {
+    let month = item.value || 1
+    let maxNumDays = daysInMonths[month - 1]
+    let change = { schedule: { month: item.value } }
+    if (s.schedule.dom && s.schedule.dom > maxNumDays) {
+      change.schedule.dom = maxNumDays
+    }
+
+    this.props.onChange(s.id, change)
+  }
+
   renderHeader() {
     let headerLabels = ['Run', 'Month', 'Day of month', 'Day of week', 'Hour', 'Minute', 'Until', 'Options']
 
@@ -198,14 +209,15 @@ class Schedule extends React.Component {
         width={120}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'month')}
-        onChange={item => { this.props.onChange(s.id, { schedule: { month: item.value } }) }}
+        onChange={item => { this.handleMonthChange(s, item) }}
       />
     )
   }
 
   renderDayOfMonthValue(s) {
+    let month = s.schedule.month || 1
     let items = [{ label: 'Any', value: null }]
-    for (let i = 1; i <= 31; i += 1) {
+    for (let i = 1; i <= daysInMonths[month - 1]; i += 1) {
       items.push({ label: i, value: i })
     }
 
