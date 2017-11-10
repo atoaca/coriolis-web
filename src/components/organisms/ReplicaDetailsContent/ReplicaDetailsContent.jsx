@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { DetailsNavigation, MainDetails, Button, Executions } from 'components'
+import { DetailsNavigation, MainDetails, Button, Executions, Schedule } from 'components'
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,12 +36,24 @@ class ReplicaDetailsContent extends React.Component {
   static propTypes = {
     item: PropTypes.object,
     endpoints: PropTypes.array,
+    scheduleStore: PropTypes.object,
     page: PropTypes.string,
     onCancelExecutionClick: PropTypes.func,
     onDeleteExecutionClick: PropTypes.func,
     onExecuteClick: PropTypes.func,
     onCreateMigrationClick: PropTypes.func,
     onDeleteReplicaClick: PropTypes.func,
+    onAddScheduleClick: PropTypes.func,
+    onScheduleChange: PropTypes.func,
+    onScheduleRemove: PropTypes.func,
+  }
+
+  constructor() {
+    super()
+
+    this.state = {
+      timezone: 'local',
+    }
   }
 
   getLastExecution() {
@@ -52,6 +64,10 @@ class ReplicaDetailsContent extends React.Component {
   getStatus() {
     let lastExecution = this.getLastExecution()
     return lastExecution && lastExecution.status
+  }
+
+  handleTimezoneChange(timezone) {
+    this.setState({ timezone: timezone.value })
   }
 
   handleDetailsNavigationChange(item) {
@@ -111,6 +127,25 @@ class ReplicaDetailsContent extends React.Component {
     )
   }
 
+  renderSchedule() {
+    if (this.props.page !== 'schedule') {
+      return null
+    }
+
+    return (
+      <Schedule
+        schedules={this.props.scheduleStore.schedules}
+        adding={this.props.scheduleStore.adding}
+        loading={this.props.scheduleStore.loading}
+        onAddScheduleClick={this.props.onAddScheduleClick}
+        onChange={this.props.onScheduleChange}
+        onRemove={this.props.onScheduleRemove}
+        timezone={this.state.timezone}
+        onTimezoneChange={timezone => { this.handleTimezoneChange(timezone) }}
+      />
+    )
+  }
+
   render() {
     return (
       <Wrapper>
@@ -122,6 +157,7 @@ class ReplicaDetailsContent extends React.Component {
         <DetailsBody>
           {this.renderMainDetails()}
           {this.renderExecutions()}
+          {this.renderSchedule()}
         </DetailsBody>
       </Wrapper>
     )

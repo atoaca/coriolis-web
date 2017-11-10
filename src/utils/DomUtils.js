@@ -2,7 +2,7 @@ class DomUtils {
   static getEventPath(event) {
     let path = []
     let node = event.target
-    while (node !== document.body) {
+    while (node !== document.body && node.parentNode) {
       path.push(node)
       node = node.parentNode
     }

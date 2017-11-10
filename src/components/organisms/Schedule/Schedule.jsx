@@ -3,7 +3,16 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { Switch, Dropdown, Button, DatetimePicker, ReplicaExecutionOptions, Modal, DropdownLink } from 'components'
+import {
+  Switch,
+  Dropdown,
+  Button,
+  DatetimePicker,
+  ReplicaExecutionOptions,
+  Modal,
+  DropdownLink,
+  LoadingAnimation,
+} from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
@@ -14,6 +23,16 @@ import deleteHoverImage from './images/delete-hover.svg'
 
 const Wrapper = styled.div`
   width: 100%;
+`
+const LoadingWrapper = styled.div`
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const LoadingText = styled.div`
+  margin-top: 38px;
+  font-size: 18px;
 `
 const Table = styled.div``
 const Header = styled.div`
@@ -103,6 +122,8 @@ class Schedule extends React.Component {
     onAddScheduleClick: PropTypes.func,
     onChange: PropTypes.func,
     onRemove: PropTypes.func,
+    adding: PropTypes.bool,
+    loading: PropTypes.bool,
   }
 
   constructor() {
@@ -115,8 +136,12 @@ class Schedule extends React.Component {
     }
   }
 
-  getFieldValue(schedule, items, fieldName, zeroBasedIndex) {
-    if (schedule === null || schedule === undefined || schedule[fieldName] === null || schedule[fieldName] === undefined) {
+  getFieldValue(schedule, items, fieldName, zeroBasedIndex, defaultSelectedIndex) {
+    if (schedule === null || schedule === undefined) {
+      return defaultSelectedIndex !== undefined ? items[defaultSelectedIndex] : items[0]
+    }
+
+    if (schedule[fieldName] === null || schedule[fieldName] === undefined) {
       return items[0]
     }
 
@@ -184,6 +209,19 @@ class Schedule extends React.Component {
     }
 
     this.props.onChange(s.id, { expiration_date: date.toDate() })
+  }
+
+  renderLoading() {
+    if (!this.props.loading) {
+      return null
+    }
+
+    return (
+      <LoadingWrapper>
+        <LoadingAnimation />
+        <LoadingText>Loading schedules...</LoadingText>
+      </LoadingWrapper>
+    )
   }
 
   renderHeader() {
@@ -275,7 +313,7 @@ class Schedule extends React.Component {
     }
 
     if (s.enabled) {
-      return this.renderLabel(this.getFieldValue(s.schedule, items, 'hour'))
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'hour', true, 1))
     }
 
     return (
@@ -283,7 +321,7 @@ class Schedule extends React.Component {
         centered
         width={64}
         items={items}
-        selectedItem={this.getFieldValue(s.schedule, items, 'hour', true)}
+        selectedItem={this.getFieldValue(s.schedule, items, 'hour', true, 1)}
         onChange={item => { this.props.onChange(s.id, { schedule: { hour: item.value } }) }}
       />
     )
@@ -296,7 +334,7 @@ class Schedule extends React.Component {
     }
 
     if (s.enabled) {
-      return this.renderLabel(this.getFieldValue(s.schedule, items, 'minute'))
+      return this.renderLabel(this.getFieldValue(s.schedule, items, 'minute', true, 1))
     }
 
     return (
@@ -304,7 +342,7 @@ class Schedule extends React.Component {
         centered
         width={64}
         items={items}
-        selectedItem={this.getFieldValue(s.schedule, items, 'minute', true)}
+        selectedItem={this.getFieldValue(s.schedule, items, 'minute', true, 1)}
         onChange={item => { this.props.onChange(s.id, { schedule: { minute: item.value } }) }}
       />
     )
@@ -378,7 +416,7 @@ class Schedule extends React.Component {
   }
 
   renderTable() {
-    if (!this.props.schedules || this.props.schedules.length === 0) {
+    if (!this.props.schedules || this.props.schedules.length === 0 || this.props.loading) {
       return null
     }
 
@@ -391,7 +429,7 @@ class Schedule extends React.Component {
   }
 
   renderNoSchedules() {
-    if (this.props.schedules && this.props.schedules.length > 0) {
+    if ((this.props.schedules && this.props.schedules.length > 0) || this.props.loading) {
       return null
     }
 
@@ -404,7 +442,7 @@ class Schedule extends React.Component {
   }
 
   renderFooter() {
-    if (!this.props.schedules || this.props.schedules.length === 0) {
+    if (!this.props.schedules || this.props.schedules.length === 0 || this.props.loading) {
       return null
     }
 
@@ -412,15 +450,16 @@ class Schedule extends React.Component {
       { label: 'Local Time', value: 'local' },
       { label: 'UTC', value: 'utc' },
     ]
+    let selectedItem = this.props.timezone || timezoneItems[0].value
 
     return (
       <Footer>
-        <Button secondary onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
+        <Button disabled={this.props.adding} secondary onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
         <Timezone>
           <TimezoneLabel>Show all times in</TimezoneLabel>
           <DropdownLink
             items={timezoneItems}
-            selectedItem={this.props.timezone}
+            selectedItem={selectedItem}
             onChange={this.props.onTimezoneChange}
           />
         </Timezone>
@@ -434,6 +473,7 @@ class Schedule extends React.Component {
         {this.renderTable()}
         {this.renderFooter()}
         {this.renderNoSchedules()}
+        {this.renderLoading()}
         <Modal
           isOpen={this.state.showOptionsModal}
           title="Execution options"

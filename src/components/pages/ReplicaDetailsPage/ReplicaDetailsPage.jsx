@@ -22,6 +22,8 @@ import ReplicaActions from '../../../actions/ReplicaActions'
 import MigrationActions from '../../../actions/MigrationActions'
 import EndpointStore from '../../../stores/EndpointStore'
 import EndpointActions from '../../../actions/EndpointActions'
+import ScheduleActions from '../../../actions/ScheduleActions'
+import ScheduleStore from '../../../stores/ScheduleStore'
 import { requestPollTimeout } from '../../../config'
 
 import replicaImage from './images/replica.svg'
@@ -34,10 +36,11 @@ class ReplicaDetailsPage extends React.Component {
     replicaStore: PropTypes.object,
     endpointStore: PropTypes.object,
     userStore: PropTypes.object,
+    scheduleStore: PropTypes.object,
   }
 
   static getStores() {
-    return [ReplicaStore, EndpointStore, UserStore]
+    return [ReplicaStore, EndpointStore, UserStore, ScheduleStore]
   }
 
   static getPropsFromStores() {
@@ -45,6 +48,7 @@ class ReplicaDetailsPage extends React.Component {
       replicaStore: ReplicaStore.getState(),
       endpointStore: EndpointStore.getState(),
       userStore: UserStore.getState(),
+      scheduleStore: ScheduleStore.getState(),
     }
   }
 
@@ -65,6 +69,7 @@ class ReplicaDetailsPage extends React.Component {
 
     ReplicaActions.getReplica(this.props.match.params.id)
     EndpointActions.getEndpoints()
+    ScheduleActions.getSchedules(this.props.match.params.id)
     this.pollData()
     this.pollInterval = setInterval(() => { this.pollData() }, requestPollTimeout)
   }
@@ -151,6 +156,19 @@ class ReplicaDetailsPage extends React.Component {
     this.setState({ showMigrationModal: true })
   }
 
+  handleAddScheduleClick() {
+    ScheduleActions.addSchedule(this.props.match.params.id)
+  }
+
+  handleScheduleChange(scheduleId, data) {
+    let oldData = this.props.scheduleStore.schedules.find(s => s.id === scheduleId)
+    ScheduleActions.updateSchedule(this.props.match.params.id, scheduleId, data, oldData)
+  }
+
+  handleScheduleRemove(scheduleId) {
+    ScheduleActions.removeSchedule(this.props.match.params.id, scheduleId)
+  }
+
   migrateReplica(options) {
     MigrationActions.migrateReplica(this.props.replicaStore.replicaDetails.id, options)
     this.handleCloseMigrationModal()
@@ -186,12 +204,16 @@ class ReplicaDetailsPage extends React.Component {
           contentComponent={<ReplicaDetailsContent
             item={this.props.replicaStore.replicaDetails}
             endpoints={this.props.endpointStore.endpoints}
+            scheduleStore={this.props.scheduleStore}
             page={this.props.match.params.page || ''}
             onCancelExecutionClick={execution => { this.handleCancelExecutionClick(execution) }}
             onDeleteExecutionClick={execution => { this.handleDeleteExecutionClick(execution) }}
             onExecuteClick={() => { this.handleActionButtonClick() }}
             onCreateMigrationClick={() => { this.handleCreateMigrationClick() }}
             onDeleteReplicaClick={() => { this.handleDeleteReplicaClick() }}
+            onAddScheduleClick={() => { this.handleAddScheduleClick() }}
+            onScheduleChange={(scheduleId, data) => { this.handleScheduleChange(scheduleId, data) }}
+            onScheduleRemove={scheduleId => { this.handleScheduleRemove(scheduleId) }}
           />}
         />
         <Modal
