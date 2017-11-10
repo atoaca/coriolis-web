@@ -225,7 +225,7 @@ class Schedule extends React.Component {
   }
 
   renderHeader() {
-    let headerLabels = ['Run', 'Month', 'Day of month', 'Day of week', 'Hour', 'Minute', 'Until', 'Options']
+    let headerLabels = ['Run', 'Month', 'Day of month', 'Day of week', 'Hour', 'Minute', 'Expires', 'Options']
 
     return (
       <Header>
@@ -405,7 +405,7 @@ class Schedule extends React.Component {
                   onClick={() => { this.handleShowOptions(s) }}
                   secondary
                   width="48px"
-                >...</Button>
+                >•••</Button>
               </RowData>
               <DeleteButton onClick={() => { this.props.onRemove(s.id) }} />
             </Row>
