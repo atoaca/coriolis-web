@@ -71,6 +71,10 @@ class ScheduleSource {
           if (s.expiration_date) {
             s.expiration_date = DateUtils.getLocalTime(s.expiration_date)
           }
+
+          if (s.shutdown_instance) {
+            s.shutdown_instances = s.shutdown_instance
+          }
         })
 
         resolve(response.data.schedules)
@@ -138,6 +142,9 @@ class ScheduleSource {
         let s = { ...response.data.schedule }
         if (s.expiration_date) {
           s.expiration_date = DateUtils.getLocalTime(s.expiration_date)
+        }
+        if (s.shutdown_instance) {
+          s.shutdown_instances = s.shutdown_instance
         }
         resolve(s)
       }, reject).catch(reject)
