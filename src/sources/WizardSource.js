@@ -1,7 +1,7 @@
 import cookie from 'js-cookie'
 
 import Api from '../utils/ApiCaller'
-
+import NotificationActions from '../actions/NotificationActions'
 import { servicesUrl, executionOptions } from '../config'
 
 class WizardSourceUtils {
@@ -52,6 +52,32 @@ class WizardSource {
       }).then(response => {
         resolve(response.data[type])
       }, reject).catch(reject)
+    })
+  }
+
+  static createMultiple(type, data) {
+    return new Promise((resolve, reject) => {
+      let items = []
+      let count = 0
+
+      data.selectedInstances.forEach(instance => {
+        let newData = { ...data }
+        newData.selectedInstances = [instance]
+        WizardSource.create(type, newData).then(item => {
+          count += 1
+          items.push(item)
+          if (count === data.selectedInstances.length) {
+            if (items.length > 0) {
+              resolve(items)
+            } else {
+              reject()
+            }
+          }
+        }, () => {
+          count += 1
+          NotificationActions.notify(`Error while creating ${type} for instance ${instance.name}`, 'error')
+        })
+      })
     })
   }
 }

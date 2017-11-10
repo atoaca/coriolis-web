@@ -33,7 +33,21 @@ const List = styled.div`
   max-height: 400px;
   overflow: auto;
 `
-
+const Tip = styled.div`
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: ${props => props.primary ? Palette.primary : 'white'};
+  border-top: 1px solid ${Palette.grayscale[3]};
+  border-left: 1px solid ${Palette.grayscale[3]};
+  border-bottom: 1px solid ${props => props.primary ? Palette.primary : 'white'};
+  border-right: 1px solid ${props => props.primary ? Palette.primary : 'white'};
+  transform: rotate(45deg);
+  right: 8px;
+  bottom: -20px;
+  z-index: 11;
+  transition: all ${StyleProps.animations.swift};
+`
 const ListItem = styled.div`
   position: relative;
   color: ${Palette.grayscale[4]};
@@ -44,24 +58,6 @@ const ListItem = styled.div`
   &:first-child {
     border-top-left-radius: ${StyleProps.borderRadius};
     border-top-right-radius: ${StyleProps.borderRadius};
-
-    &:after {
-      content: ' ';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: white;
-      border: 1px solid ${Palette.grayscale[3]};
-      border-color: transparent transparent ${Palette.grayscale[3]} ${Palette.grayscale[3]};
-      transform: rotate(135deg);
-      right: 8px;
-      top: -6px;
-      transition: all ${StyleProps.animations.swift};
-    }
-
-    &:hover:after {
-      background: ${Palette.primary};
-    }
   }
 
   &:last-child {
@@ -142,6 +138,25 @@ class Dropdown extends React.Component {
     }
   }
 
+  handleItemMouseEnter(index) {
+    if (index === 0) {
+      this.setState({ firstItemHover: true })
+    }
+  }
+
+  handleItemMouseLeave(index) {
+    if (index === 0) {
+      this.setState({ firstItemHover: false })
+    }
+  }
+
+  renderTip() {
+    if (!this.props.items || this.props.items.length === 0 || !this.state.showDropdownList) {
+      return null
+    }
+    return <Tip primary={this.state.firstItemHover} />
+  }
+
   renderList() {
     if (!this.props.items || this.props.items.length === 0 || !this.state.showDropdownList) {
       return null
@@ -150,13 +165,15 @@ class Dropdown extends React.Component {
     let selectedLabel = this.getLabel(this.props.selectedItem)
     let list = (
       <List {...this.props}>
-        {this.props.items.map((item) => {
+        {this.props.items.map((item, i) => {
           let label = this.getLabel(item)
           let listItem = (
             <ListItem
               key={label}
               onMouseDown={() => { this.itemMouseDown = true }}
               onMouseUp={() => { this.itemMouseDown = false }}
+              onMouseEnter={() => { this.handleItemMouseEnter(i) }}
+              onMouseLeave={() => { this.handleItemMouseLeave(i) }}
               onClick={() => { this.handleItemClick(item) }}
               selected={label === selectedLabel}
             >{label}
@@ -189,6 +206,7 @@ class Dropdown extends React.Component {
           value={buttonValue()}
           onClick={() => this.handleButtonClick()}
         />
+        {this.renderTip()}
         {this.renderList()}
       </Wrapper>
     )

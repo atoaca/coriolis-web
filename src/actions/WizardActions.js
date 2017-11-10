@@ -55,6 +55,23 @@ class WizardActions {
   createFailed(reponse) {
     return reponse || true
   }
+
+  createMultiple(type, data) {
+    WizardSource.createMultiple(type, data).then(
+      items => { this.createMultipleSuccess(items) },
+      response => { this.createMultipleFailed(response) }
+    )
+
+    return { type, data }
+  }
+
+  createMultipleSuccess(items) {
+    return items
+  }
+
+  createMultipleFailed(response) {
+    return response || true
+  }
 }
 
 export default alt.createActions(WizardActions)

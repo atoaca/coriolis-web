@@ -9,6 +9,8 @@ class WizardStore {
     this.currentPage = wizardConfig.pages[0]
     this.createdItem = null
     this.creatingItem = false
+    this.createdItems = null
+    this.creatingItems = false
 
     this.bindListeners({
       handleUpdateData: WizardActions.UPDATE_DATA,
@@ -23,6 +25,9 @@ class WizardStore {
       handleCreate: WizardActions.CREATE,
       handleCreateSuccess: WizardActions.CREATE_SUCCESS,
       handleCreateFailed: WizardActions.CREATE_FAILED,
+      handleCreateMultiple: WizardActions.CREATE_MULTIPLE,
+      handleCreateMultipleSuccess: WizardActions.CREATE_MULTIPLE_SUCCESS,
+      handleCreateMultipleFailed: WizardActions.CREATE_MULTIPLE_FAILED,
     })
   }
 
@@ -112,6 +117,19 @@ class WizardStore {
 
   handleCreateFailed() {
     this.creatingItem = false
+  }
+
+  handleCreateMultiple() {
+    this.creatingItems = true
+  }
+
+  handleCreateMultipleSuccess(items) {
+    this.createdItems = items
+    this.creatingItems = false
+  }
+
+  handleCreateMultipleFailed() {
+    this.creatingItems = false
   }
 }
 

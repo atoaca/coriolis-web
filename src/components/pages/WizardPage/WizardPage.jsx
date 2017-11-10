@@ -101,8 +101,22 @@ class WizardPage extends React.Component {
     }
   }
 
-  create() {
-    this.setState({ nextButtonDisabled: true })
+  createMultiple() {
+    let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
+    NotificationActions.notify(`Creating ${typeLabel}s ...`)
+    WizardActions.createMultiple(this.state.type, this.props.wizardStore.data)
+    Wait.for(() => !WizardStore.getState().creatingItems, () => {
+      let items = WizardStore.getState().createdItems
+      if (!items) {
+        Notification.notify(`${typeLabel}s couldn't be created`, 'error')
+        this.setState({ nextButtonDisabled: false })
+        return
+      }
+      this.handleCreationSuccess(items)
+    })
+  }
+
+  createSingle() {
     let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
     NotificationActions.notify(`Creating ${typeLabel} ...`)
     WizardActions.create(this.state.type, this.props.wizardStore.data)
@@ -113,8 +127,32 @@ class WizardPage extends React.Component {
         this.setState({ nextButtonDisabled: false })
         return
       }
-      this.handleCreationSuccess(item)
+      this.handleCreationSuccess([item])
     })
+  }
+
+  separateVms() {
+    let data = WizardStore.getState().data
+    let separateVms = true
+
+    if (data.options && data.options.separate_vm !== null && data.options.separate_vm !== undefined) {
+      separateVms = data.options.separate_vm
+    }
+
+    if (data.selectedInstances.length === 1) {
+      separateVms = false
+    }
+
+    if (separateVms) {
+      this.createMultiple()
+    } else {
+      this.createSingle()
+    }
+  }
+
+  create() {
+    this.setState({ nextButtonDisabled: true })
+    this.separateVms()
   }
 
   executeCreatedReplica(replica) {
@@ -137,15 +175,21 @@ class WizardPage extends React.Component {
     ReplicaActions.execute(replica.id, executeNowOptions)
   }
 
-  handleCreationSuccess(item) {
+  handleCreationSuccess(items) {
     let typeLabel = this.state.type.charAt(0).toUpperCase() + this.state.type.substr(1)
     NotificationActions.notify(`${typeLabel} was succesfully created`, 'success')
 
     if (this.state.type === 'replica') {
-      this.executeCreatedReplica(item)
+      items.forEach(replica => {
+        this.executeCreatedReplica(replica)
+      })
     }
 
-    window.location.href = `/#/${this.state.type}/${item.id}`
+    if (items.length === 1) {
+      window.location.href = `/#/${this.state.type}/${items[0].id}`
+    } else {
+      window.location.href = `/#/${this.state.type}s`
+    }
   }
 
   handleUserItemClick(item) {
