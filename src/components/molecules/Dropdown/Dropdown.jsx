@@ -44,7 +44,7 @@ const Tip = styled.div`
   border-right: 1px solid ${props => props.primary ? Palette.primary : 'white'};
   transform: rotate(45deg);
   right: 8px;
-  bottom: -20px;
+  top: 40px;
   z-index: 11;
   transition: all ${StyleProps.animations.swift};
 `
