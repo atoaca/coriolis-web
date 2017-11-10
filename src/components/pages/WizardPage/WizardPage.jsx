@@ -25,6 +25,7 @@ import NetworkActions from '../../../actions/NetworkActions'
 import NetworkStore from '../../../stores/NetworkStore'
 import NotificationActions from '../../../actions/NotificationActions'
 import ReplicaActions from '../../../actions/ReplicaActions'
+import ScheduleActions from '../../../actions/ScheduleActions'
 import Wait from '../../../utils/Wait'
 import { wizardConfig, executionOptions } from '../../../config'
 
@@ -155,6 +156,16 @@ class WizardPage extends React.Component {
     this.separateVms()
   }
 
+  scheduleReplica(replica) {
+    let data = WizardStore.getState().data
+
+    if (!data.schedules || data.schedules.length === 0) {
+      return
+    }
+
+    ScheduleActions.scheduleMultiple(replica.id, data.schedules)
+  }
+
   executeCreatedReplica(replica) {
     let options = WizardStore.getState().data.options
     let executeNow = true
@@ -182,6 +193,7 @@ class WizardPage extends React.Component {
     if (this.state.type === 'replica') {
       items.forEach(replica => {
         this.executeCreatedReplica(replica)
+        this.scheduleReplica(replica)
       })
     }
 

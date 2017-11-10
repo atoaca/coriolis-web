@@ -7,6 +7,7 @@ import { Switch, Dropdown, Button, DatetimePicker, ReplicaExecutionOptions, Moda
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
+import NotificationActions from '../../../actions/NotificationActions'
 
 import deleteImage from './images/delete.svg'
 import deleteHoverImage from './images/delete-hover.svg'
@@ -176,6 +177,15 @@ class Schedule extends React.Component {
     this.props.onChange(s.id, change)
   }
 
+  handleExpirationDateChange(s, date) {
+    if (moment(date).diff(new Date(), 'minutes') < 60) {
+      NotificationActions.notify('Please select a further expiration date.', 'error')
+      return
+    }
+
+    this.props.onChange(s.id, { expiration_date: date.toDate() })
+  }
+
   renderHeader() {
     let headerLabels = ['Run', 'Month', 'Day of month', 'Day of week', 'Hour', 'Minute', 'Until', 'Options']
 
@@ -315,7 +325,7 @@ class Schedule extends React.Component {
     return (
       <DatetimePicker
         value={date}
-        onChange={date => { this.props.onChange(s.id, { expiration_date: date.toDate() }) }}
+        onChange={date => { this.handleExpirationDateChange(s, date) }}
       />
     )
   }

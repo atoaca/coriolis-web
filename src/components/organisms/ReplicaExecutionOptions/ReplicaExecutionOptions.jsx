@@ -62,8 +62,13 @@ class ReplicaExecutionOptions extends React.Component {
   }
 
   handleValueChange(field, value) {
-    this.state.fields.find(f => f.name === field.name).value = value
-    this.setState({ fields: this.state.fields })
+    let fields = this.state.fields.map(f => {
+      if (f.name === field.name) {
+        return { ...f, value }
+      }
+      return { ...f }
+    })
+    this.setState({ fields })
 
     if (this.props.onChange) {
       this.props.onChange(field.name, value)

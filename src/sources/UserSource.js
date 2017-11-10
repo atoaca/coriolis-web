@@ -50,8 +50,8 @@ class UserSource {
     })
   }
 
-  static loginScoped(projectId) {
-    projectId = cookie.get('projectId') || projectId
+  static loginScoped(projectId, skipCookie) {
+    let useProjectId = skipCookie ? projectId : cookie.get('projectId') || projectId
     let token = cookie.get('unscopedToken')
 
     let auth = {
@@ -64,7 +64,7 @@ class UserSource {
         },
         scope: {
           project: {
-            id: projectId,
+            id: useProjectId,
           },
         },
       },
@@ -86,7 +86,13 @@ class UserSource {
         Api.setDefaultHeader('X-Auth-Token', data.token)
 
         resolve(data)
-      }, reject).catch(reject)
+      }, response => {
+        if (!skipCookie) {
+          UserSource.loginScoped(projectId, true).then(resolve, reject)
+        } else {
+          reject(response)
+        }
+      }).catch(reject)
     })
   }
 

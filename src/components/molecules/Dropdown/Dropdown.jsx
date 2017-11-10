@@ -131,7 +131,7 @@ class Dropdown extends React.Component {
   }
 
   handleItemClick(item) {
-    this.setState({ showDropdownList: false })
+    this.setState({ showDropdownList: false, firstItemHover: false })
 
     if (this.props.onChange) {
       this.props.onChange(item)
