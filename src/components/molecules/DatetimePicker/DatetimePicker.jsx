@@ -56,8 +56,13 @@ class DatetimePicker extends React.Component {
 
     this.state = {
       showPicker: false,
+      currentDate: null,
     }
     this.handlePageClick = this.handlePageClick.bind(this)
+  }
+
+  componentWillMount() {
+    this.setState({ date: this.props.value })
   }
 
   componentDidMount() {
@@ -72,12 +77,23 @@ class DatetimePicker extends React.Component {
     let path = DomUtils.getEventPath(e)
 
     if (!this.itemMouseDown && !path.find(n => n.className === 'rdtPicker')) {
+      if (this.state.date) {
+        this.props.onChange(this.state.date)
+      }
       this.setState({ showPicker: false })
     }
   }
 
   handleDropdownClick() {
+    if (this.state.showPicker && this.state.date) {
+      this.props.onChange(this.state.date)
+    }
+
     this.setState({ showPicker: !this.state.showPicker })
+  }
+
+  handleChange(date) {
+    this.setState({ date })
   }
 
   render() {
@@ -93,9 +109,9 @@ class DatetimePicker extends React.Component {
         />
         <DatetimeStyled
           input={false}
-          value={this.props.value}
+          value={this.state.date}
           open={this.state.showPicker}
-          onChange={this.props.onChange}
+          onChange={date => { this.handleChange(date) }}
           dateFormat="DD/MM/YYYY"
           timeFormat="hh:mm A"
           locale="en-gb"
