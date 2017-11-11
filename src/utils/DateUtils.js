@@ -21,6 +21,21 @@ class DateUtils {
     return moment(rawDate).add(offset, 'hours')
   }
 
+  static getUtcTime(rawDate) {
+    let offset = (new Date().getTimezoneOffset() / 60)
+    return moment(rawDate).add(offset, 'hours')
+  }
+
+  static getLocalHour(hour) {
+    let hourDate = new Date(2017, 0, 1, hour)
+    return moment(hourDate).add(-hourDate.getTimezoneOffset(), 'minutes').get('hours')
+  }
+
+  static getUtcHour(hour) {
+    let hourDate = new Date(2017, 0, 1, hour)
+    return moment(hourDate).add(hourDate.getTimezoneOffset(), 'minutes').get('hours')
+  }
+
   static getOrdinalDay(number) {
     switch (number) {
       case 1:

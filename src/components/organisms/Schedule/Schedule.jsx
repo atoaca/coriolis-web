@@ -31,6 +31,7 @@ import {
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
 import NotificationActions from '../../../actions/NotificationActions'
+import DateUtils from '../../../utils/DateUtils'
 
 import deleteImage from './images/delete.svg'
 import deleteHoverImage from './images/delete-hover.svg'
@@ -161,7 +162,15 @@ class Schedule extends React.Component {
     }
 
     if (zeroBasedIndex) {
-      return items[schedule[fieldName] + 1]
+      let value = schedule[fieldName]
+
+      if (fieldName === 'hour') {
+        if (this.props.timezone === 'local') {
+          value = DateUtils.getLocalHour(value)
+        }
+      }
+
+      return items[value + 1]
     }
 
     return items[schedule[fieldName]]
@@ -218,12 +227,21 @@ class Schedule extends React.Component {
   }
 
   handleExpirationDateChange(s, date) {
-    if (moment(date).diff(new Date(), 'minutes') < 60) {
+    let newDate = moment(date)
+    if (newDate.diff(new Date(), 'minutes') < 60) {
       NotificationActions.notify('Please select a further expiration date.', 'error')
       return
     }
 
-    this.props.onChange(s.id, { expiration_date: date.toDate() })
+    this.props.onChange(s.id, { expiration_date: newDate.toDate() })
+  }
+
+  handleHourChange(s, hour) {
+    if (this.props.timezone === 'local' && hour !== null && hour !== undefined) {
+      hour = DateUtils.getUtcHour(hour)
+    }
+
+    this.props.onChange(s.id, { schedule: { hour } })
   }
 
   renderLoading() {
@@ -337,7 +355,7 @@ class Schedule extends React.Component {
         width={72}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'hour', true, 1)}
-        onChange={item => { this.props.onChange(s.id, { schedule: { hour: item.value } }) }}
+        onChange={item => { this.handleHourChange(s, item.value) }}
       />
     )
   }
@@ -364,13 +382,10 @@ class Schedule extends React.Component {
   }
 
   renderExpirationValue(s) {
-    let momentInstance = moment
-    if (this.props.timezone === 'utc') {
-      momentInstance = moment.utc
+    let date = s.expiration_date && moment(s.expiration_date)
+    if (this.props.timezone === 'utc' && date) {
+      date = moment.utc(date)
     }
-
-    let date = s.expiration_date && momentInstance(s.expiration_date)
-
     if (s.enabled) {
       return this.renderLabel({ label: (date && date.format('DD/MM/YYYY hh:mm A')) || '-' })
     }
