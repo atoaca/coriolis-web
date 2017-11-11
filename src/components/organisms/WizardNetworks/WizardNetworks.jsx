@@ -19,12 +19,16 @@ import PropTypes from 'prop-types'
 import { LoadingAnimation, Dropdown } from 'components'
 
 import Palette from '../../styleUtils/Palette'
+import StyleProps from '../../styleUtils/StyleProps'
 
 import networkImage from './images/network.svg'
+import bigNetworkImage from './images/network-big.svg'
 import arrowImage from './images/arrow.svg'
 
 const Wrapper = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: center;
 `
 const LoadingWrapper = styled.div`
   margin-top: 32px;
@@ -39,6 +43,7 @@ const LoadingText = styled.div`
 const NicsWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
 const Nic = styled.div`
   display: flex;
@@ -75,8 +80,24 @@ const ArrowImage = styled.div`
   margin-right: 16px;
 `
 const NoNicsMessage = styled.div`
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 64px;
+  width: 440px;
+`
+const BigNetworkImage = styled.div`
+  margin-bottom: 46px;
+  ${StyleProps.exactSize('96px')}
+  background: url('${bigNetworkImage}') center no-repeat;
+`
+const NoNicsTitle = styled.div`
+  margin-bottom: 10px;
   font-size: 18px;
+`
+const NoNicsSubtitle = styled.div`
+  color: ${Palette.grayscale[4]};
+  text-align: center;
 `
 
 class WizardNetworks extends React.Component {
@@ -107,11 +128,12 @@ class WizardNetworks extends React.Component {
   }
 
   renderNoNics() {
-    let singular = this.props.instancesDetails.length === 1
-    let message = singular ? 'The selected instance has no NICs.' : 'The selected instances have no NICs.'
-
     return (
-      <NoNicsMessage>{message}</NoNicsMessage>
+      <NoNicsMessage>
+        <BigNetworkImage />
+        <NoNicsTitle>No networks were found</NoNicsTitle>
+        <NoNicsSubtitle>We could not find any Networks attached to the selected Instances. Coriolis will skip this step.</NoNicsSubtitle>
+      </NoNicsMessage>
     )
   }
 
