@@ -78,6 +78,7 @@ const DeleteButton = styled.div`
   cursor: pointer;
   right: -32px;
   top: 24px;
+  ${props => props.hidden ? 'display: none;' : ''}
 
   &:hover {
     background: url('${deleteHoverImage}') center no-repeat;
@@ -421,7 +422,10 @@ class Schedule extends React.Component {
                   width="48px"
                 >•••</Button>
               </RowData>
-              <DeleteButton onClick={() => { this.props.onRemove(s.id) }} />
+              <DeleteButton
+                onClick={() => { this.props.onRemove(s.id) }}
+                hidden={s.enabled !== null && s.enabled !== undefined ? s.enabled : false}
+              />
             </Row>
           )
         })}
