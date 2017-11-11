@@ -303,14 +303,14 @@ class WizardSummary extends React.Component {
           <OverviewRow>
             <OverviewLabel>Source</OverviewLabel>
             <OverviewRowData>
-              <StatusPill secondary small label={data.source.type.toUpperCase()} />
+              <StatusPill secondary small label={LabelDictionary.get(data.source.type).toUpperCase()} />
               <OverviewRowLabel>{data.source.name}</OverviewRowLabel>
             </OverviewRowData>
           </OverviewRow>
           <OverviewRow>
             <OverviewLabel>Target</OverviewLabel>
             <OverviewRowData>
-              <StatusPill secondary small label={data.target.type.toUpperCase()} />
+              <StatusPill secondary small label={LabelDictionary.get(data.target.type).toUpperCase()} />
               <OverviewRowLabel>{data.target.name}</OverviewRowLabel>
             </OverviewRowData>
           </OverviewRow>
