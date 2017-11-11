@@ -37,14 +37,14 @@ class InstanceActions {
 
   searchInstances(endpointId, searchText) {
     InstanceSource.loadInstances(endpointId, searchText).then(
-      instances => { this.searchInstancesSuccess(instances) },
+      instances => { this.searchInstancesSuccess(instances, searchText) },
       response => { this.searchInstancesFailed(response) },
     )
     return true
   }
 
-  searchInstancesSuccess(instances) {
-    return instances
+  searchInstancesSuccess(instances, searchText) {
+    return { instances, searchText }
   }
 
   searchInstancesFailed(response) {
@@ -87,15 +87,15 @@ class InstanceActions {
 
   reloadInstances(endpointId, searchText) {
     InstanceSource.loadInstances(endpointId, searchText).then(
-      instances => { this.reloadInstancesSuccess(instances) },
+      instances => { this.reloadInstancesSuccess(instances, searchText) },
       response => { this.reloadInstancesFailed(response) },
     )
 
     return true
   }
 
-  reloadInstancesSuccess(instances) {
-    return instances
+  reloadInstancesSuccess(instances, searchText) {
+    return { instances, searchText }
   }
 
   reloadInstancesFailed(response) {

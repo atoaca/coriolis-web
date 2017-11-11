@@ -262,6 +262,7 @@ class WizardPageContent extends React.Component {
             instances={this.props.instanceStore.instances}
             loading={this.props.instanceStore.instancesLoading}
             searching={this.props.instanceStore.searching}
+            searchNotFound={this.props.instanceStore.searchNotFound}
             reloading={this.props.instanceStore.reloading}
             onSearchInputChange={this.props.onInstancesSearchInputChange}
             onNextPageClick={this.props.onInstancesNextPageClick}

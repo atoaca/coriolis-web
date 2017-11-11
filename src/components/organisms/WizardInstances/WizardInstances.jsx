@@ -16,12 +16,22 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { LoadingAnimation, Checkbox, SearchInput, ReloadButton, Arrow, StatusIcon } from 'components'
+import {
+  LoadingAnimation,
+  Checkbox,
+  SearchInput,
+  ReloadButton,
+  Arrow,
+  StatusIcon,
+  StatusImage,
+  Button,
+} from 'components'
 
 import Palette from '../../styleUtils/Palette'
 import StyleProps from '../../styleUtils/StyleProps'
 
 import instanceImage from './images/instance.svg'
+import bigInstanceImage from './images/instance-big.svg'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -144,6 +154,29 @@ const Reloading = styled.div`
   margin: 32px auto 0 auto;
   flex-grow: 1;
 `
+const SearchNotFound = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ${props => props.marginTop ? 'margin-top: 64px;' : ''}
+  * {
+    margin-bottom: 42px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`
+const SearchNotFoundText = styled.div`
+  font-size: 18px;
+`
+const SearchNotFoundSubtitle = styled.div`
+  color: ${Palette.grayscale[4]};
+  margin-top: -32px;
+`
+const BigInstanceImage = styled.div`
+  ${StyleProps.exactSize('96px')}
+  background: url('${bigInstanceImage}') center no-repeat;
+`
 
 class WizardInstances extends React.Component {
   static propTypes = {
@@ -152,6 +185,7 @@ class WizardInstances extends React.Component {
     currentPage: PropTypes.number,
     loading: PropTypes.bool,
     searching: PropTypes.bool,
+    searchNotFound: PropTypes.bool,
     loadingPage: PropTypes.bool,
     hasNextPage: PropTypes.bool,
     reloading: PropTypes.bool,
@@ -178,6 +212,51 @@ class WizardInstances extends React.Component {
     }, 500)
   }
 
+  areNoInstances() {
+    return !this.props.loading && !this.props.searchNotFound && !this.props.reloading && this.props.instances.length === 0
+  }
+
+  renderNoInstances() {
+    if (!this.areNoInstances()) {
+      return null
+    }
+
+    return (
+      <SearchNotFound marginTop>
+        <BigInstanceImage />
+        <SearchNotFoundText>It seems like you don’t have any Instances in this Endpoint</SearchNotFoundText>
+        <SearchNotFoundSubtitle>You can retry the search or choose another Endpoint</SearchNotFoundSubtitle>
+        <Button hollow onClick={() => { this.props.onReloadClick(this.state.searchText) }}>Retry Search</Button>
+      </SearchNotFound>
+    )
+  }
+
+  renderSearchNotFound() {
+    if (!this.props.searchNotFound) {
+      return null
+    }
+
+    return (
+      <SearchNotFound>
+        <StatusImage status="ERROR" />
+        <SearchNotFoundText>Your search returned no results</SearchNotFoundText>
+        <Button hollow onClick={() => { this.props.onReloadClick(this.state.searchText) }}>Retry</Button>
+      </SearchNotFound>
+    )
+  }
+
+  renderReloading() {
+    if (!this.props.reloading) {
+      return null
+    }
+
+    return (
+      <Reloading>
+        <LoadingAnimation />
+      </Reloading>
+    )
+  }
+
   renderLoading() {
     if (!this.props.loading) {
       return null
@@ -192,15 +271,7 @@ class WizardInstances extends React.Component {
   }
 
   renderInstances() {
-    if (this.props.reloading) {
-      return (
-        <Reloading>
-          <LoadingAnimation />
-        </Reloading>
-      )
-    }
-
-    if (this.props.loading) {
+    if (this.props.loading || this.props.searchNotFound || this.props.reloading || this.areNoInstances()) {
       return null
     }
 
@@ -229,7 +300,7 @@ class WizardInstances extends React.Component {
   }
 
   renderFilters() {
-    if (this.props.loading) {
+    if (this.props.loading || this.areNoInstances()) {
       return null
     }
 
@@ -254,7 +325,7 @@ class WizardInstances extends React.Component {
   }
 
   renderPagination() {
-    if (this.props.loading) {
+    if (this.props.loading || this.props.searchNotFound || this.props.reloading || this.areNoInstances()) {
       return null
     }
 
@@ -290,8 +361,11 @@ class WizardInstances extends React.Component {
       <Wrapper>
         {this.renderFilters()}
         {this.renderLoading()}
+        {this.renderReloading()}
+        {this.renderSearchNotFound()}
         {this.renderInstances()}
         {this.renderPagination()}
+        {this.renderNoInstances()}
       </Wrapper>
     )
   }

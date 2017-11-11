@@ -46,6 +46,7 @@ class InstanceStore {
     this.instances = []
     this.instancesLoading = false
     this.searching = false
+    this.searchNotFound = false
     this.loadingPage = false
     this.currentPage = 1
     this.hasNextPage = false
@@ -77,6 +78,7 @@ class InstanceStore {
 
   handleLoadInstances() {
     this.instancesLoading = true
+    this.searchNotFound = false
   }
 
   handleLoadInstancesSuccess(instances) {
@@ -95,16 +97,18 @@ class InstanceStore {
     this.searching = true
   }
 
-  handleSearchInstancesSuccess(instances) {
+  handleSearchInstancesSuccess({ instances, searchText }) {
     this.currentPage = 1
     this.hasNextPage = InstanceStoreUtils.hasNextPage(instances)
     this.instances = instances
     this.cachedInstances = instances
     this.searching = false
+    this.searchNotFound = instances.length === 0 && searchText
   }
 
   handleSearchInstancesFailed() {
     this.searching = false
+    this.searchNotFound = true
   }
 
   handleLoadNextPage({ fromCache }) {
@@ -143,19 +147,22 @@ class InstanceStore {
 
   handleReloadInstances() {
     this.reloading = true
+    this.searchNotFound = false
   }
 
-  handleReloadInstancesSuccess(instances) {
+  handleReloadInstancesSuccess({ instances, searchText }) {
     this.reloading = false
     this.currentPage = 1
     this.hasNextPage = InstanceStoreUtils.hasNextPage(instances)
     this.instances = instances
     this.cachedInstances = instances
     this.searching = false
+    this.searchNotFound = instances.length === 0 && searchText
   }
 
   handleReloadInstancesFailed() {
     this.reloading = false
+    this.searchNotFound = true
   }
 
   handleLoadInstancesDetails({ count }) {

@@ -78,7 +78,7 @@ const getWidth = props => {
   return `${StyleProps.inputSizes.regular.width}px`
 }
 const StyledButton = styled.button`
-  height: 32px;
+  ${StyleProps.exactHeight('32px')}
   border-radius: 4px;
   background-color: ${props => backgroundColor(props)};
   border: none;
