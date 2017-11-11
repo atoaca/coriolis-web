@@ -143,9 +143,6 @@ class UserDropdown extends React.Component {
     }
 
     let items = [{
-      label: 'Profile',
-      value: 'profile',
-    }, {
       label: 'Sign Out',
       value: 'signout',
     }]

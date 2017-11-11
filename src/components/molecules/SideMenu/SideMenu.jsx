@@ -88,6 +88,10 @@ class SideMenu extends React.Component {
     this.setState({ open: !this.state.open })
   }
 
+  handleMenuItemClick(page) {
+    window.location.href = `/#/${page}`
+  }
+
   render() {
     return (
       <Wrapper>
@@ -100,7 +104,6 @@ class SideMenu extends React.Component {
           <MenuItem onClick={() => { this.handleMenuItemClick('replicas') }}>Replicas</MenuItem>
           <MenuItem onClick={() => { this.handleMenuItemClick('migrations') }}>Migrations</MenuItem>
           <MenuItem onClick={() => { this.handleMenuItemClick('endpoints') }}>Cloud Endpoints</MenuItem>
-          <MenuItem onClick={() => { this.handleMenuItemClick('projects') }}>Projects</MenuItem>
         </Menu>
       </Wrapper>
     )

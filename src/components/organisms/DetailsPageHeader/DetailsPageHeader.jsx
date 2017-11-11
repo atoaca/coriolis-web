@@ -27,17 +27,24 @@ const Wrapper = styled.div`
   background: url('${backgroundImage}');
   align-items: center;
   padding: 0 22px;
+  justify-content: space-between;
 `
-
 const Logo = styled.div`
-  width: 232px;
+  width: 240px;
   height: 48px;
   background: url('${logoImage}') no-repeat;
-  flex-grow: 1;
+  cursor: pointer;
 `
-
 const UserDropdownStyled = styled(UserDropdown) `
   margin-left: 16px;
+`
+const Menu = styled.div`
+  display: flex;
+  align-items: center;
+`
+const User = styled.div`
+  display: flex;
+  align-items: center;
 `
 
 class DetailsPageHeader extends React.Component {
@@ -46,17 +53,25 @@ class DetailsPageHeader extends React.Component {
     onUserItemClick: PropTypes.func,
   }
 
+  handleLogoClick() {
+    window.location.href = '/#/replicas'
+  }
+
   render() {
     return (
       <Wrapper>
-        <SideMenu />
-        <Logo />
-        <NotificationDropdown white />
-        <UserDropdownStyled
-          white
-          user={this.props.user}
-          onItemClick={this.props.onUserItemClick}
-        />
+        <Menu>
+          <SideMenu />
+          <Logo onClick={() => { this.handleLogoClick() }} />
+        </Menu>
+        <User>
+          <NotificationDropdown white />
+          <UserDropdownStyled
+            white
+            user={this.props.user}
+            onItemClick={this.props.onUserItemClick}
+          />
+        </User>
       </Wrapper>
     )
   }

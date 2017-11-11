@@ -36,22 +36,21 @@ const Wrapper = styled.div``
 const Coriolis = styled.div`
   ${props => props.small ? smallProps : largeProps}
   ${props => !props.large && !props.small ? StyleProps.media.handheld`
-    width: 225px;
+    width: 246px;
     height: 42px;
     background: url('${coriolisSmallImage}') center no-repeat;
   ` : ''}
 `
 
-const Logo = ({ className, large, small }) => {
+const Logo = ({ large, small, ...props }) => {
   return (
-    <Wrapper className={className}>
+    <Wrapper {...props}>
       <Coriolis large={large} small={small} />
     </Wrapper>
   )
 }
 
 Logo.propTypes = {
-  className: PropTypes.string,
   large: PropTypes.bool,
   small: PropTypes.bool,
 }

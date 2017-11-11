@@ -27,7 +27,10 @@ const Wrapper = styled.div`
   height: 100%;
 `
 
-const LogoStyled = styled(Logo)`margin: 40px auto 0 30px;`
+const LogoStyled = styled(Logo) `
+  margin: 40px auto 0 30px;
+  cursor: pointer;
+`
 
 const Menu = styled.div`margin-top:32px`
 
@@ -51,9 +54,6 @@ const MenuItems = [
   }, {
     label: 'Cloud Endpoints',
     value: 'endpoints',
-  }, {
-    label: 'Projects',
-    value: 'projects',
   },
 ]
 
@@ -64,6 +64,10 @@ class Navigation extends React.Component {
 
   handleMenuItemClick(item) {
     window.location.href = `/#/${item}`
+  }
+
+  handleLogoClick() {
+    window.location.href = '/#/replicas'
   }
 
   renderMenu() {
@@ -85,7 +89,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <Wrapper>
-        <LogoStyled small />
+        <LogoStyled small onClick={() => { this.handleLogoClick() }} />
         {this.renderMenu()}
         <Footer />
       </Wrapper>
