@@ -30,6 +30,8 @@ const List = styled.div`
   border: 1px solid ${Palette.grayscale[3]};
   border-radius: ${StyleProps.borderRadius};
   z-index: 10;
+`
+const ListItems = styled.div`
   max-height: 400px;
   overflow: auto;
 `
@@ -44,7 +46,7 @@ const Tip = styled.div`
   border-right: 1px solid ${props => props.primary ? Palette.primary : 'white'};
   transform: rotate(45deg);
   right: 8px;
-  top: 40px;
+  top: -6px;
   z-index: 11;
   transition: all ${StyleProps.animations.swift};
 `
@@ -150,13 +152,6 @@ class Dropdown extends React.Component {
     }
   }
 
-  renderTip() {
-    if (!this.props.items || this.props.items.length === 0 || !this.state.showDropdownList) {
-      return null
-    }
-    return <Tip primary={this.state.firstItemHover} />
-  }
-
   renderList() {
     if (!this.props.items || this.props.items.length === 0 || !this.state.showDropdownList) {
       return null
@@ -165,23 +160,26 @@ class Dropdown extends React.Component {
     let selectedLabel = this.getLabel(this.props.selectedItem)
     let list = (
       <List {...this.props}>
-        {this.props.items.map((item, i) => {
-          let label = this.getLabel(item)
-          let listItem = (
-            <ListItem
-              key={label}
-              onMouseDown={() => { this.itemMouseDown = true }}
-              onMouseUp={() => { this.itemMouseDown = false }}
-              onMouseEnter={() => { this.handleItemMouseEnter(i) }}
-              onMouseLeave={() => { this.handleItemMouseLeave(i) }}
-              onClick={() => { this.handleItemClick(item) }}
-              selected={label === selectedLabel}
-            >{label}
-            </ListItem>
-          )
+        <Tip primary={this.state.firstItemHover} />
+        <ListItems>
+          {this.props.items.map((item, i) => {
+            let label = this.getLabel(item)
+            let listItem = (
+              <ListItem
+                key={label}
+                onMouseDown={() => { this.itemMouseDown = true }}
+                onMouseUp={() => { this.itemMouseDown = false }}
+                onMouseEnter={() => { this.handleItemMouseEnter(i) }}
+                onMouseLeave={() => { this.handleItemMouseLeave(i) }}
+                onClick={() => { this.handleItemClick(item) }}
+                selected={label === selectedLabel}
+              >{label}
+              </ListItem>
+            )
 
-          return listItem
-        })}
+            return listItem
+          })}
+        </ListItems>
       </List>
     )
 
@@ -206,7 +204,6 @@ class Dropdown extends React.Component {
           value={buttonValue()}
           onClick={() => this.handleButtonClick()}
         />
-        {this.renderTip()}
         {this.renderList()}
       </Wrapper>
     )

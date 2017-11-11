@@ -81,13 +81,13 @@ const NoSchedulesMessage = styled.div`
   font-size: 16px;
   margin-bottom: 32px;
 `
-const DropdownStyled = styled(Dropdown) `
-  font-size: 11px;
+const DropdownStyled = styled(Dropdown)`
+  font-size: 12px;
 `
 const Label = styled.div`
   background: ${Palette.grayscale[7]};
   height: 100%;
-  font-size: 11px;
+  font-size: 12px;
   margin-right: 8px;
   border-radius: ${StyleProps.borderRadius};
   padding: 0 8px;
@@ -112,7 +112,7 @@ const TimezoneLabel = styled.div`
   margin-right: 4px;
 `
 
-const colWidths = ['6%', '16%', '16%', '16%', '9%', '9%', '22%', '6%']
+const colWidths = ['6%', '18%', '10%', '18%', '10%', '10%', '23%', '5%']
 const daysInMonths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 class Schedule extends React.Component {
   static propTypes = {
@@ -254,7 +254,7 @@ class Schedule extends React.Component {
     return (
       <DropdownStyled
         centered
-        width={120}
+        width={136}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'month')}
         onChange={item => { this.handleMonthChange(s, item) }}
@@ -276,7 +276,7 @@ class Schedule extends React.Component {
     return (
       <DropdownStyled
         centered
-        width={120}
+        width={72}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'dom')}
         onChange={item => { this.props.onChange(s.id, { schedule: { dom: item.value } }) }}
@@ -298,7 +298,7 @@ class Schedule extends React.Component {
     return (
       <DropdownStyled
         centered
-        width={120}
+        width={136}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'dow', true)}
         onChange={item => { this.props.onChange(s.id, { schedule: { dow: item.value } }) }}
@@ -319,7 +319,7 @@ class Schedule extends React.Component {
     return (
       <DropdownStyled
         centered
-        width={64}
+        width={72}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'hour', true, 1)}
         onChange={item => { this.props.onChange(s.id, { schedule: { hour: item.value } }) }}
@@ -340,7 +340,7 @@ class Schedule extends React.Component {
     return (
       <DropdownStyled
         centered
-        width={64}
+        width={72}
         items={items}
         selectedItem={this.getFieldValue(s.schedule, items, 'minute', true, 1)}
         onChange={item => { this.props.onChange(s.id, { schedule: { minute: item.value } }) }}

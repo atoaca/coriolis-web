@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Field, Button } from 'components'
+import { WizardOptionsField, Button } from 'components'
 
 import LabelDictionary from '../../../utils/LabelDictionary'
 
@@ -30,6 +30,10 @@ const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+`
+const WizardOptionsFieldStyled = styled(WizardOptionsField) `
+  width: 319px;
+  justify-content: space-between;
 `
 
 class ReplicaExecutionOptions extends React.Component {
@@ -82,9 +86,10 @@ class ReplicaExecutionOptions extends React.Component {
         <Form>
           {this.state.fields.map(field => {
             return (
-              <Field
+              <WizardOptionsFieldStyled
                 key={field.name}
-                type={field.type}
+                name={field.name}
+                type="strict-boolean"
                 value={this.getFieldValue(field)}
                 label={LabelDictionary.get(field.name)}
                 onChange={value => this.handleValueChange(field, value)}

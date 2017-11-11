@@ -70,7 +70,7 @@ class DatetimePicker extends React.Component {
     return (
       <Wrapper>
         <DropdownButtonStyled
-          width={160}
+          width={176}
           value={(this.props.value && moment(this.props.value).format('DD/MM/YYYY hh:mm A')) || '-'}
           centered
           onClick={() => { this.handleDropdownClick() }}
