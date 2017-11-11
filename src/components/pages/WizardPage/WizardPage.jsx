@@ -212,7 +212,8 @@ class WizardPage extends React.Component {
     }
 
     if (items.length === 1) {
-      window.location.href = `/#/${this.state.type}/${items[0].id}`
+      let executionsPage = this.state.type === 'replica' ? '/executions' : ''
+      window.location.href = `/#/${this.state.type}${executionsPage}/${items[0].id}`
     } else {
       window.location.href = `/#/${this.state.type}s`
     }
