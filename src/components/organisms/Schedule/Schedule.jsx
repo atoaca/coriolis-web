@@ -26,6 +26,7 @@ import {
   Modal,
   DropdownLink,
   LoadingAnimation,
+  AlertModal,
 } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
@@ -147,6 +148,7 @@ class Schedule extends React.Component {
 
     this.state = {
       showOptionsModal: false,
+      showDeleteConfirmation: false,
       selectedSchedule: null,
       executionOptions: null,
     }
@@ -182,6 +184,19 @@ class Schedule extends React.Component {
     }
 
     return number
+  }
+
+  handleDeleteClick(selectedSchedule) {
+    this.setState({ showDeleteConfirmation: true, selectedSchedule })
+  }
+
+  handleCloseDeleteConfirmation() {
+    this.setState({ showDeleteConfirmation: false })
+  }
+
+  handleDeleteConfirmation() {
+    this.setState({ showDeleteConfirmation: false })
+    this.props.onRemove(this.state.selectedSchedule.id)
   }
 
   handleShowOptions(selectedSchedule) {
@@ -438,7 +453,7 @@ class Schedule extends React.Component {
                 >•••</Button>
               </RowData>
               <DeleteButton
-                onClick={() => { this.props.onRemove(s.id) }}
+                onClick={() => { this.handleDeleteClick(s) }}
                 hidden={s.enabled !== null && s.enabled !== undefined ? s.enabled : false}
               />
             </Row>
@@ -520,6 +535,14 @@ class Schedule extends React.Component {
             onExecuteClick={fields => { this.handleOptionsSave(fields) }}
           />
         </Modal>
+        <AlertModal
+          isOpen={this.state.showDeleteConfirmation}
+          title="Delete schedule?"
+          message="Are you sure you want to delete this schedule?"
+          extraMessage=" "
+          onConfirmation={() => { this.handleDeleteConfirmation() }}
+          onRequestClose={() => { this.handleCloseDeleteConfirmation() }}
+        />
       </Wrapper>
     )
   }
