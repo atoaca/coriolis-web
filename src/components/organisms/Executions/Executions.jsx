@@ -80,7 +80,9 @@ class Executions extends React.Component {
 
     this.state = {
       selectedExecution: null,
+      canceledExecution: null,
       showCancelConfirmation: false,
+      cancelDisabled: false,
     }
   }
 
@@ -121,17 +123,21 @@ class Executions extends React.Component {
     if (!this.state.selectedExecution) {
       this.setState({
         selectedExecution: lastExecution || null,
+        cancelDisabled: this.state.canceledExecution && lastExecution && this.state.canceledExecution.id === lastExecution.id,
       })
     } else if (selectExecution) {
       this.setState({
         selectedExecution: selectExecution,
+        cancelDisabled: this.state.canceledExecution && this.state.canceledExecution.id === selectExecution.id,
       })
     } else if (this.hasExecutions(props)) {
+      selectExecution = props.item.executions.find(e => e.id === this.state.selectedExecution.id) || lastExecution
       this.setState({
-        selectedExecution: props.item.executions.find(e => e.id === this.state.selectedExecution.id) || null,
+        cancelDisabled: this.state.canceledExecution && selectExecution && this.state.canceledExecution.id === selectExecution.id,
+        selectedExecution: selectExecution,
       })
     } else {
-      this.setState({ selectedExecution: null })
+      this.setState({ selectedExecution: null, cancelDisabled: false })
     }
   }
 
@@ -176,7 +182,7 @@ class Executions extends React.Component {
   }
 
   handleCancelConfirmation() {
-    this.setState({ showCancelConfirmation: false })
+    this.setState({ showCancelConfirmation: false, canceledExecution: { ...this.state.selectedExecution } })
     this.props.onCancelExecutionClick(this.state.selectedExecution)
   }
 
@@ -197,6 +203,7 @@ class Executions extends React.Component {
       return (
         <Button
           secondary
+          disabled={this.state.cancelDisabled}
           hollow
           onClick={() => { this.handleCancelExecutionClick() }}
         >Cancel Execution</Button>)
