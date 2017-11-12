@@ -537,7 +537,7 @@ class Schedule extends React.Component {
         </Modal>
         <AlertModal
           isOpen={this.state.showDeleteConfirmation}
-          title="Delete schedule?"
+          title="Delete Schedule?"
           message="Are you sure you want to delete this schedule?"
           extraMessage=" "
           onConfirmation={() => { this.handleDeleteConfirmation() }}

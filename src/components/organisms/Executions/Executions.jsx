@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Timeline, StatusPill, CopyValue, Button, Tasks } from 'components'
+import { Timeline, StatusPill, CopyValue, Button, Tasks, AlertModal } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 import DateUtils from '../../../utils/DateUtils'
@@ -80,6 +80,7 @@ class Executions extends React.Component {
 
     this.state = {
       selectedExecution: null,
+      showCancelConfirmation: false,
     }
   }
 
@@ -166,6 +167,19 @@ class Executions extends React.Component {
     this.setState({ selectedExecution: item })
   }
 
+  handleCancelExecutionClick() {
+    this.setState({ showCancelConfirmation: true })
+  }
+
+  handleCloseCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+  }
+
+  handleCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+    this.props.onCancelExecutionClick(this.state.selectedExecution)
+  }
+
   renderTimeline() {
     return (
       <Timeline
@@ -184,7 +198,7 @@ class Executions extends React.Component {
         <Button
           secondary
           hollow
-          onClick={() => { this.props.onCancelExecutionClick(this.state.selectedExecution) }}
+          onClick={() => { this.handleCancelExecutionClick() }}
         >Cancel Execution</Button>)
     }
 
@@ -250,6 +264,14 @@ class Executions extends React.Component {
         {this.renderExecutionInfo()}
         {this.renderTasks()}
         {this.renderNoExecution()}
+        <AlertModal
+          isOpen={this.state.showCancelConfirmation}
+          title="Cancel Execution?"
+          message="Are you sure you want to cancel this execution?"
+          extraMessage=" "
+          onConfirmation={() => { this.handleCancelConfirmation() }}
+          onRequestClose={() => { this.handleCloseCancelConfirmation() }}
+        />
       </Wrapper>
     )
   }
