@@ -79,7 +79,7 @@ class ScheduleSource {
         url: `${servicesUrl.coriolis}/${projectId}/replicas/${replicaId}/schedules`,
         method: 'GET',
       }).then(response => {
-        let schedules = response.data.schedules
+        let schedules = [...response.data.schedules]
 
         schedules.forEach(s => {
           if (s.expiration_date) {
@@ -90,8 +90,8 @@ class ScheduleSource {
             s.shutdown_instances = s.shutdown_instance
           }
         })
-
-        resolve(response.data.schedules)
+        schedules.sort((a, b) => moment(a.created_at).diff(b.created_at))
+        resolve(schedules)
       }, reject).catch(reject)
     })
   }
