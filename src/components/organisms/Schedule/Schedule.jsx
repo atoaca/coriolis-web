@@ -36,6 +36,7 @@ import DateUtils from '../../../utils/DateUtils'
 
 import deleteImage from './images/delete.svg'
 import deleteHoverImage from './images/delete-hover.svg'
+import scheduleImage from './images/schedule.svg'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -93,10 +94,19 @@ const NoSchedules = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 80px;
+  background: ${Palette.grayscale[7]};
 `
-const NoSchedulesMessage = styled.div`
-  font-size: 16px;
-  margin-bottom: 32px;
+const NoSchedulesTitle = styled.div`
+  margin-bottom: 10px;
+`
+const NoSchedulesSubtitle = styled.div`
+  margin-bottom: 45px;
+`
+const ScheduleImage = styled.div`
+  ${StyleProps.exactSize('96px')}
+  background: url('${scheduleImage}') no-repeat center;
+  margin-bottom: 46px;
 `
 const DropdownStyled = styled(Dropdown)`
   font-size: 12px;
@@ -494,7 +504,9 @@ class Schedule extends React.Component {
 
     return (
       <NoSchedules>
-        <NoSchedulesMessage>There is no schedule added.</NoSchedulesMessage>
+        <ScheduleImage />
+        <NoSchedulesTitle>This Replica has no Schedules.</NoSchedulesTitle>
+        <NoSchedulesSubtitle>Add a new schedule so that the Replica executes automatically.</NoSchedulesSubtitle>
         <Button onClick={() => { this.handleAddScheduleClick() }}>Add Schedule</Button>
       </NoSchedules>
     )
