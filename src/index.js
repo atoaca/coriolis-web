@@ -20,10 +20,10 @@ import { HashRouter } from 'react-router-dom'
 import { basename } from 'config'
 import App from 'components/App.jsx'
 
-const renderApp = () => (
-  <HashRouter basename={basename}>
-    <App />
-  </HashRouter>
+const renderApp = () => React.createElement(
+  HashRouter,
+  { basename },
+  React.createElement(App, null)
 )
 
 const root = document.getElementById('app')

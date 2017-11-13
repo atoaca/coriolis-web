@@ -72,7 +72,7 @@ class PropertiesTable extends React.Component {
     )
   }
 
-  renderTextInput(prop) {
+  renderTextInput() {
     return (
       <TextInput />
     )

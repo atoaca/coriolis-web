@@ -173,8 +173,7 @@ class NotificationDropdown extends React.Component {
     window.removeEventListener('mousedown', this.handlePageClick, false)
   }
 
-  handleItemClick(item) {
-    console.log('notification item clicked', item)
+  handleItemClick() {
     this.setState({ showDropdownList: false })
   }
 
