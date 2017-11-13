@@ -170,8 +170,8 @@ class ReplicaDetailsPage extends React.Component {
     this.setState({ showMigrationModal: true })
   }
 
-  handleAddScheduleClick() {
-    ScheduleActions.addSchedule(this.props.match.params.id)
+  handleAddScheduleClick(schedule) {
+    ScheduleActions.addSchedule(this.props.match.params.id, schedule)
   }
 
   handleScheduleChange(scheduleId, data) {
@@ -225,7 +225,7 @@ class ReplicaDetailsPage extends React.Component {
             onExecuteClick={() => { this.handleActionButtonClick() }}
             onCreateMigrationClick={() => { this.handleCreateMigrationClick() }}
             onDeleteReplicaClick={() => { this.handleDeleteReplicaClick() }}
-            onAddScheduleClick={() => { this.handleAddScheduleClick() }}
+            onAddScheduleClick={schedule => { this.handleAddScheduleClick(schedule) }}
             onScheduleChange={(scheduleId, data) => { this.handleScheduleChange(scheduleId, data) }}
             onScheduleRemove={scheduleId => { this.handleScheduleRemove(scheduleId) }}
           />}

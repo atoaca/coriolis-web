@@ -40,6 +40,7 @@ import NetworkStore from '../../../stores/NetworkStore'
 import NotificationActions from '../../../actions/NotificationActions'
 import ReplicaActions from '../../../actions/ReplicaActions'
 import ScheduleActions from '../../../actions/ScheduleActions'
+import ScheduleStore from '../../../stores/ScheduleStore'
 import Wait from '../../../utils/Wait'
 import { wizardConfig, executionOptions } from '../../../config'
 
@@ -213,7 +214,9 @@ class WizardPage extends React.Component {
 
     if (items.length === 1) {
       let executionsPage = this.state.type === 'replica' ? '/executions' : ''
-      window.location.href = `/#/${this.state.type}${executionsPage}/${items[0].id}`
+      Wait.for(() => !ScheduleStore.getState().scheduling, () => {
+        window.location.href = `/#/${this.state.type}${executionsPage}/${items[0].id}`
+      })
     } else {
       window.location.href = `/#/${this.state.type}s`
     }
@@ -320,8 +323,8 @@ class WizardPage extends React.Component {
     WizardActions.updateNetworks({ sourceNic, targetNetwork })
   }
 
-  handleAddScheduleClick() {
-    WizardActions.addSchedule()
+  handleAddScheduleClick(schedule) {
+    WizardActions.addSchedule(schedule)
   }
 
   handleScheduleChange(scheduleId, data) {
@@ -362,7 +365,7 @@ class WizardPage extends React.Component {
             onInstanceClick={instance => { this.handleInstanceClick(instance) }}
             onOptionsChange={(field, value) => { this.handleOptionsChange(field, value) }}
             onNetworkChange={(sourceNic, targetNetwork) => { this.handleNetworkChange(sourceNic, targetNetwork) }}
-            onAddScheduleClick={() => { this.handleAddScheduleClick() }}
+            onAddScheduleClick={schedule => { this.handleAddScheduleClick(schedule) }}
             onScheduleChange={(scheduleId, data) => { this.handleScheduleChange(scheduleId, data) }}
             onScheduleRemove={scheduleId => { this.handleScheduleRemove(scheduleId) }}
           />}

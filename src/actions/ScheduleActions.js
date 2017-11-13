@@ -50,8 +50,8 @@ class ScheduleActions {
     return response || true
   }
 
-  addSchedule(replicaId) {
-    ScheduleSource.addSchedule(replicaId).then(
+  addSchedule(replicaId, schedule) {
+    ScheduleSource.addSchedule(replicaId, schedule).then(
       schedule => { this.addScheduleSuccess(schedule) },
       response => { this.addScheduleFailed(response) },
     )

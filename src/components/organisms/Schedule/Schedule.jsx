@@ -259,6 +259,14 @@ class Schedule extends React.Component {
     this.props.onChange(s.id, { schedule: { hour } })
   }
 
+  handleAddScheduleClick() {
+    let hour = 0
+    if (this.props.timezone === 'local') {
+      hour = DateUtils.getUtcHour(0)
+    }
+    this.props.onAddScheduleClick({ schedule: { hour, minute: 0 } })
+  }
+
   renderLoading() {
     if (!this.props.loading) {
       return null
@@ -398,16 +406,19 @@ class Schedule extends React.Component {
 
   renderExpirationValue(s) {
     let date = s.expiration_date && moment(s.expiration_date)
+    let labelDate = date
     if (this.props.timezone === 'utc' && date) {
-      date = moment.utc(date)
+      labelDate = DateUtils.getUtcTime(date)
     }
+
     if (s.enabled) {
-      return this.renderLabel({ label: (date && date.format('DD/MM/YYYY hh:mm A')) || '-' })
+      return this.renderLabel({ label: (labelDate && labelDate.format('DD/MM/YYYY hh:mm A')) || '-' })
     }
 
     return (
       <DatetimePicker
         value={date}
+        timezone={this.props.timezone}
         onChange={date => { this.handleExpirationDateChange(s, date) }}
       />
     )
@@ -484,7 +495,7 @@ class Schedule extends React.Component {
     return (
       <NoSchedules>
         <NoSchedulesMessage>There is no schedule added.</NoSchedulesMessage>
-        <Button onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
+        <Button onClick={() => { this.handleAddScheduleClick() }}>Add Schedule</Button>
       </NoSchedules>
     )
   }
@@ -502,7 +513,11 @@ class Schedule extends React.Component {
 
     return (
       <Footer>
-        <Button disabled={this.props.adding} secondary onClick={this.props.onAddScheduleClick}>Add Schedule</Button>
+        <Button
+          disabled={this.props.adding}
+          secondary
+          onClick={() => { this.handleAddScheduleClick() }}
+        >Add Schedule</Button>
         <Timezone>
           <TimezoneLabel>Show all times in</TimezoneLabel>
           <DropdownLink

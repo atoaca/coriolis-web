@@ -41,8 +41,8 @@ class WizardActions {
     return { sourceNic, targetNetwork }
   }
 
-  addSchedule() {
-    return true
+  addSchedule(schedule) {
+    return schedule || true
   }
 
   updateSchedule(scheduleId, data) {

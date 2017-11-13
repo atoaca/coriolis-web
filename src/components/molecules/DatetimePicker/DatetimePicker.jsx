@@ -21,6 +21,7 @@ import moment from 'moment'
 import { DropdownButton } from 'components'
 
 import DomUtils from '../../../utils/DomUtils'
+import DateUtils from '../../../utils/DateUtils'
 
 import style from './style.js'
 
@@ -49,6 +50,7 @@ class DatetimePicker extends React.Component {
   static propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
+    timezone: PropTypes.string,
   }
 
   constructor() {
@@ -56,7 +58,7 @@ class DatetimePicker extends React.Component {
 
     this.state = {
       showPicker: false,
-      currentDate: null,
+      date: null,
     }
     this.handlePageClick = this.handlePageClick.bind(this)
   }
@@ -77,7 +79,7 @@ class DatetimePicker extends React.Component {
     let path = DomUtils.getEventPath(e)
 
     if (!this.itemMouseDown && !path.find(n => n.className === 'rdtPicker')) {
-      if (this.state.date) {
+      if (this.state.date && this.state.showPicker) {
         this.props.onChange(this.state.date)
       }
       this.setState({ showPicker: false })
@@ -93,15 +95,24 @@ class DatetimePicker extends React.Component {
   }
 
   handleChange(date) {
+    if (this.props.timezone === 'utc') {
+      date = DateUtils.getLocalTime(date)
+    }
+
     this.setState({ date })
   }
 
   render() {
+    let timezoneDate = this.state.date
+    if (this.props.timezone === 'utc' && timezoneDate) {
+      timezoneDate = DateUtils.getUtcTime(timezoneDate)
+    }
+
     return (
       <Wrapper>
         <DropdownButtonStyled
           width={176}
-          value={(this.props.value && moment(this.props.value).format('DD/MM/YYYY hh:mm A')) || '-'}
+          value={(timezoneDate && moment(timezoneDate).format('DD/MM/YYYY hh:mm A')) || '-'}
           centered
           onClick={() => { this.handleDropdownClick() }}
           onMouseDown={() => { this.itemMouseDown = true }}
@@ -109,7 +120,7 @@ class DatetimePicker extends React.Component {
         />
         <DatetimeStyled
           input={false}
-          value={this.state.date}
+          value={timezoneDate}
           open={this.state.showPicker}
           onChange={date => { this.handleChange(date) }}
           dateFormat="DD/MM/YYYY"

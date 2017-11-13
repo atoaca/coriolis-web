@@ -90,11 +90,11 @@ class WizardStore {
     this.data.networks.push({ sourceNic, targetNetwork })
   }
 
-  handleAddSchedule() {
+  handleAddSchedule(schedule) {
     if (!this.data.schedules) {
       this.data.schedules = []
     }
-    this.data.schedules.push({ id: new Date().getTime() })
+    this.data.schedules.push({ id: new Date().getTime(), schedule: schedule.schedule })
   }
 
   handleUpdateSchedule({ scheduleId, data }) {

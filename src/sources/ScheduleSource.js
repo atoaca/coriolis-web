@@ -96,12 +96,15 @@ class ScheduleSource {
     })
   }
 
-  static addSchedule(replicaId) {
+  static addSchedule(replicaId, schedule) {
     return new Promise((resolve, reject) => {
       let projectId = cookie.get('projectId')
       let payload = {
         schedule: { hour: 0, minute: 0 },
         enabled: false,
+      }
+      if (schedule && schedule.schedule) {
+        payload.schedule = { ...schedule.schedule }
       }
 
       Api.sendAjaxRequest({
