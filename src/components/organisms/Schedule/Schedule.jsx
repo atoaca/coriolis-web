@@ -25,7 +25,7 @@ import {
   ReplicaExecutionOptions,
   Modal,
   DropdownLink,
-  LoadingAnimation,
+  StatusImage,
   AlertModal,
 } from 'components'
 
@@ -284,7 +284,7 @@ class Schedule extends React.Component {
 
     return (
       <LoadingWrapper>
-        <LoadingAnimation />
+        <StatusImage loading />
         <LoadingText>Loading schedules...</LoadingText>
       </LoadingWrapper>
     )

@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { EndpointLogos, PasswordValue, Button, CopyValue, LoadingAnimation } from 'components'
+import { EndpointLogos, PasswordValue, Button, CopyValue, StatusImage } from 'components'
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
 import DateUtils from '../../../utils/DateUtils'
@@ -85,7 +85,7 @@ class EndpointDetailsContent extends React.Component {
 
     return (
       <LoadingWrapper>
-        <LoadingAnimation />
+        <StatusImage loading />
       </LoadingWrapper>
     )
   }

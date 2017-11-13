@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Modal, Button, LoadingAnimation } from 'components'
+import { Modal, Button, StatusImage } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 
@@ -93,7 +93,7 @@ class AlertModal extends React.Component {
     return (
       <Modal {...this.props}>
         <Wrapper>
-          {this.props.type === 'loading' ? <LoadingAnimation /> : <Image type={this.props.type} />}
+          {this.props.type === 'loading' ? <StatusImage loading /> : <Image type={this.props.type} />}
           {this.props.message ? <Message>{this.props.message}</Message> : null}
           {this.props.extraMessage ? <ExtraMessage>{this.props.extraMessage}</ExtraMessage> : null}
           {this.renderConfirmationButtons()}

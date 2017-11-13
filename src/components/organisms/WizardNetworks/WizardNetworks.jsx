@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { LoadingAnimation, Dropdown } from 'components'
+import { StatusImage, Dropdown } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 import StyleProps from '../../styleUtils/StyleProps'
@@ -121,7 +121,7 @@ class WizardNetworks extends React.Component {
 
     return (
       <LoadingWrapper>
-        <LoadingAnimation />
+        <StatusImage loading />
         <LoadingText>Loading networks...</LoadingText>
       </LoadingWrapper>
     )

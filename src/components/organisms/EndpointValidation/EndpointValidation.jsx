@@ -16,11 +16,10 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { LoadingAnimation, Button, CopyButton } from 'components'
+import { Button, CopyButton, StatusImage } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 
-import failedImage from './images/failed.svg'
 import NotificationActions from '../../../actions/NotificationActions'
 import DomUtils from '../../../utils/DomUtils'
 
@@ -38,11 +37,6 @@ const Loading = styled.div`
 const Validation = styled.div`
   ${contentStyle}
 `
-const FailedImage = styled.div`
-  width: 96px;
-  height: 96px;
-  background: url('${failedImage}') center no-repeat;
-`
 const Message = styled.div`
   margin-top: 48px;
   text-align: center;
@@ -50,9 +44,6 @@ const Message = styled.div`
 const Title = styled.div`
   font-size: 18px;
   margin-bottom: 8px;
-`
-const SuccessTitle = styled.div`
-  font-size: 18px;
 `
 const Subtitle = styled.div`
   color: ${Palette.grayscale[4]};
@@ -100,7 +91,7 @@ class EndpointValidation extends React.Component {
 
     return (
       <Loading>
-        <LoadingAnimation />
+        <StatusImage loading />
         <Message>
           <Title>Validating Endpoint</Title>
           <Subtitle>Please wait ...</Subtitle>
@@ -116,7 +107,11 @@ class EndpointValidation extends React.Component {
 
     return (
       <Validation>
-        <SuccessTitle>Endpoint is valid</SuccessTitle>
+        <StatusImage status="COMPLETED" />
+        <Message>
+          <Title>Endpoint is Valid</Title>
+          <Subtitle>All tests passed succesfully.</Subtitle>
+        </Message>
       </Validation>
     )
   }
@@ -130,7 +125,7 @@ class EndpointValidation extends React.Component {
 
     return (
       <Validation>
-        <FailedImage />
+        <StatusImage status="ERROR" />
         <Message>
           <Title>Validation Failed</Title>
           <Error onClick={() => { this.handleCopyClick(message) }}>

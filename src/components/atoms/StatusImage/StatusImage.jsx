@@ -18,11 +18,26 @@ import PropTypes from 'prop-types'
 import StyleProps from '../../styleUtils/StyleProps'
 
 import errorImage from './images/error.svg'
+import successImage from './images/success.svg'
+import loadingImage from './images/loading.svg'
 
 const statuses = () => {
   return {
     ERROR: css`
       background-image: url('${errorImage}');
+    `,
+    COMPLETED: css`
+      background-image: url('${successImage}');
+    `,
+    RUNNING: css`
+      background-image: url('${loadingImage}');
+      transform-origin: 48px 48px;
+      animation: rotate 1s linear infinite;
+
+      @keyframes rotate {
+        0% {transform: rotate(0deg);}
+        100% {transform: rotate(360deg);}
+      }
     `,
   }
 }
@@ -35,12 +50,21 @@ const Wrapper = styled.div`
 
 class StatusImage extends React.Component {
   static propTypes = {
-    status: PropTypes.string.isRequired,
+    status: PropTypes.string,
+    loading: PropTypes.bool,
+  }
+
+  static defaultPropTypes = {
+    status: 'RUNNING',
   }
 
   render() {
+    let status = this.props.status
+    if (this.props.loading) {
+      status = 'RUNNING'
+    }
     return (
-      <Wrapper {...this.props} />
+      <Wrapper status={status} {...this.props} />
     )
   }
 }

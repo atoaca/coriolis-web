@@ -17,7 +17,6 @@ import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import {
-  LoadingAnimation,
   Checkbox,
   SearchInput,
   ReloadButton,
@@ -252,7 +251,7 @@ class WizardInstances extends React.Component {
 
     return (
       <Reloading>
-        <LoadingAnimation />
+        <StatusImage loading />
       </Reloading>
     )
   }
@@ -264,7 +263,7 @@ class WizardInstances extends React.Component {
 
     return (
       <LoadingWrapper>
-        <LoadingAnimation />
+        <StatusImage loading />
         <LoadingText>Loading instances...</LoadingText>
       </LoadingWrapper>
     )

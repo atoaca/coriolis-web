@@ -16,7 +16,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { EndpointLogos, Dropdown, LoadingAnimation } from 'components'
+import { EndpointLogos, Dropdown, StatusImage } from 'components'
 
 const Wrapper = styled.div`
   display: flex;
@@ -98,7 +98,7 @@ class WizardEndpointList extends React.Component {
       return null
     }
 
-    return <LoadingAnimation />
+    return <StatusImage loading />
   }
 
   render() {

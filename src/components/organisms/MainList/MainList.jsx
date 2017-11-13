@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { LoadingAnimation } from 'components'
+import { StatusImage } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 
@@ -79,7 +79,7 @@ class MainList extends React.Component {
   renderLoading() {
     return (
       <Loading>
-        <LoadingAnimation />
+        <StatusImage loading />
         <LoadingText>Loading ...</LoadingText>
       </Loading>
     )
