@@ -43,9 +43,17 @@ const ListItem = styled.div`
   align-items: center;
   border-bottom: 1px solid white;
   transition: all ${StyleProps.animations.swift};
-
+  &:hover {
+    background: ${Palette.grayscale[0]};
+  }
+  &:last-child {
+    border-bottom-left-radius: ${StyleProps.borderRadius};
+    border-bottom-right-radius: ${StyleProps.borderRadius};
+  }
   &:first-child {
     position: relative;
+    border-top-left-radius: ${StyleProps.borderRadius};
+    border-top-right-radius: ${StyleProps.borderRadius};
     &:after {
       content: ' ';
       position: absolute;
@@ -58,6 +66,11 @@ const ListItem = styled.div`
       right: 10px;
       top: -6px;
       transition: all ${StyleProps.animations.swift};
+    }
+    &:hover:after {
+      background: ${Palette.grayscale[0]};
+      border: 1px solid ${Palette.grayscale[0]};
+      border-color: transparent transparent ${Palette.grayscale[0]} ${Palette.grayscale[0]};
     }
   }
 `

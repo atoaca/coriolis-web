@@ -129,6 +129,9 @@ const TypeIcon = styled.div`
 const TitleLabel = styled.div`flex-grow: 1;`
 const Time = styled.div`color: ${Palette.grayscale[4]};`
 const Description = styled.div``
+const NoItems = styled.div`
+  text-align: center;
+`
 
 class NotificationDropdown extends React.Component {
   static propTypes = {
@@ -141,6 +144,22 @@ class NotificationDropdown extends React.Component {
 
     this.state = {
       showDropdownList: false,
+      // items: [{
+      //   title: 'Migration',
+      //   time: '12:53 PM',
+      //   description: 'A full VM migration between two clouds',
+      //   icon: { info: true },
+      // }, {
+      //   title: 'Replica',
+      //   time: '12:53 PM',
+      //   description: 'Incrementally replicate virtual machines',
+      //   icon: { error: true },
+      // }, {
+      //   title: 'Endpoint',
+      //   time: '12:53 PM',
+      //   description: 'A conection to a public or private cloud',
+      //   icon: { success: true },
+      // }],
     }
 
     this.handlePageClick = this.handlePageClick.bind(this)
@@ -173,31 +192,31 @@ class NotificationDropdown extends React.Component {
     }
   }
 
-  renderList() {
-    if (!this.state.showDropdownList) {
+  renderNoItems() {
+    if (!this.state.showDropdownList || (this.state.items && this.state.items.length > 0)) {
       return null
     }
 
-    let items = [{
-      title: 'Migration',
-      time: '12:53 PM',
-      description: 'A full VM migration between two clouds',
-      icon: { info: true },
-    }, {
-      title: 'Replica',
-      time: '12:53 PM',
-      description: 'Incrementally replicate virtual machines',
-      icon: { error: true },
-    }, {
-      title: 'Endpoint',
-      time: '12:53 PM',
-      description: 'A conection to a public or private cloud',
-      icon: { success: true },
-    }]
+    return (
+      <List>
+        <ListItem
+          onMouseDown={() => { this.itemMouseDown = true }}
+          onMouseUp={() => { this.itemMouseDown = false }}
+        >
+          <NoItems>There are no notifications</NoItems>
+        </ListItem>
+      </List>
+    )
+  }
+
+  renderList() {
+    if (!this.state.showDropdownList || !this.state.items || this.state.items.length === 0) {
+      return null
+    }
 
     let list = (
       <List>
-        {items.map(item => {
+        {this.state.items.map(item => {
           return (
             <ListItem
               key={item.title}
@@ -219,22 +238,33 @@ class NotificationDropdown extends React.Component {
 
     return list
   }
+  renderBell() {
+    let badge = this.state.items && this.state.items.length > 1 ? (
+      <Badge>
+        <BadgeLabel>{this.state.items.length}</BadgeLabel>
+      </Badge>
+    ) : null
+
+    return (
+      <Icon
+        onMouseDown={() => { this.itemMouseDown = true }}
+        onMouseUp={() => { this.itemMouseDown = false }}
+        onClick={() => this.handleButtonClick()}
+      >
+        <BellIcon
+          dangerouslySetInnerHTML={{ __html: bellImage(this.props.white ? 'white' : Palette.grayscale[2]) }}
+        />
+        {badge}
+      </Icon>
+    )
+  }
+
   render() {
     return (
       <Wrapper>
-        <Icon
-          onMouseDown={() => { this.itemMouseDown = true }}
-          onMouseUp={() => { this.itemMouseDown = false }}
-          onClick={() => this.handleButtonClick()}
-        >
-          <BellIcon
-            dangerouslySetInnerHTML={{ __html: bellImage(this.props.white ? 'white' : Palette.grayscale[2]) }}
-          />
-          <Badge>
-            <BadgeLabel>7</BadgeLabel>
-          </Badge>
-        </Icon>
+        {this.renderBell()}
         {this.renderList()}
+        {this.renderNoItems()}
       </Wrapper>
     )
   }
