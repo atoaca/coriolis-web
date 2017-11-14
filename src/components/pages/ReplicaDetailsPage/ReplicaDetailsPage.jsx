@@ -90,6 +90,7 @@ class ReplicaDetailsPage extends React.Component {
   }
 
   componentWillUnmount() {
+    ReplicaActions.clearDetails()
     clearInterval(this.pollInterval)
   }
 

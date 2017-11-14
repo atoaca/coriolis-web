@@ -22,6 +22,7 @@ class MigrationStore {
     this.migrationDetails = {}
     this.loading = true
     this.canceling = true
+    this.detailsLoading = true
 
     this.bindListeners({
       handleGetMigrations: MigrationActions.GET_MIGRATIONS,
@@ -35,6 +36,7 @@ class MigrationStore {
       handleCancel: MigrationActions.CANCEL,
       handleCancelSuccess: MigrationActions.CANCEL_SUCCESS,
       handleCancelFailed: MigrationActions.CANCEL_FAILED,
+      handleClearDetails: MigrationActions.CLEAR_DETAILS,
     })
   }
 
@@ -103,6 +105,10 @@ class MigrationStore {
 
   handleCancelFailed() {
     this.canceling = { failed: true }
+  }
+
+  handleClearDetails() {
+    this.detailsLoading = true
   }
 }
 

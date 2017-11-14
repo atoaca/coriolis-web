@@ -99,6 +99,10 @@ class MigrationActions {
   migrateReplicaFailed(response) {
     return response || true
   }
+
+  clearDetails() {
+    return true
+  }
 }
 
 export default alt.createActions(MigrationActions)

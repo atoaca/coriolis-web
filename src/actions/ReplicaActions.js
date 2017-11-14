@@ -132,6 +132,10 @@ class ReplicaActions {
   deleteFailed(response) {
     return response || true
   }
+
+  clearDetails() {
+    return true
+  }
 }
 
 export default alt.createActions(ReplicaActions)

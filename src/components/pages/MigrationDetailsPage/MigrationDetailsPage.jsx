@@ -77,6 +77,7 @@ class MigrationDetailsPage extends React.Component {
   }
 
   componentWillUnmount() {
+    MigrationActions.clearDetails()
     clearInterval(this.pollInterval)
   }
 

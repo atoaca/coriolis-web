@@ -21,6 +21,7 @@ class ReplicaStore {
     this.replicas = []
     this.replicaDetails = {}
     this.loading = true
+    this.detailsLoading = true
 
     this.bindListeners({
       handleGetReplicas: ReplicaActions.GET_REPLICAS,
@@ -36,6 +37,7 @@ class ReplicaStore {
       handleDeleteExecutionSuccess: ReplicaActions.DELETE_EXECUTION_SUCCESS,
       handleDeleteSuccess: ReplicaActions.DELETE_SUCCESS,
       handleCancelExecutionSuccess: ReplicaActions.CANCEL_EXECUTION_SUCCESS,
+      handleClearDetails: ReplicaActions.CLEAR_DETAILS,
     })
   }
 
@@ -131,6 +133,11 @@ class ReplicaStore {
 
   handleCancelExecutionSuccess() {
     setTimeout(() => { NotificationActions.notify('Cancelled', 'success') }, 0)
+  }
+
+  handleClearDetails() {
+    this.detailsLoading = true
+    this.replicaDetails = {}
   }
 }
 
