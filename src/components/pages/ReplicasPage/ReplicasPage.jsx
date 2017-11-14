@@ -172,10 +172,26 @@ class ReplicasPage extends React.Component {
     })
   }
 
+  searchText(item, text) {
+    let result = false
+    if (item.instances[0].toLowerCase().indexOf(text) > -1) {
+      return true
+    }
+    if (item.destination_environment) {
+      Object.keys(item.destination_environment).forEach(prop => {
+        if (item.destination_environment[prop] && item.destination_environment[prop].toLowerCase
+          && item.destination_environment[prop].toLowerCase().indexOf(text) > -1) {
+          result = true
+        }
+      })
+    }
+    return result
+  }
+
   itemFilterFunction(item, filterStatus, filterText) {
     let lastExecution = this.getLastExecution(item)
     if ((filterStatus !== 'all' && (!lastExecution || lastExecution.status !== filterStatus)) ||
-      (item.instances[0].toLowerCase().indexOf(filterText) === -1)
+      !this.searchText(item, filterText)
     ) {
       return false
     }
