@@ -1,6 +1,7 @@
 {
   "name": "coriolis-web",
-  "version": "2.0.0",
+  "version": "1.4.0",
+  "license" : "AGPL-3.0",
   "scripts": {
     "start": "npm run env:dev && node server.js --dev",
     "env:dev": "cross-env NODE_ENV=development",
