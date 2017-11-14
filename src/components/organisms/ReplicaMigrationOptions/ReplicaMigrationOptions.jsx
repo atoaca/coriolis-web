@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Button, Field } from 'components'
+import { Button, WizardOptionsField } from 'components'
 
 import LabelDictionary from '../../../utils/LabelDictionary'
 import replicaMigrationImage from './images/replica-migration.svg'
@@ -38,16 +38,17 @@ const Form = styled.div`
   flex-wrap: wrap;
   margin-left: -64px;
   width: 300px;
-  margin: 0 auto 110px auto;
-`
-const FieldStyled = styled(Field) `
-  margin-bottom: 16px;
-  margin-left: 64px;
+  margin: 0 auto 46px auto;
 `
 const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+`
+const WizardOptionsFieldStyled = styled(WizardOptionsField)`
+  width: 319px;
+  justify-content: space-between;
+  margin-bottom: 32px;
 `
 
 class ReplicaMigrationOptions extends React.Component {
@@ -63,16 +64,16 @@ class ReplicaMigrationOptions extends React.Component {
       fields: [
         {
           name: 'clone_disks',
-          type: 'boolean',
+          type: 'strict-boolean',
           value: true,
         },
         {
           name: 'force',
-          type: 'boolean',
+          type: 'strict-boolean',
         },
         {
           name: 'skip_os_morphing',
-          type: 'boolean',
+          type: 'strict-boolean',
         },
       ],
     }
@@ -90,8 +91,9 @@ class ReplicaMigrationOptions extends React.Component {
         <Form>
           {this.state.fields.map(field => {
             return (
-              <FieldStyled
+              <WizardOptionsFieldStyled
                 key={field.name}
+                name={field.name}
                 type={field.type}
                 value={field.value}
                 label={LabelDictionary.get(field.name)}
