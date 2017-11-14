@@ -19,7 +19,6 @@ import styled, { injectGlobal } from 'styled-components'
 import {
   LoginPage,
   Fonts,
-  StyleProps,
   Notifications,
   NotFoundPage,
   ReplicasPage,
@@ -32,6 +31,7 @@ import {
 } from 'components'
 
 import Palette from './styleUtils/Palette'
+import StyleProps from './styleUtils/StyleProps'
 import UserActions from '../actions/UserActions'
 
 injectGlobal`

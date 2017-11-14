@@ -39,7 +39,7 @@ import deleteHoverImage from './images/delete-hover.svg'
 import scheduleImage from './images/schedule.svg'
 
 const Wrapper = styled.div`
-  width: 100%;
+  width: 800px;
 `
 const LoadingWrapper = styled.div`
   margin-top: 32px;

@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 let isInTestMode = typeof it !== 'undefined'
 const req = require.context('.', true, /.*\/.*?\.jsx?$/)
 req.keys().forEach((key) => {
-  if (!isInTestMode && /test\.jsx?$/.test(key)) {
+  if (/story\.jsx$/.test(key) || (!isInTestMode && /test\.jsx?$/.test(key))) {
     return
   }
   const componentName = key.replace(/.*\/(.*?)\.jsx?$/, '$1')
