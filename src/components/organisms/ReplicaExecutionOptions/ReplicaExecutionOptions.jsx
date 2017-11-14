@@ -38,7 +38,7 @@ const ExecutionImage = styled.div`
   background: url('${executionImage}') no-repeat center;
 `
 const Form = styled.div`
-  height: 224px;
+  height: 120px;
 `
 const Buttons = styled.div`
   display: flex;
