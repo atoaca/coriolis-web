@@ -111,7 +111,11 @@ class MigrationsPage extends React.Component {
   }
 
   handleItemClick(item) {
-    window.location.href = `/#/migration/${item.id}`
+    if (item.status === 'RUNNING') {
+      window.location.href = `/#/migration/tasks/${item.id}`
+    } else {
+      window.location.href = `/#/migration/${item.id}`
+    }
   }
 
   handleActionChange(items, action) {

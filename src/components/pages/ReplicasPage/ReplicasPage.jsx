@@ -102,6 +102,13 @@ class ReplicasPage extends React.Component {
     ]
   }
 
+  getLastExecution(item) {
+    let lastExecution = item.executions && item.executions.length ?
+      item.executions[item.executions.length - 1] : null
+
+    return lastExecution
+  }
+
   handleProjectChange(project) {
     Wait.for(() => this.props.userStore.user.project.id === project.id, () => {
       ProjectActions.getProjects()
@@ -121,7 +128,12 @@ class ReplicasPage extends React.Component {
   }
 
   handleItemClick(item) {
-    window.location.href = `/#/replica/${item.id}`
+    let lastExecution = this.getLastExecution(item)
+    if (lastExecution && lastExecution.status === 'RUNNING') {
+      window.location.href = `/#/replica/executions/${item.id}`
+    } else {
+      window.location.href = `/#/replica/${item.id}`
+    }
   }
 
   handleActionChange(items, action) {
@@ -161,8 +173,7 @@ class ReplicasPage extends React.Component {
   }
 
   itemFilterFunction(item, filterStatus, filterText) {
-    let lastExecution = item.executions && item.executions.length ?
-      item.executions[item.executions.length - 1] : null
+    let lastExecution = this.getLastExecution(item)
     if ((filterStatus !== 'all' && (!lastExecution || lastExecution.status !== filterStatus)) ||
       (item.instances[0].toLowerCase().indexOf(filterText) === -1)
     ) {

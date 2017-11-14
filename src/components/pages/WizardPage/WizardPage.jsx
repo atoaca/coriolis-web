@@ -213,9 +213,15 @@ class WizardPage extends React.Component {
     }
 
     if (items.length === 1) {
-      let executionsPage = this.state.type === 'replica' ? '/executions' : ''
+      let location = `/#/${this.state.type}/`
+      if (this.state.type === 'replica') {
+        location += 'executions/'
+      } else {
+        location += 'tasks/'
+      }
+
       Wait.for(() => !ScheduleStore.getState().scheduling, () => {
-        window.location.href = `/#/${this.state.type}${executionsPage}/${items[0].id}`
+        window.location.href = location + items[0].id
       })
     } else {
       window.location.href = `/#/${this.state.type}s`
