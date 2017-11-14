@@ -14,6 +14,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import sinon from 'sinon'
 import Button from './Button'
 
 const wrap = props => shallow(<Button {...props} />)
@@ -23,4 +24,11 @@ it('renders with different combination of props', () => {
   expect(disabled.prop('disabled')).toBe(true)
   wrap({ primary: true })
   wrap({ disabled: true, primary: true })
+})
+
+it('dispatches click event', () => {
+  const onButtonClick = sinon.spy()
+  const wrapper = wrap({ onClick: onButtonClick })
+  wrapper.simulate('click')
+  expect(onButtonClick.calledOnce).toBe(true)
 })
