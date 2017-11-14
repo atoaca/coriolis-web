@@ -31,6 +31,8 @@ import UserActions from '../../../actions/UserActions'
 import MigrationActions from '../../../actions/MigrationActions'
 import EndpointStore from '../../../stores/EndpointStore'
 import EndpointActions from '../../../actions/EndpointActions'
+import NotificationActions from '../../../actions/NotificationActions'
+import Wait from '../../../utils/Wait'
 import { requestPollTimeout } from '../../../config'
 
 import migrationImage from './images/migration.svg'
@@ -62,6 +64,7 @@ class MigrationDetailsPage extends React.Component {
 
     this.state = {
       showDeleteMigrationConfirmation: false,
+      showCancelConfirmation: false,
     }
   }
 
@@ -106,6 +109,26 @@ class MigrationDetailsPage extends React.Component {
     this.setState({ showDeleteMigrationConfirmation: false })
   }
 
+  handleCancelMigrationClick() {
+    this.setState({ showCancelConfirmation: true })
+  }
+
+  handleCloseCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+  }
+
+  handleCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+    MigrationActions.cancel(this.props.migrationStore.migrationDetails.id)
+    Wait.for(() => MigrationStore.getState().canceling !== true, () => {
+      if (MigrationStore.getState().canceling === false) {
+        NotificationActions.notify('Canceled', 'success')
+      } else {
+        NotificationActions.notify('The migration couldn\'t be canceled', 'error')
+      }
+    })
+  }
+
   pollData() {
     MigrationActions.getMigration(this.props.match.params.id)
   }
@@ -121,12 +144,9 @@ class MigrationDetailsPage extends React.Component {
           contentHeaderComponent={<DetailsContentHeader
             item={this.props.migrationStore.migrationDetails}
             onBackButonClick={() => { this.handleBackButtonClick() }}
-            onActionButtonClick={() => { this.handleDeleteMigrationClick() }}
             typeImage={migrationImage}
             primaryInfoPill
-            buttonLabel="Delete"
-            alertButton
-            hollowButton
+            onCancelClick={() => { this.handleCancelMigrationClick() }}
           />}
           contentComponent={<MigrationDetailsContent
             item={this.props.migrationStore.migrationDetails}
@@ -142,6 +162,15 @@ class MigrationDetailsPage extends React.Component {
           extraMessage="Deleting a Coriolis Migration is permanent!"
           onConfirmation={() => { this.handleDeleteMigrationConfirmation() }}
           onRequestClose={() => { this.handleCloseDeleteMigrationConfirmation() }}
+        />
+
+        <AlertModal
+          isOpen={this.state.showCancelConfirmation}
+          title="Cancel Migration?"
+          message="Are you sure you want to cancel the migration?"
+          extraMessage=" "
+          onConfirmation={() => { this.handleCancelConfirmation() }}
+          onRequestClose={() => { this.handleCloseCancelConfirmation() }}
         />
       </Wrapper>
     )

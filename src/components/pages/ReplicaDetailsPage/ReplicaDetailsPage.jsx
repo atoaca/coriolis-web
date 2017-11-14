@@ -75,6 +75,7 @@ class ReplicaDetailsPage extends React.Component {
       showDeleteExecutionConfirmation: false,
       showDeleteReplicaConfirmation: false,
       confirmationItem: null,
+      showCancelConfirmation: false,
     }
   }
 
@@ -124,10 +125,6 @@ class ReplicaDetailsPage extends React.Component {
 
   handleCloseOptionsModal() {
     this.setState({ showOptionsModal: false })
-  }
-
-  handleCancelExecutionClick(execution) {
-    ReplicaActions.cancelExecution(this.props.replicaStore.replicaDetails.id, execution.id)
   }
 
   handleDeleteExecutionConfirmation() {
@@ -183,6 +180,19 @@ class ReplicaDetailsPage extends React.Component {
     ScheduleActions.removeSchedule(this.props.match.params.id, scheduleId)
   }
 
+  handleCancelExecutionClick(confirmationItem) {
+    this.setState({ confirmationItem, showCancelConfirmation: true })
+  }
+
+  handleCloseCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+  }
+
+  handleCancelConfirmation() {
+    this.setState({ showCancelConfirmation: false })
+    ReplicaActions.cancelExecution(this.props.replicaStore.replicaDetails.id, this.state.confirmationItem.id)
+  }
+
   migrateReplica(options) {
     MigrationActions.migrateReplica(this.props.replicaStore.replicaDetails.id, options)
     this.handleCloseMigrationModal()
@@ -210,6 +220,7 @@ class ReplicaDetailsPage extends React.Component {
             item={this.props.replicaStore.replicaDetails}
             onBackButonClick={() => { this.handleBackButtonClick() }}
             onActionButtonClick={() => { this.handleActionButtonClick() }}
+            onCancelClick={execution => { this.handleCancelExecutionClick(execution) }}
             actionButtonDisabled={this.isActionButtonDisabled()}
             typeImage={replicaImage}
             alertInfoPill
@@ -265,6 +276,14 @@ class ReplicaDetailsPage extends React.Component {
           extraMessage="Deleting a Coriolis Replica is permanent!"
           onConfirmation={() => { this.handleDeleteReplicaConfirmation() }}
           onRequestClose={() => { this.handleCloseDeleteReplicaConfirmation() }}
+        />
+        <AlertModal
+          isOpen={this.state.showCancelConfirmation}
+          title="Cancel Execution?"
+          message="Are you sure you want to cancel the current execution?"
+          extraMessage=" "
+          onConfirmation={() => { this.handleCancelConfirmation() }}
+          onRequestClose={() => { this.handleCloseCancelConfirmation() }}
         />
       </Wrapper>
     )

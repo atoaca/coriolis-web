@@ -16,7 +16,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { Timeline, StatusPill, CopyValue, Button, Tasks, AlertModal } from 'components'
+import { Timeline, StatusPill, CopyValue, Button, Tasks } from 'components'
 
 import Palette from '../../styleUtils/Palette'
 import DateUtils from '../../../utils/DateUtils'
@@ -80,9 +80,6 @@ class Executions extends React.Component {
 
     this.state = {
       selectedExecution: null,
-      canceledExecution: null,
-      showCancelConfirmation: false,
-      cancelDisabled: false,
     }
   }
 
@@ -123,21 +120,18 @@ class Executions extends React.Component {
     if (!this.state.selectedExecution) {
       this.setState({
         selectedExecution: lastExecution || null,
-        cancelDisabled: this.state.canceledExecution && lastExecution && this.state.canceledExecution.id === lastExecution.id,
       })
     } else if (selectExecution) {
       this.setState({
         selectedExecution: selectExecution,
-        cancelDisabled: this.state.canceledExecution && this.state.canceledExecution.id === selectExecution.id,
       })
     } else if (this.hasExecutions(props)) {
       selectExecution = props.item.executions.find(e => e.id === this.state.selectedExecution.id) || lastExecution
       this.setState({
-        cancelDisabled: this.state.canceledExecution && selectExecution && this.state.canceledExecution.id === selectExecution.id,
         selectedExecution: selectExecution,
       })
     } else {
-      this.setState({ selectedExecution: null, cancelDisabled: false })
+      this.setState({ selectedExecution: null })
     }
   }
 
@@ -174,15 +168,6 @@ class Executions extends React.Component {
   }
 
   handleCancelExecutionClick() {
-    this.setState({ showCancelConfirmation: true })
-  }
-
-  handleCloseCancelConfirmation() {
-    this.setState({ showCancelConfirmation: false })
-  }
-
-  handleCancelConfirmation() {
-    this.setState({ showCancelConfirmation: false, canceledExecution: { ...this.state.selectedExecution } })
     this.props.onCancelExecutionClick(this.state.selectedExecution)
   }
 
@@ -203,7 +188,6 @@ class Executions extends React.Component {
       return (
         <Button
           secondary
-          disabled={this.state.cancelDisabled}
           hollow
           onClick={() => { this.handleCancelExecutionClick() }}
         >Cancel Execution</Button>)
@@ -271,14 +255,6 @@ class Executions extends React.Component {
         {this.renderExecutionInfo()}
         {this.renderTasks()}
         {this.renderNoExecution()}
-        <AlertModal
-          isOpen={this.state.showCancelConfirmation}
-          title="Cancel Execution?"
-          message="Are you sure you want to cancel this execution?"
-          extraMessage=" "
-          onConfirmation={() => { this.handleCancelConfirmation() }}
-          onRequestClose={() => { this.handleCloseCancelConfirmation() }}
-        />
       </Wrapper>
     )
   }

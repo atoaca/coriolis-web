@@ -69,6 +69,7 @@ class DetailsContentHeader extends React.Component {
   static propTypes = {
     onBackButonClick: PropTypes.func,
     onActionButtonClick: PropTypes.func,
+    onCancelClick: PropTypes.func,
     typeImage: PropTypes.string,
     buttonLabel: PropTypes.string,
     description: PropTypes.string,
@@ -118,8 +119,17 @@ class DetailsContentHeader extends React.Component {
   }
 
   renderButton() {
-    if (!this.props.onActionButtonClick) {
+    if (!this.props.onActionButtonClick && this.getStatus() !== 'RUNNING') {
       return null
+    }
+
+    if (this.getStatus() === 'RUNNING') {
+      return (
+        <Button
+          secondary
+          onClick={() => { this.props.onCancelClick(this.getLastExecution()) }}
+        >Cancel</Button>
+      )
     }
 
     return (
