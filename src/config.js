@@ -12,7 +12,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-export const coriolisUrl = process.env.CORIOLIS_URL || '/'
+export const coriolisUrl = window.env.CORIOLIS_URL || '/'
 
 export const servicesUrl = {
   identity: `${coriolisUrl}identity/auth/tokens`,

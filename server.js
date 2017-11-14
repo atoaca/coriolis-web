@@ -13,10 +13,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 var express = require('express');
+var fs = require('fs')
 
 // Create our app
 var app = express();
 var PORT = process.env.PORT || 3001;
+
+// Write file to disk with process env variables, so that the client code can read
+if (!fs.existsSync('./dist')) {
+  fs.mkdirSync('./dist');
+}
+fs.writeFileSync('./dist/env.js', 'window.env = { CORIOLIS_URL: "' + process.env.CORIOLIS_URL + '" }')
 
 let isDev = process.argv.find(a => a === '--dev')
 if (isDev) {

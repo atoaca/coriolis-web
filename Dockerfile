@@ -1,21 +1,21 @@
-FROM node:9.1.0
+FROM oraclelinux:7
 
-# Set a working directory
-WORKDIR /usr/src/app
+WORKDIR /root
 
-COPY package.json .
-COPY yarn.lock .
+RUN curl --silent --location https://rpm.nodesource.com/setup_9.x | bash -
+RUN yum install -y nodejs
+RUN curl -o /etc/yum.repos.d/yarn.repo https://dl.yarnpkg.com/rpm/yarn.repo
+RUN yum install -y yarn
 
-# Set CORIOLIS_URL
-ENV CORIOLIS_URL http://127.0.0.1
-ENV PORT 3000
+ADD . coriolis-web
+WORKDIR coriolis-web
+RUN yarn install
 
-# Install Node.js dependencies
-RUN yarn install --production --no-progress
+ENV CORIOLIS_URL https://10.89.13.79/
 
-# Copy application files
-COPY . .
+#RUN cp ./src/config.sample.js ./src/config.js
+RUN yarn build
 
-EXPOSE 3000
+ENTRYPOINT [ "node", "server.js" ]
 
-CMD [ "node", "server.js" ]
+EXPOSE 3001

@@ -65,7 +65,6 @@ const config = createConfig([
   defineConstants({
     'process.env.NODE_ENV': process.env.NODE_ENV,
     'process.env.PUBLIC_PATH': publicPath.replace(/\/$/, ''),
-    'process.env.CORIOLIS_URL': process.env.CORIOLIS_URL,
   }),
   addPlugins([
     new webpack.ProgressPlugin(),
