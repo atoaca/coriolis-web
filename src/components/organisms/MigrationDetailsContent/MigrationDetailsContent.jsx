@@ -46,6 +46,7 @@ const NavigationItems = [
 class MigrationDetailsContent extends React.Component {
   static propTypes = {
     item: PropTypes.object,
+    detailsLoading: PropTypes.bool,
     endpoints: PropTypes.array,
     page: PropTypes.string,
     onDeleteMigrationClick: PropTypes.func,
@@ -77,6 +78,7 @@ class MigrationDetailsContent extends React.Component {
         item={this.props.item}
         endpoints={this.props.endpoints}
         bottomControls={this.renderBottomControls()}
+        loading={this.props.detailsLoading}
       />
     )
   }

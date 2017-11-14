@@ -230,6 +230,7 @@ class ReplicaDetailsPage extends React.Component {
             item={this.props.replicaStore.replicaDetails}
             endpoints={this.props.endpointStore.endpoints}
             scheduleStore={this.props.scheduleStore}
+            detailsLoading={this.props.replicaStore.detailsLoading || this.props.endpointStore.loading}
             page={this.props.match.params.page || ''}
             onCancelExecutionClick={execution => { this.handleCancelExecutionClick(execution) }}
             onDeleteExecutionClick={execution => { this.handleDeleteExecutionClick(execution) }}

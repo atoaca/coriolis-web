@@ -33,13 +33,13 @@ class MigrationActions {
     return response || true
   }
 
-  getMigration(migrationId) {
+  getMigration(migrationId, showLoading) {
     MigrationSource.getMigration(migrationId).then(
       migration => { this.getMigrationSuccess(migration) },
       response => { this.getMigrationFailed(response) },
     )
 
-    return migrationId
+    return { migrationId, showLoading }
   }
 
   getMigrationSuccess(migration) {

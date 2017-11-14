@@ -16,7 +16,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
-import { EndpointLogos, Table, CopyValue, StatusIcon } from 'components'
+import { EndpointLogos, Table, CopyValue, StatusIcon, StatusImage } from 'components'
 
 import StyleProps from '../../styleUtils/StyleProps'
 import Palette from '../../styleUtils/Palette'
@@ -65,12 +65,19 @@ const TableStyled = styled(Table)`
   margin-top: 89px;
   margin-bottom: 48px;
 `
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+`
 
 class MainDetails extends React.Component {
   static propTypes = {
     item: PropTypes.object,
     endpoints: PropTypes.array,
     bottomControls: PropTypes.node,
+    loading: PropTypes.bool,
   }
 
   getSourceEndpoint() {
@@ -149,6 +156,10 @@ class MainDetails extends React.Component {
   }
 
   renderNetworksTable() {
+    if (this.props.loading) {
+      return null
+    }
+
     let items = this.getNetworks()
 
     if (!items || !items.length) {
@@ -180,62 +191,93 @@ class MainDetails extends React.Component {
     return endpointIsMissing
   }
 
+  renderTable() {
+    if (this.props.loading) {
+      return null
+    }
+
+    return (
+      <ColumnsLayout>
+        <Column width="40%">
+          <Row>
+            <Field>
+              <Label>Source</Label>
+              {this.renderEndpointLink('source')}
+            </Field>
+          </Row>
+          <Row>
+            <EndpointLogos endpoint={this.getSourceEndpoint() && this.getSourceEndpoint().type} />
+          </Row>
+          <Row marginBottom>
+            <Field>
+              <Label>Id</Label>
+              <CopyValue value={this.props.item.id} width="192px" />
+            </Field>
+          </Row>
+          <Row>
+            <Field>
+              <Label>Created</Label>
+              <Value>{DateUtils.getLocalTime(this.props.item.created_at).format('YYYY-MM-DD HH:mm:ss')}</Value>
+            </Field>
+          </Row>
+        </Column>
+        <Column width="20%">
+          <Arrow />
+        </Column>
+        <Column width="40%">
+          <Row>
+            <Field>
+              <Label>Target</Label>
+              {this.renderEndpointLink('target')}
+            </Field>
+          </Row>
+          <Row>
+            <EndpointLogos endpoint={this.getDestinationEndpoint() && this.getDestinationEndpoint().type} />
+          </Row>
+          <Row marginBottom>
+            <Field>
+              <Label>Type</Label>
+              <Value capitalize>Coriolis {this.props.item.type}</Value>
+            </Field>
+          </Row>
+          <Row>
+            <Field>
+              <Label>Last Updated</Label>
+              <Value>{this.getLastExecutionTime()}</Value>
+            </Field>
+          </Row>
+        </Column>
+      </ColumnsLayout>
+    )
+  }
+
+  renderBottomControls() {
+    if (this.props.loading) {
+      return null
+    }
+
+    return this.props.bottomControls
+  }
+
+  renderLoading() {
+    if (!this.props.loading) {
+      return null
+    }
+
+    return (
+      <Loading>
+        <StatusImage loading />
+      </Loading>
+    )
+  }
+
   render() {
     return (
       <Wrapper>
-        <ColumnsLayout>
-          <Column width="40%">
-            <Row>
-              <Field>
-                <Label>Source</Label>
-                {this.renderEndpointLink('source')}
-              </Field>
-            </Row>
-            <Row>
-              <EndpointLogos endpoint={this.getSourceEndpoint() && this.getSourceEndpoint().type} />
-            </Row>
-            <Row marginBottom>
-              <Field>
-                <Label>Id</Label>
-                <CopyValue value={this.props.item.id} width="192px" />
-              </Field>
-            </Row>
-            <Row>
-              <Field>
-                <Label>Created</Label>
-                <Value>{DateUtils.getLocalTime(this.props.item.created_at).format('YYYY-MM-DD HH:mm:ss')}</Value>
-              </Field>
-            </Row>
-          </Column>
-          <Column width="20%">
-            <Arrow />
-          </Column>
-          <Column width="40%">
-            <Row>
-              <Field>
-                <Label>Target</Label>
-                {this.renderEndpointLink('target')}
-              </Field>
-            </Row>
-            <Row>
-              <EndpointLogos endpoint={this.getDestinationEndpoint() && this.getDestinationEndpoint().type} />
-            </Row>
-            <Row marginBottom>
-              <Field>
-                <Label>Type</Label>
-                <Value capitalize>Coriolis {this.props.item.type}</Value>
-              </Field>
-            </Row>
-            <Row>
-              <Field>
-                <Label>Last Updated</Label>
-                <Value>{this.getLastExecutionTime()}</Value>
-              </Field>
-            </Row>
-          </Column>
-        </ColumnsLayout>
+        {this.renderTable()}
         {this.renderNetworksTable()}
-        {this.props.bottomControls}
+        {this.renderBottomControls()}
+        {this.renderLoading()}
       </Wrapper>
     )
   }

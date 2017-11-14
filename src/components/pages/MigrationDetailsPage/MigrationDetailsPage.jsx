@@ -72,7 +72,7 @@ class MigrationDetailsPage extends React.Component {
     document.title = 'Migration Details'
 
     EndpointActions.getEndpoints()
-    this.pollData()
+    this.pollData(true)
     this.pollInterval = setInterval(() => { this.pollData() }, requestPollTimeout)
   }
 
@@ -129,8 +129,8 @@ class MigrationDetailsPage extends React.Component {
     })
   }
 
-  pollData() {
-    MigrationActions.getMigration(this.props.match.params.id)
+  pollData(showLoading) {
+    MigrationActions.getMigration(this.props.match.params.id, showLoading)
   }
 
   render() {
@@ -152,6 +152,7 @@ class MigrationDetailsPage extends React.Component {
             item={this.props.migrationStore.migrationDetails}
             endpoints={this.props.endpointStore.endpoints}
             page={this.props.match.params.page || ''}
+            detailsLoading={this.props.endpointStore.loading || this.props.migrationStore.detailsLoading}
             onDeleteMigrationClick={() => { this.handleDeleteMigrationClick() }}
           />}
         />

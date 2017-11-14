@@ -58,8 +58,8 @@ class MigrationStore {
     this.loading = false
   }
 
-  handleGetMigration() {
-    this.detailsLoading = true
+  handleGetMigration({ showLoading }) {
+    this.detailsLoading = showLoading
   }
 
   handleGetMigrationSuccess(migration) {

@@ -52,6 +52,7 @@ class ReplicaDetailsContent extends React.Component {
     endpoints: PropTypes.array,
     scheduleStore: PropTypes.object,
     page: PropTypes.string,
+    detailsLoading: PropTypes.bool,
     onCancelExecutionClick: PropTypes.func,
     onDeleteExecutionClick: PropTypes.func,
     onExecuteClick: PropTypes.func,
@@ -120,6 +121,7 @@ class ReplicaDetailsContent extends React.Component {
     return (
       <MainDetails
         item={this.props.item}
+        loading={this.props.detailsLoading}
         endpoints={this.props.endpoints}
         bottomControls={this.renderBottomControls()}
       />
