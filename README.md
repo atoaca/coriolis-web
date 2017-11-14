@@ -22,7 +22,7 @@ Your development server will be running at http://localhost:3000/
 
 This should be used only for development, as it contains live-reload and other development tools.
 
-
+You can view some of the UIs components in the [Storybook](https://github.com/storybooks/storybook) by running `yarn storybook`
 
 ### Apache Configuration
 
