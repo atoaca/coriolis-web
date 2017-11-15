@@ -62,7 +62,7 @@ class App extends React.Component {
           <Route path="/migrations" component={MigrationsPage} />
           <Route path="/migration/:id" component={MigrationDetailsPage} exact />
           <Route path="/migration/:page/:id" component={MigrationDetailsPage} />
-          <Route path="/endpoints" component={EndpointsPage} exact />
+          <Route path="/endpoints" component={EndpointsPage} />
           <Route path="/endpoint/:id" component={EndpointDetailsPage} />
           <Route path="/wizard/:type" component={WizardPage} />
           <Route component={NotFoundPage} />
