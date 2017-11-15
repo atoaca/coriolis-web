@@ -15,6 +15,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import alt from '../alt'
 import EndpointActions from '../actions/EndpointActions'
 
+const updateEndpoint = (endpoint, endpoints) => endpoints.map(e => {
+  if (e.id === endpoint.id) {
+    return { ...endpoint }
+  }
+  return { ...e }
+})
+
 class EndpointStore {
   constructor() {
     this.endpoints = []
@@ -96,20 +103,16 @@ class EndpointStore {
     this.validation = null
   }
 
-  handleUpdate() {
+  handleUpdate(endpoint) {
+    this.endpoints = updateEndpoint(endpoint, this.endpoints)
+    this.connectionInfo = { ...endpoint.connection_info }
     this.updating = true
   }
 
   handleUpdateSuccess(endpoint) {
-    this.endpoints = this.endpoints.map(e => {
-      if (e.id === endpoint.id) {
-        return endpoint
-      }
-      return e
-    })
-
+    this.endpoints = updateEndpoint(endpoint, this.endpoints)
+    this.connectionInfo = { ...endpoint.connection_info }
     this.updating = false
-    this.connectionInfo = endpoint.connection_info
   }
 
   handleClearConnectionInfo() {
