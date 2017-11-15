@@ -77,7 +77,9 @@ const Footer = styled.div``
 const WizardTypeIcon = styled.div`
   width: 60px;
   height: 32px;
-  background: url('data:image/svg+xml;utf8,${props => props.type === 'replica' ? migrationArrowImage(Palette.alert) : migrationArrowImage(Palette.primary)}') center no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 class WizardPageContent extends React.Component {
@@ -338,7 +340,12 @@ class WizardPageContent extends React.Component {
         <Button secondary onClick={this.props.onBackClick}>Back</Button>
         <IconRepresentation>
           <EndpointLogos height={32} endpoint={sourceEndpoint} />
-          <WizardTypeIcon type={this.props.type} />
+          <WizardTypeIcon
+            dangerouslySetInnerHTML={{
+              __html: this.props.type === 'replica'
+                ? migrationArrowImage(Palette.alert) : migrationArrowImage(Palette.primary),
+            }}
+          />
           <EndpointLogos height={32} endpoint={targetEndpoint} />
         </IconRepresentation>
         <Button
