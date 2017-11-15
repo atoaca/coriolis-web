@@ -15,21 +15,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import Schedule from './Schedule'
+import ProgressBar from './ProgressBar'
 
-storiesOf('Schedule', module)
-  .add('no schedules', () => (
-    <Schedule />
+storiesOf('ProgressBar', module)
+  .add('default 100%', () => (
+    <ProgressBar />
   ))
-  .add('enabled/disabled schedules', () => (
-    <Schedule
-      schedules={[{}, { enabled: true }]}
-    />
+  .add('50%', () => (
+    <ProgressBar progress={50} />
   ))
-  .add('some date values schedules', () => (
-    <Schedule
-      schedules={[
-        { schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() },
-        { enabled: true, schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() }]}
-    />
+  .add('10%', () => (
+    <ProgressBar progress={10} />
+  ))
+  .add('0%', () => (
+    <ProgressBar progress={0} />
   ))

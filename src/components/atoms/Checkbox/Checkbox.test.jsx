@@ -13,23 +13,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
-import { storiesOf } from '@storybook/react'
+import { shallow } from 'enzyme'
+import Checkbox from './Checkbox'
 
-import Schedule from './Schedule'
+const wrap = props => shallow(<Checkbox {...props} />)
 
-storiesOf('Schedule', module)
-  .add('no schedules', () => (
-    <Schedule />
-  ))
-  .add('enabled/disabled schedules', () => (
-    <Schedule
-      schedules={[{}, { enabled: true }]}
-    />
-  ))
-  .add('some date values schedules', () => (
-    <Schedule
-      schedules={[
-        { schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() },
-        { enabled: true, schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() }]}
-    />
-  ))
+it('passes the correct props to the rendered HTML input', () => {
+  let onChange = () => {}
+  let checkboxInput = wrap({ checked: true, onChange }).children()
+  expect(checkboxInput.prop('checked')).toBe(true)
+  expect(checkboxInput.prop('onChange')).toBe(onChange)
+})

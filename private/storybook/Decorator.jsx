@@ -13,23 +13,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
-import { storiesOf } from '@storybook/react'
+import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Palette from '../../src/components/styleUtils/Palette'
 
-import Schedule from './Schedule'
+const Wrapper = styled.div`
+  background: ${Palette.grayscale[7]};
+  padding: 32px;
+`
 
-storiesOf('Schedule', module)
-  .add('no schedules', () => (
-    <Schedule />
-  ))
-  .add('enabled/disabled schedules', () => (
-    <Schedule
-      schedules={[{}, { enabled: true }]}
-    />
-  ))
-  .add('some date values schedules', () => (
-    <Schedule
-      schedules={[
-        { schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() },
-        { enabled: true, schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() }]}
-    />
-  ))
+const Decorator = ({ children }) => <Wrapper>{children}</Wrapper>
+
+Decorator.propTypes = {
+  children: PropTypes.node,
+}
+
+export default Decorator

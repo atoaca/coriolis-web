@@ -366,7 +366,7 @@ class Schedule extends React.Component {
         centered
         width={136}
         items={items}
-        selectedItem={this.getFieldValue(s.schedule, items, 'dow', true)}
+        selectedItem={this.getFieldValue(s.schedule, items, 'dow')}
         onChange={item => { this.props.onChange(s.id, { schedule: { dow: item.value } }) }}
       />
     )
