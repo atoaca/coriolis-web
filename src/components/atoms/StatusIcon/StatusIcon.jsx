@@ -33,7 +33,7 @@ const getRunningImageUrl = props => {
     return `url('${progressWithBackgroundImage}')`
   }
 
-  return `url('data:image/svg+xml;utf8,${progressImage(Palette.grayscale[3], smallCircleColor)}')`
+  return `url('data:image/svg+xml;utf8,${encodeURIComponent(progressImage(Palette.grayscale[3], smallCircleColor))}')`
 }
 
 const statuses = props => {
