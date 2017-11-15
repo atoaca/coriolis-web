@@ -41,15 +41,15 @@ const Input = styled.input`
   background-color: #FFF;
   border: 1px solid ${props => props.highlight ? Palette.alert : Palette.grayscale[3]};
   color: ${Palette.black};
-  padding: 0 ${props => props.required ? '29px' : '8px'} 0 16px;
+  padding: 0 ${props => props.customRequired ? '29px' : '8px'} 0 16px;
   font-size: inherit;
   transition: all ${StyleProps.animations.swift};
   box-sizing: border-box;
   &:hover {
-    border-color: ${Palette.primary};
+    border-color: ${props => props.highlight ? Palette.alert : Palette.primary};
   }
   &:focus {
-    border-color: ${Palette.primary};
+    border-color: ${props => props.highlight ? Palette.alert : Palette.primary};
     outline: none;
   }
   &:disabled {
@@ -74,7 +74,7 @@ const Required = styled.div`
 const TextInput = ({ _ref, required, ...props }) => {
   return (
     <Wrapper>
-      <Input innerRef={_ref} type="text" required={required} {...props} />
+      <Input innerRef={_ref} type="text" customRequired={required} {...props} />
       <Required show={required} />
     </Wrapper>
   )
