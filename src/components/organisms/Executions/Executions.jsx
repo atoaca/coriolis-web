@@ -61,6 +61,7 @@ const ExecutionImage = styled.div`
 `
 const NoExecutionTitle = styled.div`
   font-size: 18px;
+  margin-bottom: 10px;
 `
 const NoExecutionText = styled.div`
   color: ${Palette.grayscale[4]};

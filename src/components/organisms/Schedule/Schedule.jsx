@@ -94,14 +94,16 @@ const NoSchedules = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80px;
-  background: ${Palette.grayscale[7]};
+  padding: ${props => props.secondary ? 56 : 80}px 80px 80px 80px;
+  background: ${props => props.secondary ? 'white' : Palette.grayscale[7]};
 `
 const NoSchedulesTitle = styled.div`
   margin-bottom: 10px;
+  font-size: 18px;
 `
 const NoSchedulesSubtitle = styled.div`
   margin-bottom: 45px;
+  color: ${Palette.grayscale[4]};
 `
 const ScheduleImage = styled.div`
   ${StyleProps.exactSize('96px')}
@@ -151,6 +153,7 @@ class Schedule extends React.Component {
     onRemove: PropTypes.func,
     adding: PropTypes.bool,
     loading: PropTypes.bool,
+    secondaryEmpty: PropTypes.bool,
   }
 
   constructor() {
@@ -503,11 +506,11 @@ class Schedule extends React.Component {
     }
 
     return (
-      <NoSchedules>
+      <NoSchedules secondary={this.props.secondaryEmpty}>
         <ScheduleImage />
-        <NoSchedulesTitle>This Replica has no Schedules.</NoSchedulesTitle>
-        <NoSchedulesSubtitle>Add a new schedule so that the Replica executes automatically.</NoSchedulesSubtitle>
-        <Button onClick={() => { this.handleAddScheduleClick() }}>Add Schedule</Button>
+        <NoSchedulesTitle>{this.props.secondaryEmpty ? 'Schedule this Replica' : 'This Replica has no Schedules.'}</NoSchedulesTitle>
+        <NoSchedulesSubtitle>{this.props.secondaryEmpty ? 'You can schedule this replica so that it executes automatically.' : 'Add a new schedule so that the Replica executes automatically.'}</NoSchedulesSubtitle>
+        <Button hollow={this.props.secondaryEmpty} onClick={() => { this.handleAddScheduleClick() }}>Add Schedule</Button>
       </NoSchedules>
     )
   }

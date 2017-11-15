@@ -14,22 +14,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react'
 import { storiesOf } from '@storybook/react'
+import styled from 'styled-components'
 
 import Schedule from './Schedule'
 
+const Wrapper = styled.div`
+  padding: 32px;
+  background: white;
+`
+
 storiesOf('Schedule', module)
   .add('no schedules', () => (
-    <Schedule />
+    <Wrapper><Schedule /></Wrapper>
+  ))
+  .add('no schedules secondary', () => (
+    <Wrapper><Schedule secondaryEmpty /></Wrapper>
   ))
   .add('enabled/disabled schedules', () => (
-    <Schedule
+    <Wrapper><Schedule
       schedules={[{}, { enabled: true }]}
-    />
+    /></Wrapper>
   ))
   .add('some date values schedules', () => (
-    <Schedule
+    <Wrapper><Schedule
       schedules={[
         { schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() },
         { enabled: true, schedule: { dom: 2, dow: 3, month: 2, hour: 13, minute: 29 }, expiration_date: new Date() }]}
-    />
+    /></Wrapper>
   ))

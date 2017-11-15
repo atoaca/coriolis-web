@@ -312,6 +312,7 @@ class WizardPageContent extends React.Component {
             onRemove={this.props.onScheduleRemove}
             timezone={this.state.timezone}
             onTimezoneChange={timezone => { this.handleTimezoneChange(timezone) }}
+            secondaryEmpty
           />
         )
         break
