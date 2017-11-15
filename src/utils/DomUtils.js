@@ -52,6 +52,8 @@ class DomUtils {
 
     try {
       successful = document.execCommand('copy')
+    } catch (e) {
+      successful = false
     } finally {
       document.body.removeChild(textArea)
     }

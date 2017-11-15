@@ -12,12 +12,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-let isInTestMode = typeof it !== 'undefined'
-const req = require.context('.', true, /.*\/.*?\.jsx?$/)
-req.keys().forEach((key) => {
-  if (/story\.jsx$/i.test(key) || (!isInTestMode && /test\.jsx?$/i.test(key))) {
-    return
-  }
-  const componentName = key.replace(/.*\/(.*?)\.jsx?$/, '$1')
-  module.exports[componentName] = req(key).default
-})
+import React from 'react'
+import { storiesOf } from '@storybook/react'
+import Logo from './Logo'
+
+storiesOf('Logo', module)
+  .add('default', () => (
+    <Logo />
+  ))
+  .add('large', () => (
+    <Logo large />
+  ))

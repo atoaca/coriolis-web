@@ -101,11 +101,16 @@ const Arrow = styled.div`
   right: 8px;
 `
 
-const DropdownButton = ({ value, onClick, className, ...props }) => {
+const DropdownButton = ({ value, onClick, className, disabled, ...props }) => {
   return (
-    <Wrapper onClick={onClick} className={className} {...props}>
-      <Label {...props}>{value}</Label>
-      <Arrow {...props} dangerouslySetInnerHTML={{ __html: arrowImage }} />
+    <Wrapper
+      onClick={e => { disabled ? null : onClick(e) }}
+      className={className}
+      disabled={disabled}
+      {...props}
+    >
+      <Label {...props} disabled={disabled}>{value}</Label>
+      <Arrow {...props} disabled={disabled} dangerouslySetInnerHTML={{ __html: arrowImage }} />
     </Wrapper>
   )
 }
@@ -114,6 +119,7 @@ DropdownButton.propTypes = {
   value: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 export default DropdownButton

@@ -13,27 +13,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { storiesOf, action } from '@storybook/react'
+import DropdownButton from './DropdownButton'
 
-import StyleProps from '../../styleUtils/StyleProps'
-
-const Wrapper = styled.div`
-  color: white;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  font-weight: ${StyleProps.fontWeights.medium};
-  font-size: 9px;
-`
-
-const FormFieldLabel = ({ content }) => {
-  return (
-    <Wrapper>{content}</Wrapper>
-  )
-}
-
-FormFieldLabel.propTypes = {
-  content: PropTypes.string.isRequired,
-}
-
-export default FormFieldLabel
+storiesOf('DropdownButton', module)
+  .add('default', () => (
+    <DropdownButton value="Dropdown Button" onClick={action('clicked')} />
+  ))
+  .add('primary', () => (
+    <DropdownButton primary value="Dropdown Button" onClick={action('clicked')} />
+  ))
+  .add('disabled', () => (
+    <DropdownButton disabled value="Dropdown Button" onClick={action('clicked')} />
+  ))

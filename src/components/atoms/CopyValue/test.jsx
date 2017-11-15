@@ -12,12 +12,16 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-let isInTestMode = typeof it !== 'undefined'
-const req = require.context('.', true, /.*\/.*?\.jsx?$/)
-req.keys().forEach((key) => {
-  if (/story\.jsx$/i.test(key) || (!isInTestMode && /test\.jsx?$/i.test(key))) {
-    return
-  }
-  const componentName = key.replace(/.*\/(.*?)\.jsx?$/, '$1')
-  module.exports[componentName] = req(key).default
+import React from 'react'
+import { shallow } from 'enzyme'
+import sinon from 'sinon'
+import CopyValue from './CopyValue'
+
+const wrap = props => shallow(<CopyValue {...props} />).dive()
+
+it('copies value to clipboard', () => {
+  let wrapper = wrap({ value: 'test' })
+  let spy = sinon.spy()
+  wrapper.simulate('click', { stopPropagation: spy })
+  expect(spy.calledOnce).toBe(true)
 })

@@ -13,39 +13,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
-import PropTypes from 'prop-types'
+import { storiesOf } from '@storybook/react'
 import styled from 'styled-components'
 
-import { TextInput } from 'components'
-
-import StyleProps from '../../styleUtils/StyleProps'
+import CopyButton from './CopyButton'
 
 const Wrapper = styled.div`
-  margin-bottom: 16px;
-  margin-left: 16px;
-`
-const FormFieldLabel = styled.div`
-  color: white;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  font-weight: ${StyleProps.fontWeights.medium};
-  font-size: 9px;
-`
-const StyledTextInput = styled(TextInput) `
-  width: ${StyleProps.inputSizes.regular.width}px;
+  cursor: pointer;
+  display: inline-block;
+
+  &:hover > span {
+    opacity: 1;
+  }
+  > span {
+    background-position-y: 4px;
+    margin-left: 4px;
+  }
 `
 
-const LoginFormField = ({ label, ...props }) => {
-  return (
-    <Wrapper>
-      <FormFieldLabel>{label}</FormFieldLabel>
-      <StyledTextInput {...props} />
-    </Wrapper>
-  )
-}
-
-LoginFormField.propTypes = {
-  label: PropTypes.string,
-}
-
-export default LoginFormField
+storiesOf('CopyButton', module)
+  .add('default', () => (
+    <Wrapper>Hover here<CopyButton /></Wrapper>
+  ))

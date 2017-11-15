@@ -3,7 +3,7 @@ import { configure, addDecorator } from '@storybook/react'
 import { BrowserRouter } from 'react-router-dom'
 import Decorator from './Decorator'
 
-const req = require.context('components', true, /.story.jsx$/)
+const req = require.context('components', true, /story.jsx$/i)
 
 function loadStories() {
   req.keys().forEach(filename => req(filename))

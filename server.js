@@ -54,7 +54,7 @@ if (isDev) {
 
         if (!isBrowserOpen && isSuccesfull) {
           isBrowserOpen = true
-          opn('http://localhost:' + PORT);
+          //opn('http://localhost:' + PORT);
         }
       } else {
         console.log(text)

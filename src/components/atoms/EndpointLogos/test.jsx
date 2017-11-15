@@ -12,12 +12,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-let isInTestMode = typeof it !== 'undefined'
-const req = require.context('.', true, /.*\/.*?\.jsx?$/)
-req.keys().forEach((key) => {
-  if (/story\.jsx$/i.test(key) || (!isInTestMode && /test\.jsx?$/i.test(key))) {
-    return
-  }
-  const componentName = key.replace(/.*\/(.*?)\.jsx?$/, '$1')
-  module.exports[componentName] = req(key).default
+import React from 'react'
+import { shallow } from 'enzyme'
+import EndpointLogos from './EndpointLogos'
+
+const wrap = props => shallow(<EndpointLogos {...props} />).dive()
+
+it('passes down props', () => {
+  let wrapper = wrap({ height: 32, endpoint: 'aws' })
+  expect(wrapper.prop('height')).toBe(32)
+  expect(wrapper.children().prop('endpoint')).toBe('aws')
 })

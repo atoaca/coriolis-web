@@ -12,12 +12,20 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-let isInTestMode = typeof it !== 'undefined'
-const req = require.context('.', true, /.*\/.*?\.jsx?$/)
-req.keys().forEach((key) => {
-  if (/story\.jsx$/i.test(key) || (!isInTestMode && /test\.jsx?$/i.test(key))) {
-    return
-  }
-  const componentName = key.replace(/.*\/(.*?)\.jsx?$/, '$1')
-  module.exports[componentName] = req(key).default
+import React from 'react'
+import { shallow } from 'enzyme'
+import PasswordValue from './PasswordValue'
+
+const wrap = props => shallow(<PasswordValue {...props} />)
+const text = html => html.substring(html.indexOf('>') + 1, html.lastIndexOf('<'))
+it('conceals the password', () => {
+  let password = text(wrap({ value: 'test' }).children().first().html())
+  expect(password).toBe('•••••••••')
+})
+
+it('reveals password on click', () => {
+  let wrapper = wrap({ value: 'test' })
+  wrapper.simulate('click')
+  let password = text(wrapper.children().first().html())
+  expect(password).toBe('test')
 })
