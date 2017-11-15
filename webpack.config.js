@@ -1,16 +1,3 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const splitVendor = require('webpack-blocks-split-vendor')
-const happypack = require('webpack-blocks-happypack')
-
-const {
-  addPlugins, createConfig, entryPoint, env, setOutput,
-  sourceMaps, defineConstants, webpack,
-} = require('@webpack-blocks/webpack2')
-
-const sourceDir = 'src'
-const publicPath = `/${process.env.PUBLIC_PATH || ''}/`.replace('//', '/')
-const sourcePath = path.join(process.cwd(), sourceDir)
 /*
 Copyright (C) 2017  Cloudbase Solutions SRL
 This program is free software: you can redistribute it and/or modify
@@ -25,6 +12,19 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const splitVendor = require('webpack-blocks-split-vendor')
+const happypack = require('webpack-blocks-happypack')
+
+const {
+  addPlugins, createConfig, entryPoint, env, setOutput,
+  sourceMaps, defineConstants, webpack,
+} = require('@webpack-blocks/webpack2')
+
+const sourceDir = 'src'
+const publicPath = `/${process.env.PUBLIC_PATH || ''}/`.replace('//', '/')
+const sourcePath = path.join(process.cwd(), sourceDir)
 const outputPath = path.join(process.cwd(), 'dist')
 
 const babel = () => () => ({
