@@ -13,40 +13,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
+import { storiesOf } from '@storybook/react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import Switch from './Switch'
 
-import Palette from '../../styleUtils/Palette'
-
-import searchImage from './images/search.js'
-
-const Wrapper = styled.div`display: flex;`
-
-const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-class SearchButton extends React.Component {
+class Wrapper extends React.Component {
   static propTypes = {
-    className: PropTypes.string,
-    primary: PropTypes.bool,
+    children: PropTypes.node,
+  }
+
+  constructor() {
+    super()
+
+    this.state = {
+      checked: false
+    }
+  }
+
+  handleChange(checked) {
+    this.setState({ checked })
   }
 
   render() {
-    return (
-      <Wrapper className={this.props.className} {...this.props}>
-        <Icon dangerouslySetInnerHTML={{
-          __html: searchImage(this.props.primary ? Palette.primary : Palette.grayscale[4]),
-        }}
-        />
-      </Wrapper>
-    )
+    return <Switch {...this.props} checked={this.state.checked} onChange={checked => { this.handleChange(checked) }} />
   }
 }
 
-export default SearchButton
+storiesOf('Switch', module)
+  .add('default', () => <Wrapper />)
+  .add('disabled', () => <Wrapper disabled />)
+  .add('secondary', () => <Wrapper secondary />)
+  .add('tri-state', () => <Wrapper triState />)
+  .add('colored', () => <Wrapper big />)
+  .add('small', () => <Wrapper height={16} />)

@@ -13,40 +13,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { storiesOf } from '@storybook/react'
+import ToggleButtonBar from './ToggleButtonBar'
 
-import Palette from '../../styleUtils/Palette'
+class Wrapper extends React.Component {
+  constructor() {
+    super()
 
-import searchImage from './images/search.js'
+    this.state = {
+      items: [
+        { label: 'Tab 1', value: 'tab_1' },
+        { label: 'Tab 2', value: 'tab_2' },
+      ],
+      selectedValue: 'tab_1',
+    }
+  }
 
-const Wrapper = styled.div`display: flex;`
-
-const Icon = styled.div`
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-class SearchButton extends React.Component {
-  static propTypes = {
-    className: PropTypes.string,
-    primary: PropTypes.bool,
+  handleChange(item) {
+    this.setState({ selectedValue: item.value })
   }
 
   render() {
     return (
-      <Wrapper className={this.props.className} {...this.props}>
-        <Icon dangerouslySetInnerHTML={{
-          __html: searchImage(this.props.primary ? Palette.primary : Palette.grayscale[4]),
-        }}
-        />
-      </Wrapper>
+      <ToggleButtonBar
+        items={this.state.items}
+        selectedValue={this.state.selectedValue}
+        onChange={item => this.handleChange(item)}
+      />
     )
   }
 }
 
-export default SearchButton
+storiesOf('ToggleButtonBar', module)
+  .add('default', () => (
+    <Wrapper />
+  ))

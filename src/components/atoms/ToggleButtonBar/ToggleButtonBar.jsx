@@ -57,6 +57,10 @@ class ToggleButtonBar extends React.Component {
   }
 
   render() {
+    if (!this.props.items) {
+      return null
+    }
+
     return (
       <Wrapper>
         {this.props.items.map(item => {
