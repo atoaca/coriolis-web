@@ -65,10 +65,11 @@ const FooterText = styled.div`
   color: white;
   margin-bottom: 16px;
 `
-const CbsLogo = styled.div`
+const CbsLogo = styled.a`
   width: 128px;
   height: 32px;
   background: url('${cbsImage}') center no-repeat;
+  cursor: pointer;
 `
 
 class LoginPage extends React.Component {
@@ -126,7 +127,7 @@ class LoginPage extends React.Component {
             />
             <Footer>
               <FooterText>Coriolis® is a service offered by</FooterText>
-              <CbsLogo />
+              <CbsLogo href="https://cloudbase.it" />
             </Footer>
           </Content>
         </Wrapper>
