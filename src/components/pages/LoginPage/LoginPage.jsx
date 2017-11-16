@@ -23,7 +23,7 @@ import UserActions from '../../../actions/UserActions'
 import UserStore from '../../../stores/UserStore'
 
 import backgroundImage from './images/star-bg.jpg'
-import footerImage from './images/footer.svg'
+import cbsImage from './images/cbs-logo.svg'
 
 const Wrapper = styled.div`
   background-image: url('${backgroundImage}');
@@ -38,7 +38,6 @@ const Wrapper = styled.div`
   right: 0;
   bottom: 0;
 `
-
 const Content = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,20 +47,28 @@ const Content = styled.div`
     margin-top: 96px;
   `}
 `
-
 const StyledLoginForm = styled(LoginForm)`
   margin-top: 32px;
   ${StyleProps.media.handheld`
     margin-top: 32px;
   `}
 `
-
 const Footer = styled.div`
   position: absolute;
   bottom: 48px;
-  width: 176px;
-  height: 62px;
-  background: url('${footerImage}') center no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const FooterText = styled.div`
+  font-size: 12px;
+  color: white;
+  margin-bottom: 16px;
+`
+const CbsLogo = styled.div`
+  width: 128px;
+  height: 32px;
+  background: url('${cbsImage}') center no-repeat;
 `
 
 class LoginPage extends React.Component {
@@ -117,7 +124,10 @@ class LoginPage extends React.Component {
               loading={this.props.loading}
               loginFailedResponse={this.props.loginFailedResponse}
             />
-            <Footer />
+            <Footer>
+              <FooterText>Coriolis® is a service offered by</FooterText>
+              <CbsLogo />
+            </Footer>
           </Content>
         </Wrapper>
       </EmptyTemplate>
