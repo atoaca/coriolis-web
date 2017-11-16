@@ -41,7 +41,9 @@ injectGlobal`
     color: ${Palette.black};
     font-family: Rubik;
     font-size: 14px;
-    font-weight: ${StyleProps.fontWeights.regular}
+    font-weight: ${StyleProps.fontWeights.regular};
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 `
 const Wrapper = styled.div``
