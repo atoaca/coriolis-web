@@ -214,10 +214,16 @@ class MainDetails extends React.Component {
               <CopyValue value={this.props.item.id} width="192px" />
             </Field>
           </Row>
-          <Row>
+          <Row marginBottom>
             <Field>
               <Label>Created</Label>
               <Value>{DateUtils.getLocalTime(this.props.item.created_at).format('YYYY-MM-DD HH:mm:ss')}</Value>
+            </Field>
+          </Row>
+          <Row>
+            <Field>
+              <Label>Description</Label>
+              <Value>{(this.props.item.destination_environment && this.props.item.destination_environment.description) || '-'}</Value>
             </Field>
           </Row>
         </Column>
