@@ -16,7 +16,22 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Checkbox from './Checkbox'
 
+class Wrapper extends React.Component {
+  constructor() {
+    super()
+    this.state = { checked: false }
+  }
+
+  handleChange(checked) {
+    this.setState({ checked })
+  }
+
+  render() {
+    return <Checkbox checked={this.state.checked} onChange={checked => { this.handleChange(checked) }} />
+  }
+}
+
 storiesOf('Checkbox', module)
   .add('default', () => (
-    <Checkbox />
+    <Wrapper />
   ))

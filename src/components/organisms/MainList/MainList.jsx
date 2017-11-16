@@ -69,7 +69,7 @@ class MainList extends React.Component {
             item,
             selected,
             onClick: () => { this.props.onItemClick(item) },
-            onSelectedChange: e => { this.props.onSelectedChange(item, e.target.checked) },
+            onSelectedChange: checked => { this.props.onSelectedChange(item, checked) },
           })
         })}
       </List>

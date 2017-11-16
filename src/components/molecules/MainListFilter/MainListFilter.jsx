@@ -99,7 +99,7 @@ class MainListFilter extends React.Component {
       <Wrapper>
         <Main>
           <Checkbox
-            onChange={(e) => { this.props.onSelectAllChange(e.target.checked) }}
+            onChange={checked => { this.props.onSelectAllChange(checked) }}
             checked={!!this.props.selectAllSelected}
           />
           {this.renderFilterGroup()}

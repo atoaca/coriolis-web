@@ -14,13 +14,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import sinon from 'sinon'
 import Checkbox from './Checkbox'
 
 const wrap = props => shallow(<Checkbox {...props} />)
 
-it('passes the correct props to the rendered HTML input', () => {
-  let onChange = () => {}
-  let checkboxInput = wrap({ checked: true, onChange }).children()
-  expect(checkboxInput.prop('checked')).toBe(true)
-  expect(checkboxInput.prop('onChange')).toBe(onChange)
+it('passes `checked` to the component', () => {
+  let wrapper = wrap({ checked: true, onChange: () => {} })
+  expect(wrapper.prop('checked')).toBe(true)
+})
+
+it('calls `onChange` with correct value, on click', () => {
+  let onChange = sinon.spy()
+  let wrapper = wrap({ checked: false, onChange })
+  wrapper.simulate('click')
+  expect(onChange.args[0][0]).toBe(true)
+})
+
+it('doesn\'t call `onChange` if disabled', () => {
+  let onChange = sinon.spy()
+  let wrapper = wrap({ checked: false, onChange, disabled: true })
+  wrapper.simulate('click')
+  expect(onChange.notCalled).toBe(true)
 })

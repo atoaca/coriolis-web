@@ -29,7 +29,6 @@ let isDev = process.argv.find(a => a === '--dev')
 if (isDev) {
   let isBrowserOpen = false
   var webpack = require('webpack');
-  var opn = require('opn');
   var webpackConfig = require('./webpack.config');
   var compiler = webpack(webpackConfig);
 
@@ -54,7 +53,7 @@ if (isDev) {
 
         if (!isBrowserOpen && isSuccesfull) {
           isBrowserOpen = true
-          //opn('http://localhost:' + PORT);
+          console.log('\033[96mServer is available at http://localhost:' + PORT + '\033[0m')
         }
       } else {
         console.log(text)
